@@ -1,3 +1,0 @@
-Microservices Infrastructure Wiki
-
-https://github.com/CiscoCloud/microservices-infrastructure
