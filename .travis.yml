@@ -1,0 +1,30 @@
+---
+language: go
+
+env:
+  - PACKAGE=generate-certificate
+
+sudo: false
+
+addons:
+  apt:
+    packages:
+      # hammer
+      - rpm
+
+install:
+  # packages for packaging
+  - go get -v github.com/asteris-llc/hammer
+  - gem install fpm
+
+script:
+  - hammer build --output=/tmp/out $PACKAGE
+
+after_failure:
+  - tail logs/*
+
+deploy:
+  provider: script
+  script: /bin/bash scripts/bintray.sh /tmp/out
+  on:
+    branch: master
