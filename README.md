@@ -1,12 +1,12 @@
-# Mesos Packaging
+# Mantl Packaging
 
 This repository contains [Hammer](https://github.com/asteris-llc/hammer) specs
-for building [Apache Mesos](http://mesos.apache.org).
+for building generic Mantl utilities.
 
 <!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-generate-toc again -->
 **Table of Contents**
 
-- [Mesos Packaging](#mesos-packaging)
+- [Mantl Packaging](#mantl-packaging)
     - [Dynamic Configuration](#dynamic-configuration)
         - [Per-node Configuration](#per-node-configuration)
     - [Packages](#packages)
