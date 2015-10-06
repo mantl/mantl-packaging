@@ -28,5 +28,5 @@ scripts:
 
     for F in openssl-req.cnf index.txt serial; do
       chmod 600 /etc/pki/CA/$F
-      chown root /etc/pkie/CA/$F
+      chown root /etc/pki/CA/$F
     done
