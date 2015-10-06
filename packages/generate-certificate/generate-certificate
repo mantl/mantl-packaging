@@ -1,0 +1,105 @@
+#!/bin/bash
+
+# Variables
+#
+cert_country="US"
+cert_state="New York"
+cert_locality="Anytown"
+cert_organization="Example Company Inc"
+cert_unit="Operations"
+cert_email="operations@example.com"
+cert_ip=
+cert_dns=
+destination=
+prefix=
+
+OPTS=`getopt -n generate_certificate -l country:,state:,locality:,organization:,unit:,email:,location:,ip:,dns:,destination:,prefix: -- $0 "$@"`
+if [ $? -ne 0 ]; then
+	echo "Error"
+	exit 1
+fi
+eval set -- "${OPTS}"
+
+while :; do
+	case "$1" in
+	--country)	cert_country="$2"; shift 2;;
+	--state)	cert_state="$2"; shift 2;;
+	--locality)	cert_locality="$2"; shift 2;;
+	--organization)	cert_organization="$2"; shift 2;;
+	--unit)		cert_unit="$2"; shift 2;;
+	--email)	cert_email="$2"; shift 2;;
+	--location)	cert_location="$2"; shift 2;;
+	--ip)		cert_ip="${cert_ip} $2"; shift 2;;
+	--dns)		cert_dns="${cert_dns} $2"; shift 2;;
+	--destination)	destination="$2"; shift 2;;
+	--prefix)	prefix="$2."; shift 2;;
+	--)		shift; break;;
+	esac
+done
+
+# Sanity checks
+#
+if [ -z "${cert_location}" ]; then
+	echo "--location must be provided"
+	exit 1
+fi
+
+if [ -z "${destination}" ]; then
+	echo "Certificate destination not provided"
+	exit 1
+fi
+
+if [ ! -d ${destination} ]; then
+	echo "Certificate destination is not a directory"
+	exti 1
+fi
+
+# Set up SubjectAltName environment variable
+#
+SAN="DNS:localhost"
+for dns in ${cert_dns}; do
+	SAN="${SAN},DNS:${dns}"
+done
+SAN="${SAN},IP:127.0.0.1"
+for ip in ${cert_ip}; do
+	SAN="${SAN},IP:${ip}"
+done
+export SAN
+
+# Helper variables
+#
+keyfile=${destination}/${prefix}key
+csrfile=${destination}/${prefix}csr.pem
+certfile=${destination}/${prefix}cert
+
+# Actual work
+#
+cd /etc/pki/CA
+openssl genrsa -out ${keyfile} 2048 -config openssl-req.cnf
+if [ $? -ne 0 ]; then
+	echo "Error generating key"
+	exit 1
+fi
+chmod 0666 ${keyfile}
+
+openssl req -sha256 -new -subj "/C=${cert_country}/ST=${cert_state}/L=${cert_locality}/O=${cert_organization}/OU=${cert_unit}/CN=${cert_location}/emailAddress=${cert_email}" \
+    -key ${keyfile} -out ${csrfile} -config openssl-req.cnf
+if [ $? -ne 0 ]; then
+	echo "Error generating csr"
+	exit 1
+fi
+
+openssl ca -extensions usr_cert -notext -md sha256 -in ${csrfile} -out ${certfile} -config openssl-req.cnf -batch
+if [ $? -ne 0 ]; then
+	echo "Error generating cert"
+	exit 1
+fi
+chmod 0666 ${certfile}
+
+openssl verify -CAfile ./cacert.pem ${certfile}
+if [ $? -ne 0 ]; then
+	echo "Error signing certificate"
+	exit 1
+fi
+
+exit 0

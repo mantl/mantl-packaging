@@ -1,0 +1,32 @@
+---
+name: generate-certificate
+version: 0.0.1
+license: ASL 2.0
+iteration: 1
+vendor: Asteris
+architecture: noarch
+type: rpm
+
+depends:
+  - openssl
+  - bash
+
+targets:
+  - src: '{{.SpecRoot}}/generate-certificate'
+    dest: /usr/bin/
+  - src: '{{.SpecRoot}}/openssl-req.cnf'
+    dest: /etc/pki/CA/
+    config: true
+  - src: '{{.SpecRoot}}/index.txt'
+    dest: /etc/pki/CA/
+  - src: '{{.SpecRoot}}/serial'
+    dest: /etc/pki/CA/
+
+scripts:
+  after-install: |
+    chmod +x /usr/bin/generate-certificate
+
+    for F in openssl-req.cnf index.txt serial; do
+      chmod 600 /etc/pki/CA/$F
+      chown root /etc/pkie/CA/$F
+    done
