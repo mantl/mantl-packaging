@@ -20,7 +20,7 @@ $(cat /etc/traefik/global.toml)
 $(cat /etc/traefik/configs/*.toml 2>/dev/null)
 EOF
 
-if [[ "$(cat $TMP)" != "$(cat $REAL)" ]]; then
+if [[ "$(cat $TMP 2>/dev/null)" != "$(cat $REAL 2>/dev/null)" ]]; then
     mv $TMP $REAL
     sudo /usr/bin/systemctl restart traefik.service
 else
