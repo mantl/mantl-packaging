@@ -12,6 +12,7 @@ for building generic Mantl utilities.
     - [Packages](#packages)
         - [Core](#core)
             - [generate-certificate](#generate-certificate)
+            - [traefik](#traefik)
     - [Building](#building)
 
 <!-- markdown-toc end -->
@@ -40,20 +41,24 @@ in the config files if not set, but here's a short list:
 
 ### Core
 
-#### generate-certificate [ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/generate-certificate/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/generate-certificate/_latestVersion)
+#### generate-certificate
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/generate-certificate/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/generate-certificate/_latestVersion)
 
 [*spec*](packages/generate-certificate/spec.yml)
 
 A script to generate certificates with a number of sensible defaults set.
 
-#### traefik [ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/traefik/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/traefik/_latestVersion)
+#### traefik
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/traefik/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/traefik/_latestVersion)
 
 [*spec*](packages/traefik/spec.yml)
 
 > Træfɪk is a modern HTTP reverse proxy and load balancer made to deploy
-> microservices with ease. It supports several backends (Docker hale:,
-> Mesos/Marathon, Consul, Etcd, Zookeeper, BoltDB, Rest API, file...) to manage
-> its configuration automatically and dynamically.
+> microservices with ease. It supports several backends (Docker, Mesos/Marathon,
+> Consul, Etcd, Zookeeper, BoltDB, Rest API, file...) to manage its
+> configuration automatically and dynamically.
 
 - [Traefik's README](https://github.com/EmileVauge/traefik)
 
