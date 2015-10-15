@@ -58,6 +58,7 @@ scripts:
     systemctl start {{.Name}}.service
 
     sudo -u {{.Name}} traefik-global --port=80 --grace-time-out=10
+    sudo -u {{.Name}} traefik-web --address=:8080
 
   after-upgrade: |
     setcap 'cap_net_bind_service=+ep' /usr/bin/{{.Name}}
