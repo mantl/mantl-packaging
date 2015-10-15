@@ -40,13 +40,13 @@ in the config files if not set, but here's a short list:
 
 ### Core
 
-#### generate-certificate
+#### generate-certificate [ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/generate-certificate/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/generate-certificate/_latestVersion)
 
 [*spec*](packages/generate-certificate/spec.yml)
 
 A script to generate certificates with a number of sensible defaults set.
 
-#### traefik
+#### traefik [ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/traefik/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/traefik/_latestVersion)
 
 [*spec*](packages/traefik/spec.yml)
 
