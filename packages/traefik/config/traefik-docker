@@ -10,12 +10,12 @@ def parse_args(args=None):
         __file__,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
-    parser.add_argument('--endpoint', default='unix:///var/run/docker.sock')
-    parser.add_argument('--domain', default='docker.localhost')
-    parser.add_argument('--disable', action='store_true')
+    parser.add_argument('--endpoint', default='unix:///var/run/docker.sock', help='docker socket')
+    parser.add_argument('--domain', default='docker.localhost', help='domain to address containers by')
+    parser.add_argument('--disable', action='store_true', help='disable docker backend')
 
     watch = parser.add_mutually_exclusive_group(required=False)
-    watch.add_argument('--watch', dest='watch', action='store_true')
+    watch.add_argument('--watch', dest='watch', action='store_true', help='watch for changes')
     watch.add_argument('--no-watch', dest='watch', action='store_false')
     parser.set_defaults(watch=True)
 

@@ -10,13 +10,13 @@ def parse_args(args=None):
         __file__,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
-    parser.add_argument('--endpoint', default='http://127.0.0.1:8080')
-    parser.add_argument('--interface', default='eth0')
-    parser.add_argument('--domain', default='marathon.localhost')
-    parser.add_argument('--disable', action='store_true')
+    parser.add_argument('--endpoint', default='http://127.0.0.1:8080', help='marathon address')
+    parser.add_argument('--interface', default='eth0', help='interface to get IP from')
+    parser.add_argument('--domain', default='marathon.localhost', help='domain to address apps by')
+    parser.add_argument('--disable', action='store_true', help='disable marathon backend')
 
     watch = parser.add_mutually_exclusive_group(required=False)
-    watch.add_argument('--watch', dest='watch', action='store_true')
+    watch.add_argument('--watch', dest='watch', action='store_true', help='watch for changes')
     watch.add_argument('--no-watch', dest='watch', action='store_false')
     parser.set_defaults(watch=True)
 
