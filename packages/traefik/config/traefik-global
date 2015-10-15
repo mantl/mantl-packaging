@@ -25,23 +25,19 @@ def parse_args(args=None):
 
 
 def get_template(port, grace_time_out, traefik_logs_file, access_logs_file, log_level, cert_file, key_file):
-    return dedent("""
-    port = ":{port}"
-    graceTimeOut = {grace_time_out}
-    {traefik_logs_file}
-    {access_logs_file}
-    logLevel = "{log_level}"
-    {cert_file}
-    {key_file}
-    """.format(
-        port=port,
-        grace_time_out=grace_time_out,
-        traefik_logs_file=('traefikLogsFile = "%s"' % traefik_logs_file) if traefik_logs_file else '',
-        access_logs_file=('accessLogsFile = "%s"' % access_logs_file) if access_logs_file else '',
-        log_level=log_level,
-        cert_file=('CertFile = "%s"' % cert_file) if cert_file else '',
-        key_file=('KeyFile = "%s"' % key_file) if key_file else '',
-    ))
+    return '\n'.join([
+        line for line in
+        [
+            'port = ":{}"'.format(port),
+            'graceTimeOut = {}'.format(grace_time_out),
+            'traefikLogsFile = "{}"'.format(traefik_logs_file) if traefik_logs_file else '',
+            'accessLogsFile = "{}"'.format(access_logs_file) if access_logs_file else '',
+            'logLevel = "{}"'.format(log_level),
+            'CertFile = "{}"'.format(cert_file) if cert_file else '',
+            'KeyFile = "{}"'.format(key_file) if key_file else '',
+        ]
+        if line != ''
+    ]) + '\n'
 
 
 def main(args=None):

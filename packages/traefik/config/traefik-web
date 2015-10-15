@@ -19,16 +19,16 @@ def parse_args(args=None):
 
 
 def get_template(address, cert_file, key_file):
-    return dedent("""
-    [web]
-    address = "{address}"
-    {cert_file}
-    {key_file}
-    """.format(
-        address=address,
-        cert_file=('CertFile = "%s"' % cert_file) if cert_file else '',
-        key_file=('KeyFile = "%s"' % key_file) if key_file else '',
-    ))
+    return '\n'.join([
+        line for line in
+        [
+            '[web]',
+            'address = "{}"'.format(address),
+            'CertFile = "{}"'.format(cert_file) if cert_file else '',
+            'KeyFile = "{}"'.format(key_file) if key_file else '',
+        ]
+        if line != ''
+    ]) + '\n'
 
 
 def main(args=None):
