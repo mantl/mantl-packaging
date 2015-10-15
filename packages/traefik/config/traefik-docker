@@ -8,7 +8,7 @@ from textwrap import dedent
 def parse_args(args=None):
     parser = argparse.ArgumentParser(
         __file__,
-        formatter=argparse.ArgumentDefaultsHelpFormatter
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
     parser.add_argument('--endpoint', default='unix:///var/run/docker.sock')
     parser.add_argument('--domain', default='docker.localhost')
