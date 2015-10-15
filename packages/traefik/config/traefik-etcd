@@ -1,0 +1,51 @@
+#!/usr/bin/env python
+import argparse
+import os
+import subprocess
+import sys
+from textwrap import dedent
+
+def parse_args(args=None):
+    parser = argparse.ArgumentParser(__file__)
+    parser.add_argument('--endpoint', default='127.0.0.1:4001')
+    parser.add_argument('--prefix', default='/traefik')
+    parser.add_argument('--disable', action='store_true')
+
+    watch = parser.add_mutually_exclusive_group(required=False)
+    watch.add_argument('--watch', dest='watch', action='store_true')
+    watch.add_argument('--no-watch', dest='watch', action='store_false')
+    parser.set_defaults(watch=True)
+
+    return parser.parse_args(args)
+
+
+def get_template(endpoint, watch, prefix):
+    return dedent("""
+    [etcd]
+    endpoint = "{endpoint}"
+    watch = {watch}
+    prefix = "{prefix}"
+    """.format(
+        endpoint=endpoint,
+        watch="true" if watch else "false",
+        prefix=prefix,
+    ))
+
+
+def main(args=None):
+    args = parse_args()
+
+    if args.disable:
+        os.unlink('/etc/traefik/configs/etcd.toml')
+    else:
+        with open('/etc/traefik/configs/etcd.toml', 'w') as f:
+            f.write(get_template(
+                args.endpoint,
+                args.watch,
+                args.prefix,
+            ))
+
+    return subprocess.call('traefik-regen')
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv))

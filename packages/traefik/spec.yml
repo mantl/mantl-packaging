@@ -2,7 +2,7 @@
 name: traefik
 version: 0.0.0
 epoch: 215
-iteration: 1
+iteration: 2
 license: MIT
 vendor: EmileVague
 architecture: x86_64
@@ -12,6 +12,8 @@ description: Træfɪk, a modern reverse proxy
 
 dependencies:
   - libcap
+  - python
+  - sudo
 
 resources:
   - url: https://github.com/EmileVauge/traefik/releases/download/v1.0.alpha.215/traefik_linux-amd64
@@ -19,14 +21,22 @@ resources:
     hash: b9346649f216ea6f9f5effebb24ed353f095451e
 
 targets:
+  # base
   - src: '{{.BuildRoot}}/traefik_linux-amd64'
     dest: /usr/bin/{{.Name}}
-  - src: '{{.SpecRoot}}/{{.Name}}.toml'
-    dest: /etc/{{.Name}}/{{.Name}}.toml
-    config: yes
   - src: '{{.SpecRoot}}/{{.Name}}.service'
     dest: /etc/systemd/system/{{.Name}}.service
     template: yes
+  - src: '{{empty}}'
+    dest: /etc/traefik
+  - src: '{{empty}}'
+    dest: /etc/traefik/configs
+
+  # config generation scripts
+  - src: '{{.SpecRoot}}/config/'
+    dest: /usr/bin/
+  - src: '{{.SpecRoot}}/traefik-restart'
+    dest: /etc/sudoers.d/
 
 scripts:
   before-install: |
@@ -44,8 +54,10 @@ scripts:
 
     setcap 'cap_net_bind_service=+ep' /usr/bin/{{.Name}}
 
-    systemctl enable /etc/systemd/system/{{.Name}}.service
+    systemctl enable /etc/systemd/system/{{.Name}}.service 2>/dev/null
     systemctl start {{.Name}}.service
+
+    sudo -u {{.Name}} traefik-global --port=80 --grace-time-out=10
 
   after-upgrade: |
     setcap 'cap_net_bind_service=+ep' /usr/bin/{{.Name}}
@@ -55,10 +67,14 @@ scripts:
 
   before-remove: |
     systemctl stop {{.Name}}.service
-    systemctl disable {{.Name}}.service
+    systemctl disable {{.Name}}.service 2>/dev/null
+
+  after-remove: |
+    systemctl daemon-reload
 
 extra-args: |
   --rpm-os linux
   --rpm-auto-add-directories
   --rpm-auto-add-exclude-directories /etc/systemd
   --rpm-auto-add-exclude-directories /etc/systemd/system
+  --rpm-auto-add-exclude-directories /etc/sudoers.d
