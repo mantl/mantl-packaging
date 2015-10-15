@@ -3,6 +3,7 @@ language: go
 
 env:
   - PACKAGE=generate-certificate
+  - PACKAGE=traefik
 
 sudo: false
 
