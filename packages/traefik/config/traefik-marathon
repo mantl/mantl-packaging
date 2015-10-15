@@ -6,7 +6,10 @@ import sys
 from textwrap import dedent
 
 def parse_args(args=None):
-    parser = argparse.ArgumentParser(__file__)
+    parser = argparse.ArgumentParser(
+        __file__,
+        formatter=argparse.ArgumentDefaultsHelpFormatter
+    )
     parser.add_argument('--endpoint', default='http://127.0.0.1:8080')
     parser.add_argument('--interface', default='eth0')
     parser.add_argument('--domain', default='marathon.localhost')
@@ -38,10 +41,12 @@ def get_template(endpoint, interface, watch, domain):
 def main(args=None):
     args = parse_args()
 
+    fname = '/etc/traefik/configs/marathon.toml'
+
     if args.disable:
-        os.unlink('/etc/traefik/configs/marathon.toml')
+        os.unlink(fname)
     else:
-        with open('/etc/traefik/configs/marathon.toml', 'w') as f:
+        with open(fname, 'w') as f:
             f.write(get_template(
                 args.endpoint,
                 args.interface,

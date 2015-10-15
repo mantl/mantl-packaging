@@ -6,7 +6,10 @@ import sys
 from textwrap import dedent
 
 def parse_args(args=None):
-    parser = argparse.ArgumentParser(__file__)
+    parser = argparse.ArgumentParser(
+        __file__,
+        formatter=argparse.ArgumentDefaultsHelpFormatter,
+    )
     parser.add_argument('--port', type=int, default=80)
 
     parser.add_argument('--grace-time-out', type=int, default=10)
@@ -44,7 +47,9 @@ def get_template(port, grace_time_out, traefik_logs_file, access_logs_file, log_
 def main(args=None):
     args = parse_args()
 
-    with open('/etc/traefik/global.toml', 'w') as f:
+    fname = '/etc/traefik/global.toml'
+
+    with open(fname, 'w') as f:
         f.write(get_template(
             args.port,
             args.grace_time_out,

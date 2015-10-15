@@ -6,7 +6,10 @@ import sys
 from textwrap import dedent
 
 def parse_args(args=None):
-    parser = argparse.ArgumentParser(__file__)
+    parser = argparse.ArgumentParser(
+        __file__,
+        formatter=argparse.ArgumentDefaultsHelpFormatter
+    )
     parser.add_argument('--endpoint', default='127.0.0.1:4001')
     parser.add_argument('--prefix', default='/traefik')
     parser.add_argument('--disable', action='store_true')
@@ -35,10 +38,12 @@ def get_template(endpoint, watch, prefix):
 def main(args=None):
     args = parse_args()
 
+    fname = '/etc/traefik/configs/zookeeper.toml'
+
     if args.disable:
-        os.unlink('/etc/traefik/configs/zookeeper.toml')
+        os.unlink(fname)
     else:
-        with open('/etc/traefik/configs/zookeeper.toml', 'w') as f:
+        with open(fname, 'w') as f:
             f.write(get_template(
                 args.endpoint,
                 args.watch,

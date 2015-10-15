@@ -6,7 +6,10 @@ import sys
 from textwrap import dedent
 
 def parse_args(args=None):
-    parser = argparse.ArgumentParser(__file__)
+    parser = argparse.ArgumentParser(
+        __file__,
+        formatter=argparse.ArgumentDefaultsHelpFormatter
+    )
     parser.add_argument('--endpoint', default='unix:///var/run/docker.sock')
     parser.add_argument('--domain', default='docker.localhost')
     parser.add_argument('--disable', action='store_true')
@@ -35,10 +38,12 @@ def get_template(endpoint, watch, domain):
 def main(args=None):
     args = parse_args()
 
+    fname = '/etc/traefik/configs/docker.toml'
+
     if args.disable:
-        os.unlink('/etc/traefik/configs/docker.toml')
+        os.unlink(fname)
     else:
-        with open('/etc/traefik/configs/docker.toml', 'w') as f:
+        with open(fname, 'w') as f:
             f.write(get_template(
                 args.endpoint,
                 args.watch,
