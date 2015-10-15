@@ -1,0 +1,64 @@
+---
+name: traefik
+version: 0.0.0
+epoch: 215
+iteration: 1
+license: MIT
+vendor: EmileVague
+architecture: x86_64
+type: rpm
+url: https://github.com/EmileVauge/traefik
+description: Træfɪk, a modern reverse proxy
+
+dependencies:
+  - libcap
+
+resources:
+  - url: https://github.com/EmileVauge/traefik/releases/download/v1.0.alpha.215/traefik_linux-amd64
+    hash-type: sha1
+    hash: b9346649f216ea6f9f5effebb24ed353f095451e
+
+targets:
+  - src: '{{.BuildRoot}}/traefik_linux-amd64'
+    dest: /usr/bin/{{.Name}}
+  - src: '{{.SpecRoot}}/{{.Name}}.toml'
+    dest: /etc/{{.Name}}/{{.Name}}.toml
+    config: yes
+  - src: '{{.SpecRoot}}/{{.Name}}.service'
+    dest: /etc/systemd/system/{{.Name}}.service
+    template: yes
+
+scripts:
+  before-install: |
+    getent group {{.Name}} > /dev/null || groupadd -r {{.Name}}
+    getent passwd {{.Name}} > /dev/null || \
+        useradd -r \
+                -g {{.Name}} \
+                -d /etc/{{.Name}} \
+                -s /sbin/nologin \
+                -c "{{.Name}} user" \
+                {{.Name}}
+
+  after-install: |
+    chown -R {{.Name}}:{{.Name}} /etc/{{.Name}}
+
+    setcap 'cap_net_bind_service=+ep' /usr/bin/{{.Name}}
+
+    systemctl enable /etc/systemd/system/{{.Name}}.service
+    systemctl start {{.Name}}.service
+
+  after-upgrade: |
+    setcap 'cap_net_bind_service=+ep' /usr/bin/{{.Name}}
+
+    systemctl daemon-reload
+    systemctl restart {{.Name}}.service
+
+  before-remove: |
+    systemctl stop {{.Name}}.service
+    systemctl disable {{.Name}}.service
+
+extra-args: |
+  --rpm-os linux
+  --rpm-auto-add-directories
+  --rpm-auto-add-exclude-directories /etc/systemd
+  --rpm-auto-add-exclude-directories /etc/systemd/system

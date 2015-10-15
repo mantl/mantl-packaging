@@ -46,6 +46,17 @@ in the config files if not set, but here's a short list:
 
 A script to generate certificates with a number of sensible defaults set.
 
+#### traefik
+
+[*spec*](packages/traefik/spec.yml)
+
+> Træfɪk is a modern HTTP reverse proxy and load balancer made to deploy
+> microservices with ease. It supports several backends (Docker hale:,
+> Mesos/Marathon, Consul, Etcd, Zookeeper, BoltDB, Rest API, file...) to manage
+> its configuration automatically and dynamically.
+
+- [Traefik's README](https://github.com/EmileVauge/traefik)
+
 ## Building
 
 If you're on linux, run `hammer` to build all of the packages, which will end up
