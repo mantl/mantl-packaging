@@ -1,0 +1,48 @@
+---
+name: traefik-dynamic
+version: 0.0.0
+epoch: 215
+iteration: 1
+license: MIT
+vendor: Asteris
+architecture: noarch
+type: rpm
+url: https://github.com/asteris-llc/mantl-packaging
+description: consul-template for traefik
+
+dependencies:
+  - consul-template >= 0.10.0
+  - traefik = {{.Version}}
+
+targets:
+  - src: '{{.SpecRoot}}/traefik.hcl'
+    dest: /etc/consul-template/config.d/traefik.hcl
+  - src: '{{.SpecRoot}}/templates/'
+    dest: /etc/consul-template/templates/
+
+scripts:
+  after-install: |
+    # move existing configurations out of the way
+    ln -sb --suffix=.pre-dynamic /var/run/consul-template/traefik.toml /etc/traefik/traefik.toml
+
+    # TODO: figure out what other configs here are going to be important and
+    # include them but not much else, since we don't want to re-render *all* the
+    # templates, just the ones for mesos-master
+    sudo -u consul consul-template -config /etc/consul-template/config.d/traefik.hcl -once
+    systemctl restart traefik.service
+
+    systemctl restart consul-template.service
+
+  after-upgrade: |
+    systemctl restart consul-template.service
+
+  after-remove: |
+    systemctl restart consul-template.service
+
+    rm /etc/traefik/traefik.toml
+    mv /etc/traefik/traefik.toml.pre-dynamic /etc/traefik/traefik.toml
+
+    systemctl restart traefik.service
+
+extra-args:
+  --rpm-os linux

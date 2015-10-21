@@ -1,0 +1,52 @@
+# global config
+port = {{or (key "config/traefik/port") 80}}
+graceTimeOut = {{or (key "config/traefik/gracetimeout") 10}}
+{{with $value := key "config/traefik/logs"}}traefikLogsFile = "{{$value}}"{{end}}
+{{with $value := key "config/traefik/access"}}accessLogsFile = "{{$value}}"{{end}}
+logLevel = "{{or (key "config/traefik/loglevel") "ERROR"}}"
+{{with $value := key "config/traefik/certfile"}}CertFile = "{{$value}}"{{end}}
+{{with $value := key "config/traefik/keyfile"}}KeyFile = "{{$value}}"{{end}}
+
+{{with $enable := key "config/traefik/web/enable"}}[web]
+address = "{{or (key "config/traefik/web/address") ":8080"}}"
+{{with $value := key "config/traefik/web/certfile"}}CertFile = "{{$value}}"{{end}}
+{{with $value := key "config/traefik/web/keyfile"}}KeyFile = "{{$value}}"{{end}}
+{{else}}# web disabled{{end}}
+
+# backends
+{{with $enable := key "config/traefik/boltdb/enable"}}[boltdb]
+endpoint = "{{or (key "config/traefik/boltdb/endpoint") "/etc/traefik/traefik.db"}}"
+watch = {{or (key "config/traefik/boltdb/watch") "true"}}
+prefix = "{{or (key "config/traefik/boltdb/prefix") "traefik"}}"
+{{else}}# boltdb disabled{{end}}
+
+{{with $enable := key "config/traefik/consul/enable"}}[consul]
+endpoint = "{{or (key "config/traefik/consul/endpoint") "127.0.0.1:8500"}}"
+watch = {{or (key "config/traefik/consul/watch") "true"}}
+prefix = "{{or (key "config/traefik/consul/prefix") "traefik"}}"
+{{else}}# consul disabled{{end}}
+
+{{with $enable := key "config/traefik/docker/enable"}}[docker]
+endpoint = "{{or (key "config/traefik/docker/endpoint") "unix:///var/run/docker.sock"}}"
+watch = {{or (key "config/traefik/docker/watch") "true"}}
+domain = "{{or (key "config/traefik/docker/domain") "docker.localhost"}}"
+{{else}}# docker disabled{{end}}
+
+{{with $enable := key "config/traefik/etcd/enable"}}[etcd]
+endpoint = "{{or (key "config/traefik/etcd/endpoint") "127.0.0.1:4000"}}"
+watch = {{or (key "config/traefik/etcd/watch") "true"}}
+prefix = "{{or (key "config/traefik/etcd/prefix") "/traefik"}}"
+{{else}}# etcd disabled{{end}}
+
+{{with $enable := key "config/traefik/marathon/enable"}}[marathon]
+endpoint = "{{or (key "config/traefik/marathon/endpoint") "http://127.0.0.1:8000"}}"
+networkInterface = "{{or (key "config/traefik/marathon/networkInterface") "eth0"}}"
+watch = {{or (key "config/traefik/marathon/watch") "true"}}
+domain = "{{or (key "config/traefik/marathon/domain") "marathon.localhost"}}"
+{{else}}# marathon disabled{{end}}
+
+{{with $enable := key "config/traefik/zookeeper/enable"}}[zookeeper]
+endpoint = "{{or (key "config/traefik/zookeeper/endpoint") "127.0.0.1:2181"}}"
+watch = {{or (key "config/traefik/zookeeper/watch") "true"}}
+prefix = "{{or (key "config/traefik/zookeeper/prefix") "/traefik"}}"
+{{else}}# zookeeper disabled{{end}}
