@@ -10,7 +10,7 @@ def parse_args(args=None):
         __file__,
         formatter_class=argparse.ArgumentDefaultsHelpFormatter
     )
-    parser.add_argument('--endpoint', default='127.0.0.1:4001', help='zookeeper address')
+    parser.add_argument('--endpoint', default='127.0.0.1:2181', help='zookeeper address')
     parser.add_argument('--prefix', default='/traefik', help='cnode prefix')
     parser.add_argument('--disable', action='store_true', help='disable zookeeper backend')
 
