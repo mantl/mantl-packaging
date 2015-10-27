@@ -4,7 +4,7 @@ version: 0.0.0
 epoch: 215
 iteration: 4
 license: MIT
-vendor: EmileVague
+vendor: Emile Vauge
 architecture: x86_64
 type: rpm
 url: https://github.com/EmileVauge/traefik
