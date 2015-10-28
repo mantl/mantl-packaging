@@ -19,6 +19,8 @@ targets:
     dest: /etc/consul-template/config.d/traefik.hcl
   - src: '{{.SpecRoot}}/templates/'
     dest: /etc/consul-template/templates/
+  - src: '{{.SpecRoot}}/consul-template-traefik'
+    dest: /etc/sudoers.d/
 
 scripts:
   after-install: |
