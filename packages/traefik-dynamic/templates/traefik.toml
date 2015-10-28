@@ -1,5 +1,5 @@
 # global config
-port = {{or (key "config/traefik/port") 80}}
+port = "{{or (key "config/traefik/port") ":80"}}"
 graceTimeOut = {{or (key "config/traefik/gracetimeout") 10}}
 {{with $value := key "config/traefik/logs"}}traefikLogsFile = "{{$value}}"{{end}}
 {{with $value := key "config/traefik/access"}}accessLogsFile = "{{$value}}"{{end}}
