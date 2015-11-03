@@ -65,7 +65,7 @@ A script to generate certificates with a number of sensible defaults set.
 #### docker-gc
 
 A cron.hourly script to garbage collect Docker containers. Uses
-martin/docker-cleanup-volumes. This is currently being tested!
+`spotify/docker-gc`. This is currently being tested!
 
 ## Building
 
