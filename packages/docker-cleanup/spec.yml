@@ -1,15 +1,11 @@
 ---
 name: docker-cleanup
-version: 0.0.1
+version: 0.0.2
 license: ASL 2.0
 iteration: 1
 vendor: Asteris
 architecture: noarch
 type: rpm
-
-depends:
-  - cron
-  - docker
 
 targets:
   - src: '{{.SpecRoot}}/docker-cleanup'
@@ -17,4 +13,4 @@ targets:
 
 scripts:
   after-install: |
-    chmod +x /usr/bin/docker-cleanup
+    chmod a+x /etc/cron.hourly/docker-cleanup
