@@ -62,10 +62,10 @@ A script to generate certificates with a number of sensible defaults set.
 
 - [Traefik's README](https://github.com/EmileVauge/traefik)
 
-#### docker-gc
+#### docker-cleanup
 
 A cron.hourly script to garbage collect Docker containers. Uses
-`spotify/docker-gc`. This is currently being tested!
+`spotify/docker-gc` and `martin/docker-cleanup-volumes` together.
 
 ## Building
 
