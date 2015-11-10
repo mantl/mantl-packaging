@@ -6,7 +6,7 @@
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure(2) do |config|
-  config.vm.box = "chef/centos-7.0"
+  config.vm.box = "asteris/centos-7-hammer"
 
   config.vm.provider :virtualbox do |vb|
     vb.customize ["modifyvm", :id, "--cpus", "4"]

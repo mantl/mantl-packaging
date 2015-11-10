@@ -1,7 +1,7 @@
 ---
 name: docker-cleanup
 version: 0.0.4-alpha
-license: Apache 2.0
+license: ASL 2.0
 iteration: 1
 vendor: Asteris
 architecture: noarch
