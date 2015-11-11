@@ -13,6 +13,7 @@ for building generic Mantl utilities.
         - [Core](#core)
             - [generate-certificate](#generate-certificate)
             - [traefik](#traefik)
+            - [docker-cleanup](#docker-cleanup)
     - [Building](#building)
 
 <!-- markdown-toc end -->
@@ -64,8 +65,21 @@ A script to generate certificates with a number of sensible defaults set.
 
 #### docker-cleanup
 
-A cron.hourly script to garbage collect Docker containers. Uses
-`spotify/docker-gc` and `martin/docker-cleanup-volumes` together.
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/docker-cleanup/images/download.svg) ](https://bintray/asteris/mantl-rpm/docker-cleanup/_latestVersion)
+
+[*spec*](packages/docker-cleanup/spec.yml)
+
+A cron.hourly script and a few configuration files to take out the garbage.
+Uses `spotify/docker-gc` and `martin/docker-cleanup-volumes` Docker containers in tandem.
+
+First, `spotify/docker-gc` runs, and removes any containers that have been in an exit status for more than an hour.
+Spotify's container also supports excluding containers at this step. Two files control this:
+`/etc/docker-cleanup/docker-gc-exclude` to match image names and docker hashes, and
+`/etc/docker-cleanup/docker-gc-exclude-containers` to match container names. Both of these files have example lines
+for your reference.
+
+Second, `martin/docker-cleanup-volumes` removes orphaned Docker volumes, something that removing containers with docker
+commands normally does not do. Docker version 1.9 is beginning to address this issue, but this adds support for previous versions.
 
 ## Building
 
