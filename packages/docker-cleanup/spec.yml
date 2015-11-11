@@ -1,6 +1,6 @@
 ---
 name: docker-cleanup
-version: 0.0.4-alpha
+version: 0.0.1
 license: ASL 2.0
 iteration: 1
 vendor: Asteris
