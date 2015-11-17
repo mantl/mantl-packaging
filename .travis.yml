@@ -4,6 +4,7 @@ language: go
 env:
   - PACKAGE=generate-certificate
   - PACKAGE=traefik
+  - PACKAGE=docker-cleanup
 
 sudo: false
 

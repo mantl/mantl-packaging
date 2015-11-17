@@ -1,15 +1,21 @@
 ---
 name: docker-cleanup
-version: 0.0.3-alpha
-license: Apache 2.0
+version: 0.0.1
+license: ASL 2.0
 iteration: 1
 vendor: Asteris
 architecture: noarch
 type: rpm
 
 targets:
-  - src: '{{.SpecRoot}}/docker-cleanup'
-    dest: /etc/cron.hourly/
+  - src: '{{.SpecRoot}}/docker-cleanup-cron'
+    dest: /etc/cron.hourly/docker-cleanup
+  - src: '{{.SpecRoot}}/docker-cleanup-etc/docker-gc-exclude'
+    dest: /etc/docker-cleanup/docker-gc-exclude
+    config: true
+  - src: '{{.SpecRoot}}/docker-cleanup-etc/docker-gc-exclude-containers'
+    dest: /etc/docker-cleanup/docker-gc-exclude-containers
+    config: true
 
 scripts:
   after-install: |

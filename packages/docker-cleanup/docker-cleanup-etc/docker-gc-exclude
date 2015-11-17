@@ -1,0 +1,6 @@
+# this file is used for exluding docker images from cleanup
+# the lines come in two forms:
+# image:tag
+#   hello-world:latest
+# docker hash
+#   1337deadbeef
