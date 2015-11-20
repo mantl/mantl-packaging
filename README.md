@@ -14,6 +14,7 @@ for building generic Mantl utilities.
             - [generate-certificate](#generate-certificate)
             - [traefik](#traefik)
             - [docker-cleanup](#docker-cleanup)
+            - [nomad](#nomad)
     - [Building](#building)
 
 <!-- markdown-toc end -->
@@ -80,6 +81,16 @@ for your reference.
 
 Second, `martin/docker-cleanup-volumes` removes orphaned Docker volumes, something that removing containers with docker
 commands normally does not do. Docker version 1.9 is beginning to address this issue, but this adds support for previous versions.
+
+#### nomad
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/nomad/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/nomad/_latestVersion)
+
+[*spec*](packages/nomad/spec.yml)
+
+> A Distributed, Highly Available, Datacenter-Aware Scheduler
+
+- [Nomad's Project Page](https://nomadproject.io/)
 
 ## Building
 
