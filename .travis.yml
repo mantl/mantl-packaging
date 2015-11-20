@@ -1,15 +1,6 @@
 ---
 language: go
 
-env:
-  - PACKAGE=generate-certificate
-  - PACKAGE=traefik
-  - PACKAGE=docker-cleanup
-  - PACKAGE=nomad
-  - PACKAGE=consul
-  - PACKAGE=consul-template
-  - PACKAGE=consul-cli
-
 sudo: false
 
 addons:
@@ -18,10 +9,18 @@ addons:
       # hammer
       - rpm
 
+cache:
+  bundler: true
+  directories:
+    - .build-info
+
 install:
   # packages for packaging
   - go get -v github.com/asteris-llc/hammer
   - gem install fpm
+
+  # set cache if not set
+  - "[[ ! -f .build-info/last-build ]] && git rev-list --max-parents=0 HEAD > .build-info/last-build"
 
 script:
   - hammer build --output=/tmp/out $PACKAGE
