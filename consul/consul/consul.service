@@ -11,6 +11,7 @@ EnvironmentFile=/etc/sysconfig/consul
 ExecStart=/usr/bin/consul agent -config-dir=${CONFIG_DIR} $EXTRA_OPTS
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
+LimitNOFILE=65536
 
 [Install]
 WantedBy=multi-user.target
