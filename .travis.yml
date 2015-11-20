@@ -6,6 +6,9 @@ env:
   - PACKAGE=traefik
   - PACKAGE=docker-cleanup
   - PACKAGE=nomad
+  - PACKAGE=consul
+  - PACKAGE=consul-template
+  - PACKAGE=consul-cli
 
 sudo: false
 

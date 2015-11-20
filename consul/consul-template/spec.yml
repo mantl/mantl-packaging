@@ -1,0 +1,63 @@
+---
+name: consul-template
+version: 0.10.0
+license: MPLv2.0
+iteration: 2
+vendor: Hashicorp
+url: https://github.com/hashicorp/consul-template
+architecture: x86_64
+description: Generic template rendering and notifications with Consul
+type: rpm
+
+depends:
+  - consul = 0.5.2
+  - systemd
+
+resources:
+  - url: https://github.com/hashicorp/consul-template/releases/download/v{{.Version}}/consul-template_{{.Version}}_linux_amd64.tar.gz
+    hash-type: sha1
+    hash: 606678dfe2a50b06c10d5d3872b31e7495f5e8da
+
+targets:
+  - src: "{{.BuildRoot}}/consul-template_{{.Version}}_linux_amd64/consul-template"
+    dest: /usr/bin/
+  - src: "{{.SpecRoot}}/plugins/"
+    dest: /usr/bin/
+  - src: "{{.SpecRoot}}/consul-template.service"
+    dest: /etc/systemd/system/consul-template.service
+    template: true
+  - src: "{{.SpecRoot}}/consul-template.sysconfig"
+    dest: /etc/sysconfig/consul-template
+    config: true
+  - src: "{{empty}}"
+    dest: /etc/consul-template/config.d
+  - src: "{{empty}}"
+    dest: /etc/consul-template/templates
+  - src: "{{empty}}"
+    dest: /etc/consul-template/scripts
+  - src: "{{empty}}"
+    dest: /var/run/consul-template
+
+scripts:
+  build: |
+    tar -xzvf consul-template_{{.Version}}_linux_amd64.tar.gz
+
+  after-install: |
+    systemctl enable /etc/systemd/system/consul-template.service
+    systemctl start consul-template.service
+
+    chown -R consul:consul /etc/consul-template
+    chown -R consul:consul /var/run/consul-template
+
+  before-remove: |
+    systemctl disable consul-template.service
+
+  after-upgrade: |
+    systemctl reload-daemon
+    systemctl restart consul-template.service
+
+extra-args: |
+  --rpm-os linux
+  --rpm-auto-add-directories
+  --rpm-auto-add-exclude-directories /etc/systemd
+  --rpm-auto-add-exclude-directories /etc/systemd/system

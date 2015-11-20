@@ -1,0 +1,2 @@
+EXTRA_OPTS="-config /etc/consul-template/config.d"
+# GOMAXPROCS=2

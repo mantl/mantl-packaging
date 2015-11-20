@@ -1,0 +1,23 @@
+#!/usr/bin/python
+from __future__ import print_function
+import json
+import sys
+import urllib2
+import socket
+
+CONFIG = '/etc/consul/consul.json'
+
+
+def get_node():
+    with open(CONFIG, 'r') as f:
+        content = json.load(f)
+
+    return content.get('node_name', '') or socket.gethostname()
+
+
+def template(tmpl):
+    return tmpl % get_node()
+
+
+if __name__ == '__main__':
+    print(template(sys.argv[-1]))

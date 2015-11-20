@@ -1,0 +1,20 @@
+[Unit]
+Description={{.Description}}
+Documentation={{.URL}}
+After=network-online.target
+After=consul.service
+Wants=network-online.target
+Wants=consul.service
+
+[Service]
+User=consul
+Group=consul
+EnvironmentFile=-/etc/sysconfig/consul-template
+ExecStart=/usr/bin/consul-template $EXTRA_OPTS
+ExecReload=/bin/kill -HUP $MAINPID
+KillSignal=SIGINT
+Restart=always
+RestartSec=5s
+
+[Install]
+WantedBy=multi-user.target

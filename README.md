@@ -15,6 +15,10 @@ for building generic Mantl utilities.
             - [traefik](#traefik)
             - [docker-cleanup](#docker-cleanup)
             - [nomad](#nomad)
+        - [Consul Packages](#consul-packages)
+            - [consul](#consul)
+            - [consul-template](#consul-template)
+            - [consul-cli](#consul-cli)
     - [Building](#building)
 
 <!-- markdown-toc end -->
@@ -87,6 +91,35 @@ commands normally does not do. Docker version 1.9 is beginning to address this i
 [ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/nomad/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/nomad/_latestVersion)
 
 [*spec*](nomad/nomad/spec.yml)
+
+### Consul Packages
+
+#### consul
+
+[*spec*](consul/consul/spec.yml)
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/consul/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/consul/_latestVersion)
+
+Packages consul.io with systemd. Check `/etc/sysconfig/consul` for
+configuration.
+
+#### consul-template
+
+[*spec*](consul/consul-template/spec.yml)
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/consul-template/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/consul-template/_latestVersion)
+
+Packages [consul-template](https://github.com/hashicorp/consul-template) with
+systemd. Check `/etc/sysconfig/consul-template` for configuration.
+
+#### consul-cli
+
+[*spec*](consul/consul-cli/spec.yml)
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/consul-cli/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/consul-cli/_latestVersion)
+
+Packages [consul-cli](https://github.com/CiscoCloud/consul-cli) with the
+currently released version.
 
 > A Distributed, Highly Available, Datacenter-Aware Scheduler
 
