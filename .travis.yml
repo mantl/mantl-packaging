@@ -19,11 +19,8 @@ install:
   - go get -v github.com/asteris-llc/hammer
   - gem install fpm
 
-  # set cache if not set
-  - "[[ ! -f .build-info/last-build ]] && git rev-list --max-parents=0 HEAD > .build-info/last-build"
-
 script:
-  - hammer build --output=/tmp/out $PACKAGE
+  - ./scripts/travis.sh
 
 after_failure:
   - tail logs/*
