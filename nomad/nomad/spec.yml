@@ -1,0 +1,55 @@
+---
+name: nomad
+version: 0.2.0
+license: MPLv2.0
+iteration: 1
+vendor: Hashicorp
+url: https://nomadproject.io
+architecture: x86_64
+description: Nomad is a distributed, highly available, datacenter-aware scheduler
+type: rpm
+
+depends:
+  - systemd
+
+resources:
+  - url: https://releases.hashicorp.com/nomad/0.2.0/nomad_0.2.0_linux_amd64.zip
+    hash-type: sha1
+    hash: 926374326494e45efae6a18b3e0b6ee8ffffe509
+
+targets:
+  - src: "{{.BuildRoot}}/nomad"
+    dest: /usr/bin/
+  - src: "{{.SpecRoot}}/nomad.service"
+    dest: /etc/systemd/system/nomad.service
+    template: true
+  - src: "{{.SpecRoot}}/nomad.sysconfig"
+    dest: /etc/sysconfig/nomad
+    config: true
+  - src: "{{.SpecRoot}}/nomad.hcl"
+    dest: /etc/nomad/nomad.hcl
+    config: true
+  - src: "{{empty}}"
+    dest: /var/lib/nomad
+
+scripts:
+  build: |
+    unzip nomad_{{.Version}}_linux_amd64.zip
+
+  after-install: |
+    systemctl enable /etc/systemd/system/nomad.service 2>/dev/null
+    systemctl start nomad.service
+
+  before-remove: |
+    systemctl stop nomad.service
+    systemctl disable nomad.service 2>/dev/null
+
+  after-remove: |
+    systemctl daemon-reload
+
+  after-upgrade: |
+    systemctl daemon-reload
+    systemctl restart nomad.service
+
+extra-args: |
+  --rpm-os linux

@@ -1,0 +1,14 @@
+[Unit]
+Description={{.Description}}
+Documentation={{.URL}}
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=root
+Group=root
+EnvironmentFile=-/etc/sysconfig/nomad
+ExecStart=/usr/bin/nomad agent -config=${CONFIG_DIR} $EXTRA_OPTS
+
+[Install]
+WantedBy=multi-user.target

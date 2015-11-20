@@ -1,0 +1,2 @@
+CONFIG_DIR=/etc/nomad
+EXTRA_OPTS=

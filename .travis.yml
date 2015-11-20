@@ -5,6 +5,7 @@ env:
   - PACKAGE=generate-certificate
   - PACKAGE=traefik
   - PACKAGE=docker-cleanup
+  - PACKAGE=nomad
 
 sudo: false
 
