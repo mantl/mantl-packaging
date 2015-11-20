@@ -86,7 +86,7 @@ commands normally does not do. Docker version 1.9 is beginning to address this i
 
 [ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/nomad/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/nomad/_latestVersion)
 
-[*spec*](packages/nomad/spec.yml)
+[*spec*](nomad/nomad/spec.yml)
 
 > A Distributed, Highly Available, Datacenter-Aware Scheduler
 
