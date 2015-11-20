@@ -10,7 +10,6 @@ addons:
       - rpm
 
 cache:
-  bundler: true
   directories:
     - .build-info
 
