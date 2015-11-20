@@ -11,8 +11,9 @@ CURRENT=$(git rev-parse HEAD)
 NAMES=$(python scripts/names.py $LAST $CURRENT)
 
 if [[ "$NAMES" == "" ]]; then
-    echo "no packages to build";
+    echo "no changed packages found";
 else
+    echo "changed packages found: $NAMES"
     hammer build --output=/tmp/out $NAMES
 fi
 
