@@ -31,10 +31,16 @@ targets:
     dest: /etc/traefik
   - src: '{{empty}}'
     dest: /etc/traefik/configs
+
+  # logging
   - src: '{{.SpecRoot}}/logrotate/traefik'
     dest: /etc/logrotate.d/
   - src: '{{.SpecRoot}}/logrotate/traefik-access'
     dest: /etc/logrotate.d/
+  - src: "{{empty}}"
+    dest: /var/log/{{.Name}}
+  - src: "{{empty}}"
+    dest: /var/log/{{.Name}}/archive
 
   # config generation scripts
   - src: '{{.SpecRoot}}/config/'
@@ -54,6 +60,9 @@ scripts:
                 {{.Name}}
 
   after-install: |
+    logrotate /etc/logrotate.d/traefik
+    logrotate /etc/logrotate.d/traefik-access
+
     chown -R {{.Name}}:{{.Name}} /etc/{{.Name}}
     chown -R {{.Name}}:{{.Name}} /var/log/{{.Name}}
 
