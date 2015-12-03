@@ -2,7 +2,7 @@
 name: traefik
 version: 0.0.0
 epoch: 285
-iteration: 6
+iteration: 7
 license: MIT
 vendor: Emile Vauge
 architecture: x86_64
@@ -57,7 +57,10 @@ scripts:
     systemctl enable /etc/systemd/system/{{.Name}}.service 2>/dev/null
     systemctl start {{.Name}}.service
 
-    sudo -u {{.Name}} traefik-global --port=80 --grace-time-out=10
+    sudo -u {{.Name}} traefik-global --port=80 \
+                                      --grace-time-out=10 \
+                                      --access-logs-file=/var/log/{{.Name}}/access.log
+                                      --traefik-logs-file=/var/log/{{.Name}}/traefik.log
     sudo -u {{.Name}} traefik-web --address=:8080
 
   after-upgrade: |
