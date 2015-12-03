@@ -31,6 +31,10 @@ targets:
     dest: /etc/traefik
   - src: '{{empty}}'
     dest: /etc/traefik/configs
+  - src: '{{.SpecRoot}}/logrotate/traefik'
+    dest: /etc/logrotate.d/
+  - src: '{{.SpecRoot}}/logrotate/traefik-access'
+    dest: /etc/logrotate.d/
 
   # config generation scripts
   - src: '{{.SpecRoot}}/config/'
@@ -51,6 +55,7 @@ scripts:
 
   after-install: |
     chown -R {{.Name}}:{{.Name}} /etc/{{.Name}}
+    chown -R {{.Name}}:{{.Name}} /var/log/{{.Name}}
 
     setcap 'cap_net_bind_service=+ep' /usr/bin/{{.Name}}
 
