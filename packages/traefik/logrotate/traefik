@@ -1,7 +1,7 @@
 /var/log/traefik/traefik.log {
 	daily
 	rotate 7
-	create
+	create 0664 traefik traefik
 	missingok
 	compress
 	delaycompress
