@@ -1,0 +1,11 @@
+/var/log/traefik/traefik.log {
+	daily
+	rotate 7
+	create 0664 traefik traefik
+	missingok
+	compress
+	delaycompress
+	notifempty
+	minsize 1
+	olddir archive
+}
