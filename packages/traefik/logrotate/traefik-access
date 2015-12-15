@@ -1,4 +1,4 @@
-"/var/log/traefik/access.log"  
+/var/log/traefik/access.log {
 	daily
 	rotate 7
 	create 0664 traefik traefik
