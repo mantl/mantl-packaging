@@ -92,3 +92,4 @@ extra-args: |
   --rpm-auto-add-exclude-directories /etc/systemd
   --rpm-auto-add-exclude-directories /etc/systemd/system
   --rpm-auto-add-exclude-directories /etc/sudoers.d
+  --rpm-auto-add-exclude-directories /etc/logrotate.d
