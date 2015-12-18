@@ -1,8 +1,8 @@
 ---
 name: traefik
 version: 0.0.0
-epoch: 285
-iteration: 6
+epoch: 341
+iteration: 7
 license: MIT
 vendor: Emile Vauge
 architecture: x86_64
@@ -16,9 +16,9 @@ dependencies:
   - sudo
 
 resources:
-  - url: https://github.com/emilevauge/traefik/releases/download/v1.0.alpha.285/traefik_linux-amd64
+  - url: https://github.com/emilevauge/traefik/releases/download/v1.0.alpha.341/traefik_linux-amd64
     hash-type: sha1
-    hash: 01564a14919fd364000e085e4aa2a29d134d3d90
+    hash: 554e4124354d95c14b4109027abcd1f6e0b2e37f
 
 targets:
   # base

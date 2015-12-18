@@ -8,7 +8,7 @@ Wants=network-online.target
 User=consul
 Group=consul
 EnvironmentFile=/etc/sysconfig/consul
-ExecStart=/usr/bin/consul agent -config-dir=${CONFIG_DIR} $EXTRA_OPTS
+ExecStart=/usr/bin/consul agent -config-dir=${CONFIG_DIR} -data-dir=${DATA_DIR} $EXTRA_OPTS
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
 LimitNOFILE=65536
