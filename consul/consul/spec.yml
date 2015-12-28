@@ -11,6 +11,7 @@ type: rpm
 
 depends:
   - systemd
+  - bash
 
 resources:
   - url: https://releases.hashicorp.com/consul/{{.Version}}/consul_{{.Version}}_linux_amd64.zip
