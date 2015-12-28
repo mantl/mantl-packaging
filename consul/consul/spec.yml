@@ -2,7 +2,7 @@
 name: consul
 version: 0.6.0
 license: MPLv2.0
-iteration: 1
+iteration: 2
 vendor: Hashicorp
 url: https://consul.io
 architecture: x86_64
@@ -82,6 +82,7 @@ scripts:
 
 extra-args: |
   --rpm-os linux
+  --rpm-dist centos
   --rpm-auto-add-directories
   --rpm-auto-add-exclude-directories /etc/systemd
   --rpm-auto-add-exclude-directories /etc/systemd/system
