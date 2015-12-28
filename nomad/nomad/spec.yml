@@ -26,8 +26,8 @@ targets:
   - src: "{{.SpecRoot}}/nomad.sysconfig"
     dest: /etc/sysconfig/nomad
     config: true
-  - src: "{{.SpecRoot}}/nomad.hcl"
-    dest: /etc/nomad/nomad.hcl
+  - src: "{{.SpecRoot}}/nomad.json"
+    dest: /etc/nomad/nomad.json
     config: true
   - src: "{{empty}}"
     dest: /var/lib/nomad
