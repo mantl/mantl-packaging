@@ -62,7 +62,7 @@ scripts:
         useradd -r \
                 -g consul \
                 -d /var/lib/consul \
-                -s /sbin/nologin \
+                -s /bin/bash \
                 -c "consul.io user" \
                 consul
 
@@ -75,6 +75,9 @@ scripts:
 
   before-remove: |
     systemctl disable consul.service
+
+  before-upgrade: |
+    usermod -s /bin/bash consul
 
   after-upgrade: |
     systemctl reload-daemon
