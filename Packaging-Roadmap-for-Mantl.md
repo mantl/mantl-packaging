@@ -185,6 +185,12 @@ to write actual hammer specs and package them.
     - lvm2
 
 `mantl-collectd`
+
+    collectd/files/collectd_docker_plugin.pp
+        - 2.52 KB
+    collectd/handlers/main.yml: restart collectd
+        
+
 - Dependencies
     - mantl-collectd
     - libsemanage-python
