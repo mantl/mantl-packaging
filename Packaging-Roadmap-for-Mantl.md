@@ -188,8 +188,14 @@ to write actual hammer specs and package them.
 
     collectd/files/collectd_docker_plugin.pp
         - 2.52 KB
+
     collectd/handlers/main.yml: restart collectd
-        
+        - sudo
+        - service collectd to be restarted
+        - tag is collectd
+
+    collects/tasks/main.yml
+        - 
 
 - Dependencies
     - mantl-collectd
