@@ -195,7 +195,9 @@ to write actual hammer specs and package them.
         - tag is collectd
 
     collectd/tasks/main.yml
-        - 
+        - sudo
+        - install collectd package
+ 
 
 - Dependencies
     - mantl-collectd
