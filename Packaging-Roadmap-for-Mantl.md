@@ -194,7 +194,7 @@ to write actual hammer specs and package them.
         - service collectd to be restarted
         - tag is collectd
 
-    collects/tasks/main.yml
+    collectd/tasks/main.yml
         - 
 
 - Dependencies
