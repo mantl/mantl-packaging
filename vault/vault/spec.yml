@@ -1,0 +1,47 @@
+---
+name: vault
+version: 0.4.0
+license: MPLv2.0
+iteration: 1
+vendor: Hashicorp
+url: https://vaultproject.io
+architecture: x86_64
+description: Vault is a tool for managing secrets
+type: rpm
+
+depends:
+  - systemd
+
+resources:
+  - url: https://releases.hashicorp.com/vault/{{.Version}}/vault_{{.Version}}_linux_amd64.zip
+    hash-type: sha256
+    hash: f56933cb7a445db89f8832016a862ca39b3e63dedb05709251e59d6bb40c56e8
+
+targets:
+  - src: "{{.BuildRoot}}/vault"
+    dest: /usr/bin/
+  - src: "{{.SpecRoot}}/vault.service"
+    dest: /etc/systemd/system/vault.service
+    template: true
+  - src: "{{.SpecRoot}}/vault.sysconfig"
+    dest: /etc/sysconfig/vault
+    config: true
+  - src: "{{empty}}"
+    dest: /etc/vault/ssl
+
+scripts:
+  build: |
+    unzip vault_{{.Version}}_linux_amd64.zip
+
+  before-remove: |
+    systemctl disable vault.service
+
+  after-upgrade: |
+    systemctl reload-daemon
+    systemctl restart vault.service
+
+extra-args: |
+  --rpm-os linux
+  --rpm-auto-add-directories
+  --rpm-auto-add-exclude-directories /etc/systemd
+  --rpm-auto-add-exclude-directories /etc/systemd/system
