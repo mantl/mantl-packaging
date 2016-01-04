@@ -9,7 +9,9 @@ description: Mantl Vault
 type: rpm
 
 depends:
+  - jq
   - consul
+  - consul-cli
 
 targets:
   - src: "{{.SpecRoot}}/vault-unseal.sh"
