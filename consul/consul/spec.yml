@@ -2,12 +2,14 @@
 name: consul
 version: 0.6.0
 license: MPLv2.0
-iteration: 2
+iteration: 3
 vendor: Hashicorp
 url: https://consul.io
 architecture: x86_64
 description: Consul is a tool for service discovery and configuration.
 type: rpm
+obsoletes:
+  - consul-ui
 
 depends:
   - systemd
