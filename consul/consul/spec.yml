@@ -83,6 +83,9 @@ scripts:
     usermod -s /bin/bash consul
 
   after-upgrade: |
+    chown consul:consul /var/lib/consul
+    chown consul:consul /etc/consul
+
     systemctl reload-daemon
     systemctl restart consul.service
 
