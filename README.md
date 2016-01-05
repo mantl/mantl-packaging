@@ -92,6 +92,10 @@ commands normally does not do. Docker version 1.9 is beginning to address this i
 
 [*spec*](nomad/nomad/spec.yml)
 
+> A Distributed, Highly Available, Datacenter-Aware Scheduler
+
+- [Nomad's Project Page](https://nomadproject.io/)
+
 ### Consul Packages
 
 #### consul
@@ -120,10 +124,6 @@ systemd. Check `/etc/sysconfig/consul-template` for configuration.
 
 Packages [consul-cli](https://github.com/CiscoCloud/consul-cli) with the
 currently released version.
-
-> A Distributed, Highly Available, Datacenter-Aware Scheduler
-
-- [Nomad's Project Page](https://nomadproject.io/)
 
 ## Building
 
