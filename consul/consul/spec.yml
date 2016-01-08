@@ -1,15 +1,13 @@
 ---
 name: consul
-version: 0.6.0
+version: 0.6.1
 license: MPLv2.0
-iteration: 3
+iteration: 1
 vendor: Hashicorp
 url: https://consul.io
 architecture: x86_64
 description: Consul is a tool for service discovery and configuration.
 type: rpm
-obsoletes:
-  - consul-ui
 
 depends:
   - systemd
@@ -17,11 +15,11 @@ depends:
 
 resources:
   - url: https://releases.hashicorp.com/consul/{{.Version}}/consul_{{.Version}}_linux_amd64.zip
-    hash-type: sha1
-    hash: 6c251f1a9249a8e9599cf54b009cca1b3fea45dc
+    hash-type: sha256
+    hash: dbb3c348fdb7cdfc03e5617956b243c594a399733afee323e69ef664cdadb1ac
   - url: https://releases.hashicorp.com/consul/{{.Version}}/consul_{{.Version}}_web_ui.zip
-    hash-type: sha1
-    hash: 1bfeed05508a029a20977ad6aefeda933f46f512
+    hash-type: sha256
+    hash: afccdd540b166b778c7c0483becc5e282bbbb1ee52335bfe94bf757df8c55efc
 
 targets:
   - src: "{{.BuildRoot}}/consul"
