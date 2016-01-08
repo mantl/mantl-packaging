@@ -187,21 +187,36 @@ to write actual hammer specs and package them.
 `mantl-collectd`
 
     collectd/files/collectd_docker_plugin.pp
-        - 2.52 KB
+        // 2.52 KB
 
     collectd/handlers/main.yml: restart collectd
-        - sudo
-        - service collectd to be restarted
-        - tag is collectd
+        // sudo
+        // service collectd to be restarted
+        // tag is collects
 
     collectd/tasks/main.yml
-        - sudo
-        - install collectd package
- 
+        // sudo
+        // install collectd package
+        // Dependencies
+            - mantl-collectd
+            - libsemanage-python
+        // tags are collectd and bootstrap
 
-- Dependencies
-    - mantl-collectd
-    - libsemanage-python
+        line 14
+        // sudo
+        // create plugins directory /usr/share/collectd/plugins
+        // permissions 0755(chmod) 
+        // tag is collectd
+
+        line 23
+        // sudo
+        // collectd.conf.j2 is the path of the Jinja2 formatted template on the local server
+        // render the template to /etc/collectd.conf (on remote machine)
+        // restart collectd
+        // tag is collectd
+
+        line 34
+
 
 `mantl-consul`
 This package is important during the bootstrapping process,
