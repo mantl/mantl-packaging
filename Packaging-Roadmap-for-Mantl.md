@@ -215,8 +215,42 @@ to write actual hammer specs and package them.
         // restart collectd
         // tag is collectd
 
-        line 34
+        line 34: authorizes collectd to make tcp connections
+        // sudo
+        // name of a SELinux boolean: collect_tcp_network_connect
+            // boolean value set to yes
+            // persistent: boolean setting should survive a reboot
+        //  (direct quote)when: ansible_selinux.status == "enabled" and ansible_selinux.mode == "enforcing"
+        // tag is collectd
 
+        line 41: check if collectd is authorized to connect to docker
+        // sudo
+        // shell: semodule -l
+        // register: semodule_list
+        // failed_when: no
+        // changed_when: no
+        // when: ansible_selinux.status == "enabled" and ansible_selinux.mode == "enforcing"
+        // tag is collectd
+
+        line 51: copy collectd selinux docker policy
+        // sudo
+        // copy: src=collectd_docker_plugin.pp dest=/tmp/collectd_docker_plugin.pp owner=root mode=0600
+        // when: "semodule_list.stdout is defined and semodule_list.stdout.find('collectd_docker_plugin') == -1"
+        // tag is collectd
+
+        line 58: authorize collectd to connect to docker
+        // sudo
+        shell: semodule -i /tmp/collectd_docker_plugin.pp
+        when: "semodule_list.stdout is defined and semodule_list.stdout.find('collectd_docker_plugin') == -1"
+        // tag is collectd
+
+        line 65: enable collectd
+        // sudo
+        // collectd starts on boot
+        // start collectd if not running(idempotent actions)
+
+        microservices-infrastructure/roles/collectd/templates/collectd.conf.j2
+        //
 
 `mantl-consul`
 This package is important during the bootstrapping process,
