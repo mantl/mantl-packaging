@@ -1,5 +1,5 @@
 {
-    "node_name": "",
+    "bootstrap_expect": 1,
     "server": true,
     "ui": true,
     "data_dir": "/var/lib/consul",
