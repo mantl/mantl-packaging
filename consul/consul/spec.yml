@@ -2,7 +2,7 @@
 name: consul
 version: 0.6.1
 license: MPLv2.0
-iteration: 1
+iteration: 2
 vendor: Hashicorp
 url: https://consul.io
 architecture: x86_64
