@@ -17,6 +17,7 @@ for building generic Mantl utilities.
             - [nomad](#nomad)
         - [Consul Packages](#consul-packages)
             - [consul](#consul)
+            - [consul-ui](#consul-ui)
             - [consul-template](#consul-template)
             - [consul-cli](#consul-cli)
     - [Building](#building)
@@ -106,6 +107,14 @@ commands normally does not do. Docker version 1.9 is beginning to address this i
 
 Packages consul.io with systemd. Check `/etc/sysconfig/consul` for
 configuration.
+
+#### consul-ui
+
+[*spec*](consul/consul-ui/spec.yml)
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/consul-ui/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/consul-ui/_latestVersion)
+
+Standalone web UI for Consul
 
 #### consul-template
 
