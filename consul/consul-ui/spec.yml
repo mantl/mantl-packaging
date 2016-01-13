@@ -1,0 +1,38 @@
+---
+name: consul-ui
+version: 0.6.1
+license: MPLv2.0
+iteration: 1
+vendor: Hashicorp
+url: https://consul.io
+architecture: x86_64
+description: Consul is a tool for service discovery and configuration.
+type: rpm
+
+depends:
+  - consul
+
+resources:
+  - url: https://releases.hashicorp.com/consul/{{.Version}}/consul_{{.Version}}_web_ui.zip
+    hash-type: sha256
+    hash: afccdd540b166b778c7c0483becc5e282bbbb1ee52335bfe94bf757df8c55efc
+
+targets:
+  - src: "{{.BuildRoot}}/web_ui/"
+    dest: /usr/share/consul-ui/
+
+  # configuration
+  - src: "{{.SpecRoot}}/consul-ui.json"
+    dest: /etc/consul/
+    config: true
+
+scripts:
+  build: |
+    mkdir web_ui
+    unzip consul_{{.Version}}_web_ui.zip -d web_ui
+
+extra-args: |
+  --rpm-os linux
+  --rpm-auto-add-directories
+  --rpm-auto-add-exclude-directories /etc/systemd
+  --rpm-auto-add-exclude-directories /etc/systemd/system

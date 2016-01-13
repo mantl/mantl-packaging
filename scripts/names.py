@@ -5,6 +5,7 @@ from subprocess import Popen, PIPE
 prefixes = {
     'consul/consul-cli': 'consul-cli',
     'consul/consul': 'consul',
+    'consul/consul-ui': 'consul-ui',
     'consul/consul-template': 'consul-template',
     'nomad/nomad': 'nomad',
     'packages/docker-cleanup': 'docker-cleanup',
