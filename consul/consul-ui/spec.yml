@@ -1,6 +1,6 @@
 ---
 name: consul-ui
-version: 0.6.1
+version: 0.6.2
 license: MPLv2.0
 iteration: 1
 vendor: Hashicorp
@@ -15,7 +15,7 @@ depends:
 resources:
   - url: https://releases.hashicorp.com/consul/{{.Version}}/consul_{{.Version}}_web_ui.zip
     hash-type: sha256
-    hash: afccdd540b166b778c7c0483becc5e282bbbb1ee52335bfe94bf757df8c55efc
+    hash: f144377b8078df5a3f05918d167a52123089fc47b12fc978e6fb375ae93afc90
 
 targets:
   - src: "{{.BuildRoot}}/web_ui/"
