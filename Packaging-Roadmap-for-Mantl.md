@@ -105,25 +105,30 @@ to write actual hammer specs and package them.
             // fails when the output is not "command_result|failed and 'No such file or directory'"
           packaging solutions:
             - disable firewalld (sudo systemctl disable firewalld)
-            - if the status is Active, disable has failed
+            - if the status is Active, disable has failed(exception handling in bash?)
             
         lines 44-48
             // sudo
             // update or install epel-release
            packaging solutions
-           - if it does not exist: sudo yum install epel-release
-           - if it does exist: sudo yum update epel-release
+           - if it does not exist: sudo yum -y install epel-release
+           - if it does exist: sudo yum -y update epel-release
                
         lines 50-54
             // sudo
             // install or update package python-pip
+           packaging solutions:
+           - if it does not exist: sudo yum -y install python-pip
+           - if it does exist: sudo yum -y update python-pip
             
         lines 56-63
             // sudo
             // update pip and setuptools
             // dependencies
                     - pip
-                    - setuptools
+                    - setup tools
+            packaging solutions:
+               sudo yum -y update pip setup tools
         
         lines 65-71
             // sudo
