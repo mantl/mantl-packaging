@@ -105,8 +105,8 @@ to write actual hammer specs and package them.
             // fails when the output is not "command_result|failed and 'No such file or directory'"
           packaging solutions:
             - disable firewalld (sudo systemctl disable firewalld)
-            - if the status is Active, disable has failed(exception handling in bash?)
-            
+            - if the status is "active (running)", disable has failed(exception handling in bash?)
+         
         lines 44-48
             // sudo
             // update or install epel-release
