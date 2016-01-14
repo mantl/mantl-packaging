@@ -31,8 +31,15 @@ scripts:
     mkdir web_ui
     unzip consul_{{.Version}}_web_ui.zip -d web_ui
 
+  after-install:
+    chown -R consul:consul /usr/share/consul-ui
+
+  after-upgrade:
+    chown -R consul:consul /usr/share/consul-ui
+
 extra-args: |
   --rpm-os linux
   --rpm-auto-add-directories
+  --rpm-auto-add-exclude-directories /etc/consul
   --rpm-auto-add-exclude-directories /etc/systemd
   --rpm-auto-add-exclude-directories /etc/systemd/system
