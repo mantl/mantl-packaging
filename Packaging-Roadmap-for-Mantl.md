@@ -71,8 +71,8 @@ to write actual hammer specs and package them.
             // set time to etc/utc
             // sudo
             // force a symlink to the src file in place of the path
-            packaging solutions:
-            - set timezone to UTC (`ln -sf /etc/localtime /usr/share/zoneinfo/Etc/UTC`)
+          packaging solutions:
+            - set timezone to UTC (`sudo ln -sf /etc/localtime /usr/share/zoneinfo/Etc/UTC`)
             - create `/etc/mantl`, a config dir that along with consul/vault k/v stores, can replace ansible facts
         
         lines 12-19
@@ -80,7 +80,10 @@ to write actual hammer specs and package them.
             // add hosts (hosts.j2) to /etc/hosts
             // set permissions to 644
             // tag is common
-            
+          packaging solutions:
+             -copy hosts.j2 to /etc/hosts(`sudo cp hosts.j2 /etc/hosts`)
+             -set permissions (`sudo chmod 0644 /etc/hosts`)            
+
         lines 21-33
             // install system utilities
             // sudo
@@ -92,17 +95,25 @@ to write actual hammer specs and package them.
                 - policycoreutils-python 
                 - unzip
             // tag is bootstrap
-                
+          packaging solutions:
+            - update packages (`sudo yum -y update httpd-tools nc openssh policycoreutils-python unzip`)                
+
         lines 35-42
             // sudo
             // firewalld is not started on boot
             // firewalld stopped
             // fails when the output is not "command_result|failed and 'No such file or directory'"
+          packaging solutions:
+            - disable firewalld (sudo systemctl disable firewalld)
+            - if the status is Active, disable has failed
             
         lines 44-48
             // sudo
             // update or install epel-release
-            
+           packaging solutions
+           - if it does not exist: sudo yum install epel-release
+           - if it does exist: sudo yum update epel-release
+               
         lines 50-54
             // sudo
             // install or update package python-pip
