@@ -1,0 +1,12 @@
+
+name: distributive-docker
+version: 0.2.1-test
+iteration: 1
+license: ASL 2.0
+description: Distributive-docker is a configuration for distributed health checks.
+url: https://github.com/CiscoCloud/distributive
+type: rpm
+
+targets:
+  - src: "{{.SpecRoot}}/distributive-docker.json"
+    dest: /etc/distributive.d/distributive-docker.json

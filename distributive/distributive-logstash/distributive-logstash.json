@@ -1,0 +1,46 @@
+{
+    "Name": "logstash health check",
+    "Notes": "For use with Microservice Infrastructure",
+    "Checklist" : [
+        {
+            "Name": "logstash configuration directory",
+            "ID": "directory",
+            "Parameters": ["/etc/logstash.d/"]
+        },
+        {
+            "Name": "logstash configuration file",
+            "ID": "file",
+            "Parameters": ["/etc/logstash.d/logstash.conf"]
+        },
+        {
+            "Name": "logstash systemd service file",
+            "ID": "file",
+            "Parameters": ["/usr/lib/systemd/system/logstash.service"]
+        },
+        {
+            "Name": "rsyslog configuration file",
+            "ID": "file",
+            "Parameters": ["/etc/rsyslog.conf"]
+        },
+        {
+            "Name": "logstashd statsd port",
+            "ID": "PortUDP",
+            "Parameters": ["8125"]
+        },
+        {
+            "Name": "logstashd collectd port",
+            "ID": "PortUDP",
+            "Parameters": ["25826"]
+        },
+        {
+            "Name": "logstashd syslog port",
+            "ID": "port",
+            "Parameters": ["1514"]
+        },
+        {
+            "Name": "logstash docker container running",
+            "ID": "dockerRunningRegexp",
+            "Parameters": ["ciscocloud/logstash"]
+        }
+    ]
+}

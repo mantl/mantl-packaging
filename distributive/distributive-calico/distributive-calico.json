@@ -1,0 +1,66 @@
+{
+    "Name": "calico health check",
+    "Notes": "For use with Microservice Infrastructure",
+    "Checklist" : [
+        {
+            "Name": "kernel modules to load on boot for calico",
+            "ID": "file",
+            "Parameters": ["/etc/modules-load.d/calico-modules.conf"]
+        },
+        {
+            "Name": "xt_set kernel module activated",
+            "ID": "module",
+            "Parameters": ["xt_set"]
+        },
+        {
+            "Name": "kernel packet forwarding enabled",
+            "ID": "kernelParameter",
+            "Parameters": ["net.ipv4.ip_forward"]
+        },
+        {
+            "Name": "calicoctl binary",
+            "ID": "file",
+            "Parameters": ["/usr/bin/calicoctl"]
+        },
+        {
+            "Name": "calico environment config",
+            "ID": "file",
+            "Parameters": ["/etc/default/calico"]
+        },
+        {
+            "Name": "mesos-slave networking integration",
+            "ID": "file",
+            "Parameters": ["/etc/mesos-slave/executor_environment_variables"]
+        },
+        {
+            "Name": "calico service loaded",
+            "ID": "systemctlLoaded",
+            "Parameters": ["calico.service"]
+        },
+        {
+            "Name": "calico service active",
+            "ID": "systemctlActive",
+            "Parameters": ["calico.service"]
+        },
+        {
+            "Name": "calico consul service",
+            "ID": "file",
+            "Parameters": ["/etc/consul/calico-service.json"]
+        },
+        {
+            "Name": "powerstrip port of calico docker image",
+            "ID": "port",
+            "Parameters": ["2377"]
+        },
+        {
+            "Name": "check-calico-node script existence",
+            "ID": "file",
+            "Parameters": ["/usr/local/bin/check-calico-node"]
+        },
+        {
+            "Name": "check-calico-node script",
+            "ID": "command",
+            "Parameters": ["/usr/local/bin/check-calico-node"]
+        }
+    ]
+}

@@ -1,0 +1,12 @@
+
+name: distributive-haproxy
+version: 0.2.1-test
+iteration: 1
+license: ASL 2.0
+description: Distributive-haproxy is a configuration for running distributed health checks.
+url: https://github.com/CiscoCloud/distributive
+type: rpm
+
+targets:
+  - src: "{{.SpecRoot}}/distributive-haproxy.json"
+    dest: /etc/distributive.d/distributive-haproxy.json

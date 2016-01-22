@@ -1,0 +1,51 @@
+{
+    "Name": "zookeeper health check",
+    "Notes": "For use with Microservice Infrastructure",
+    "Checklist" : [
+        {
+            "Name": "netcat installation",
+            "ID": "installed",
+            "Parameters": ["nmap-ncat"]
+        },
+        {
+            "Name": "wait-for-listen script existence",
+            "ID": "file",
+            "Parameters": ["/usr/local/bin/zookeeper-wait-for-listen.sh"]
+        },
+        {
+            "Name": "zookeeper log directory existence",
+            "ID": "directory",
+            "Parameters": ["/var/log/zookeeper/"]
+        },
+        {
+            "Name": "zookeeper misc. scripts",
+            "ID": "file",
+            "Parameters": ["/usr/local/bin/zookeeper_check.sh"]
+        },
+        {
+            "Name": "zookeeper consul service",
+            "ID": "file",
+            "Parameters": ["/etc/consul/zk-consul.json"]
+        },
+        {
+            "Name": "zookeeper collectd plugin",
+            "ID": "file",
+            "Parameters": ["/usr/share/collectd/plugins/zookeeper.py"]
+        },
+        {
+            "Name": "zookeeper collectd plugin configuration",
+            "ID": "file",
+            "Parameters": ["/etc/collectd.d/zookeeper.conf"]
+        },
+        {
+            "Name": "zookeeper service active",
+            "ID": "systemctlActive",
+            "Parameters": ["zookeeper.service"]
+        },
+        {
+            "Name": "zookeeper service loaded",
+            "ID": "systemctlLoaded",
+            "Parameters": ["zookeeper.service"]
+        }
+    ]
+}

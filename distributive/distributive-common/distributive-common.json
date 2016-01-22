@@ -1,0 +1,61 @@
+{
+    "Name": "common health check",
+    "Notes": "For use with Microservice Infrastructure",
+    "Checklist" : [
+        {
+            "Name": "timezone is UTC",
+            "ID": "symlink",
+            "Parameters": ["/etc/localtime"]
+        },
+        {
+            "Name": "httpd-tools installation",
+            "ID": "installed",
+            "Parameters": ["httpd-tools"]
+        },
+        {
+            "Name": "openssh installation",
+            "ID": "installed",
+            "Parameters": ["openssh"]
+        },
+        {
+            "Name": "firewalld disabled",
+            "ID": "systemctlUnitFileStatus",
+            "Parameters": ["firewalld.service", "disabled"]
+        },
+        {
+            "Name": "pip installation",
+            "ID": "installed",
+            "Parameters": ["python-pip"]
+        },
+        {
+            "Name": "distributive installation",
+            "ID": "installed",
+            "Parameters": ["distributive"]
+        },
+        {
+            "Name": "distributive configuration directory",
+            "ID": "directory",
+            "Parameters": ["/etc/distributive.d/"]
+        },
+        {
+            "Name": "root ca present",
+            "ID": "file",
+            "Parameters": ["/etc/pki/ca-trust/source/anchors/cacert.pem"]
+        },
+        {
+            "Name": "cpu usage is below 100%",
+            "ID": "cpuUsage",
+            "Parameters": ["100%"]
+        },
+        {
+            "Name": "memory usage is below 100%",
+            "ID": "memoryUsage",
+            "Parameters": ["100%"]
+        },
+        {
+            "Name": "disk usage is below 90%",
+            "ID": "diskUsage",
+            "Parameters": ["/", "90%"]
+        }
+    ]
+}
