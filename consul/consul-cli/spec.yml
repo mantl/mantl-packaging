@@ -2,12 +2,14 @@
 name: consul-cli
 version: 0.1.0
 license: APL 2.0
-iteration: 1
+iteration: 2
 vendor: Cisco
 url: https://github.com/CiscoCloud/consul-cli
 architecture: x86_64
 description: Command line interface to Consul HTTP API
 type: rpm
+obsoletes:
+  - consul-utils
 
 resources:
   - url: https://github.com/CiscoCloud/consul-cli/releases/download/v{{.Version}}/consul-cli_{{.Version}}_linux_amd64.tar.gz

@@ -3,6 +3,8 @@ Description={{.Description}}
 Documentation={{.URL}}
 After=network-online.target
 Wants=network-online.target
+After=rsyslog.service
+Wants=rsyslog.service
 
 [Service]
 User=consul

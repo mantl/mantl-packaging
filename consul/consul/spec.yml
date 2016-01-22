@@ -1,8 +1,8 @@
 ---
 name: consul
-version: 0.6.0
+version: 0.6.2
 license: MPLv2.0
-iteration: 2
+iteration: 1
 vendor: Hashicorp
 url: https://consul.io
 architecture: x86_64
@@ -15,17 +15,12 @@ depends:
 
 resources:
   - url: https://releases.hashicorp.com/consul/{{.Version}}/consul_{{.Version}}_linux_amd64.zip
-    hash-type: sha1
-    hash: 6c251f1a9249a8e9599cf54b009cca1b3fea45dc
-  - url: https://releases.hashicorp.com/consul/{{.Version}}/consul_{{.Version}}_web_ui.zip
-    hash-type: sha1
-    hash: 1bfeed05508a029a20977ad6aefeda933f46f512
+    hash-type: sha256
+    hash: 7234eba9a6d1ce169ff8d7af91733e63d8fc82193d52d1b10979d8be5c959095
 
 targets:
   - src: "{{.BuildRoot}}/consul"
     dest: /usr/bin/
-  - src: "{{.BuildRoot}}/web_ui/"
-    dest: /usr/share/consul-ui/
 
   # data storage
   - src: "{{empty}}"
@@ -43,9 +38,6 @@ targets:
   - src: "{{.SpecRoot}}/consul.json"
     dest: /etc/consul/
     config: true
-  - src: "{{.SpecRoot}}/consul-ui.json"
-    dest: /etc/consul/
-    config: true
   - src: "{{empty}}"
     dest: /etc/consul/ssl
     config: true
@@ -53,9 +45,6 @@ targets:
 scripts:
   build: |
     unzip consul_{{.Version}}_linux_amd64.zip
-
-    mkdir web_ui
-    unzip consul_{{.Version}}_web_ui.zip -d web_ui
 
   before-install: |
     getent group consul > /dev/null || groupadd -r consul
@@ -81,6 +70,9 @@ scripts:
     usermod -s /bin/bash consul
 
   after-upgrade: |
+    chown consul:consul /var/lib/consul
+    chown consul:consul /etc/consul
+
     systemctl reload-daemon
     systemctl restart consul.service
 
