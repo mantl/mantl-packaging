@@ -2,14 +2,14 @@
 #### Rationale
 To improve mantl's deployment speed, we are going to replace some
 ansible role logic with packages. These packages will be defined by a hammer spec,
-and uploaded to bintray. Anything that is as simple as 'copy this file here' 
+and uploaded to bintray. Anything that is as simple as 'copy this file here'
 or 'run this command' can be ported to these packages. Then, the ansible roles can
 be updated to simple package install commands
 
 Because we are using the hammer tool to build these, when hammer supports `.deb` packages,
 ubuntu/debian support will come much more easily.
 
-Logic that relies upon Jinja2 templates could be ported to Consul templates, 
+Logic that relies upon Jinja2 templates could be ported to Consul templates,
 and those could be ported to packages.
 
 The more ansible roles that we port to packages, the faster the build process will be.
@@ -53,19 +53,17 @@ to write actual hammer specs and package them.
 
 `mantl-common`
 
-
-
     - pyhon-pip
-- Reverse Dependencies 
+- Reverse Dependencies
     - mantl-distributive
     - mantl-consul
 
 -Components
 
     -defaults/main.yml: selinux with permissive policy and central configuration
-    
+
     -handlers/main.yml: update-ca-trust
-    
+
     -tasks/main.yml
         lines 3-9
             // set time to etc/utc
@@ -74,7 +72,7 @@ to write actual hammer specs and package them.
           packaging solutions:
             - set timezone to UTC (`sudo ln -sf /etc/localtime /usr/share/zoneinfo/Etc/UTC`)
             - create `/etc/mantl`, a config dir that along with consul/vault k/v stores, can replace ansible facts
-        
+
         lines 12-19
             // sudo
             // add hosts (hosts.j2) to /etc/hosts
@@ -89,10 +87,10 @@ to write actual hammer specs and package them.
             // sudo
             // update yum packages(yum -y update)
             // dependencies/packages
-                - httpd-tools 
-                - nc 
-                - openssh 
-                - policycoreutils-python 
+                - httpd-tools
+                - nc
+                - openssh
+                - policycoreutils-python
                 - unzip
             // tag is bootstrap
           packaging solutions:
@@ -104,23 +102,45 @@ to write actual hammer specs and package them.
             // firewalld stopped
             // fails when the output is not "command_result|failed and 'No such file or directory'"
           packaging solutions:
-            - disable firewalld (sudo systemctl disable firewalld)
-            - if the status is "active (running)", disable has failed(exception handling in bash?)
-         
+            // disable firwalld (sudo systemctl disable firewalld)
+            // run a script that checks if it is disabled
+                ./firewalld_script
+            // script that checks that it is disabled
+              #!/go/bin
+              package main
+              import (
+                  "fmt"
+                  "log"
+                  "os/exec"
+              )
+
+              func main () {
+                  // check state of firewalld
+                  out, err := exec.Command("firewalld-cmd --state").Output()
+                  if err != nil{
+                    log.Fatal(err)
+                  }
+                  // if the state is NOT not running, disable has failed
+                  if out != not running{
+                    log.Fatal(err)
+                    fmt.println ("Firewalld is not disabled.")
+                  }      
+              }
+
         lines 44-48
             // sudo
             // update or install epel-release
            packaging solutions
            - if it does not exist: sudo yum -y install epel-release
            - if it does exist: sudo yum -y update epel-release
-               
+
         lines 50-54
             // sudo
             // install or update package python-pip
            packaging solutions:
            - if it does not exist: sudo yum -y install python-pip
            - if it does exist: sudo yum -y update python-pip
-            
+
         lines 56-63
             // sudo
             // update pip and setuptools
@@ -128,46 +148,48 @@ to write actual hammer specs and package them.
                     - pip
                     - setup tools
             packaging solutions:
-               sudo yum -y update pip setup tools
-        
+               sudo yum -y update pip setuptools
+
         lines 65-71
             // sudo
             // install distributive from bintray:
-                // https://bintray.com/artifact/download/ciscocloud/rpm/distributive-0.2.1-5.el7.centos.x86_64.rpm
+                //https://bintray.com/artifact/download/ciscocloud/rpm/distributive-0.2.1-5.el7.centos.x86_64.rpm
             // tag is distributive
-            
+            // use bintray.sh to install 
+
         lines 73-80
-            lineinfile-ensure that a particular line is in a file, or replace an existing line using a back-referenced                      regular expression
+            lineinfile-ensure that a particular line is in a file, or replace an existing line using a back-referenced regular expression
             // sudo
             // disable requiretty in sudoers
                 // look for the regular expression ^.+requiretty$ in every line of the file, /etc/sudoers. This regular                         expression should be in this file.
                 // replace the last instance of this regular expression with "# Defaults requiretty"
-                
+            -packaging solutions: write a search and replace script that replaces the last instance      of the string
+
         lines 82-89
             // sudo
             // configure selinux
                 // set the SELinux policy and the SELinux mode
             // tags are security and bootstrap
-            
+
         lines 91-92
             // sudo
             // dependencies for this file include other files within tasks/
                 - users.yml
                 - ssl.yml
-                
+
     - tasks/ssl.ym: deploy root ca
         // sudo
         // copy local path ssl/cacert.pem to remote server /etc/pki/ca-trust/source/anchors/cacert.pem
         // root is the owner(chown)
         // notify handler update-ca-trust
-        
+
     - tasks/users.yml
         lines 2-10: configure members of wheel group for passwordlest sudo
             // sudo
             // look in file /etc/sudoersfor regular expression "^%wheel" that should be there
             // replace the last instance of the regular expression with "%wheel ALL=(ALL) NOPASSWD: ALL"
             // users is tag
-        
+
         lines 12-20: create os users
             // sudo
             // name of user needing modification (form of item.name)
@@ -175,23 +197,23 @@ to write actual hammer specs and package them.
             // dependencies
                 - users
             // tags is users
-            
+
         lines 22-30: set ssh key for users
             // sudo
             // add an ssh authorized key to the user when the key(item.1) is defined and enabled (item.0.enabled == 1)
             // loop through list of subelements, users|default([]) and pubkeys
             // users is tags
-            
+
         lines 32-41: delete os users
             // sudo
             // if the user exists remove them (userdel --remove) when item.enabled is defined and item.enabled == 0
             // dependencies
                 -users
             // users is tags
-            
+
         - templates/hosts.j2
             // sets hosts file, use the template instead of regex
-            
+
 `mantl-lvm`
 - create volume group, and save the in `etc/mantl`
 - enable lvmetad service
@@ -221,7 +243,7 @@ to write actual hammer specs and package them.
         line 14
         // sudo
         // create plugins directory /usr/share/collectd/plugins
-        // permissions 0755(chmod) 
+        // permissions 0755(chmod)
         // tag is collectd
 
         line 23
@@ -325,7 +347,7 @@ ZooKeeper is used for coordination among Mesos and Marathon nodes.
     - collectd.yml
     - jobs.yml
     - distributive.yml
-    
+
     - key: zk
       value: "{{ marathon_zk_connect }}"
     - key: ssl_keystore_password
