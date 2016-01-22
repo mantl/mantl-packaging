@@ -20,6 +20,9 @@ for building generic Mantl utilities.
             - [consul-ui](#consul-ui)
             - [consul-template](#consul-template)
             - [consul-cli](#consul-cli)
+        - [Vault Packages](#vault-packages)
+            - [vault](#vault)
+            - [vault-mantl](#vault-mantl)
     - [Building](#building)
 
 <!-- markdown-toc end -->
@@ -133,6 +136,34 @@ systemd. Check `/etc/sysconfig/consul-template` for configuration.
 
 Packages [consul-cli](https://github.com/CiscoCloud/consul-cli) with the
 currently released version.
+
+> A Distributed, Highly Available, Datacenter-Aware Scheduler
+
+- [Nomad's Project Page](https://nomadproject.io/)
+
+#### vault
+
+[*spec*](vault/vault/spec.yml)
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/vault/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/vault/_latestVersion)
+
+Packages vault.io with systemd. Check `/etc/sysconfig/vault` for
+configuration.
+
+#### vault-mantl
+
+[*spec*](vault/vault-mantl/spec.yml)
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/vault-mantl/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/vault-mantl/_latestVersion)
+
+Packages mantl.io specific scripts for Vault. 
+
+| Script                          | Description                               |
+|---------------------------------|-------------------------------------------|
+| `vault-bootstrap.sh`            | Initialize vault and store keys in Consul |
+| `vault-health-check.sh`         | Consul health check script for Vault      |
+| `vault-register-with-consul.sh` | Register the Vault service with Consul    |
+| `vault-unseal.sh`               | Read tokens from Consul and unlock Vault  |
 
 ## Building
 
