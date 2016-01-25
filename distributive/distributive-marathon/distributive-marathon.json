@@ -18,16 +18,6 @@
             "Parameters": ["/usr/lib/systemd/system/marathon.service"]
         },
         {
-            "Name": "marathon collectd plugin",
-            "ID": "file",
-            "Parameters": ["/usr/share/collectd/plugins/marathon.py"]
-        },
-        {
-            "Name": "marathon collectd configuration",
-            "ID": "file",
-            "Parameters": ["/etc/collectd.d/marathon.conf"]
-        },
-        {
             "Name": "marathon nginx configuration",
             "ID": "file",
             "Parameters": ["/etc/marathon/marathon.nginx"]

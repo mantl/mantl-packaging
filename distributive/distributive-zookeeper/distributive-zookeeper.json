@@ -28,16 +28,6 @@
             "Parameters": ["/etc/consul/zk-consul.json"]
         },
         {
-            "Name": "zookeeper collectd plugin",
-            "ID": "file",
-            "Parameters": ["/usr/share/collectd/plugins/zookeeper.py"]
-        },
-        {
-            "Name": "zookeeper collectd plugin configuration",
-            "ID": "file",
-            "Parameters": ["/etc/collectd.d/zookeeper.conf"]
-        },
-        {
             "Name": "zookeeper service active",
             "ID": "systemctlActive",
             "Parameters": ["zookeeper.service"]
