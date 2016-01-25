@@ -167,7 +167,7 @@ Packages mantl.io specific scripts for Vault.
 
 #### distributive-checks
 
-Contain distributive health checks based on the software included in Mantl. Distributive-checks are located in the directory [*distributive*](asteris-llc/mantl-packaging/distributive)
+Contain distributive health checks based on the software included in Mantl. Distributive-checks are located in the directory asteris-llc/mantl-packaging/distributive
 
 ## Building
 
