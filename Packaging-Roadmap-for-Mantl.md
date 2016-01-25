@@ -101,11 +101,11 @@ to write actual hammer specs and package them.
             // firewalld is not started on boot
             // firewalld stopped
             // fails when the output is not "command_result|failed and 'No such file or directory'"
-          packaging solutions:
+          packaging solutions: firewalld-cmd --state; echo $?       252=NOT_RUNNING
             // disable firwalld (sudo systemctl disable firewalld)
             // run a script that checks if it is disabled
                 ./firewalld_script
-            // script that checks that it is disabled
+            // script that checks that it is disabled(ok, go was fun but come up with bash commands instead)
               #!/go/bin
               package main
               import (
@@ -155,7 +155,7 @@ to write actual hammer specs and package them.
             // install distributive from bintray:
                 //https://bintray.com/artifact/download/ciscocloud/rpm/distributive-0.2.1-5.el7.centos.x86_64.rpm
             // tag is distributive
-            // use bintray.sh to install 
+            // use bintray.sh to install
 
         lines 73-80
             lineinfile-ensure that a particular line is in a file, or replace an existing line using a back-referenced regular expression
@@ -214,6 +214,66 @@ to write actual hammer specs and package them.
         - templates/hosts.j2
             // sets hosts file, use the template instead of regex
 
+`mantl-docker`
+  /docker/defaults/main.yml
+
+`mantl-dnsmasq`
+      /files/distributive-dnsmasq-check.json
+      /handlers/main.yml
+        - run 2 commands on nodes
+        - sudo systemctl restart NetworkManager
+        - sudo systemctl restart dnsmasq
+      /tasks/distributive.yml
+        - create directory at destination /etc/consul when consul_dc_group is defined
+        - chmod 0700
+        - tags are consul, distributive, dnsmasq
+
+        line 16
+        - sudo
+        - create a symlink to distributive dnsmasq checklist from
+          /usr/share/distributive/dnsmasq.json to /etc/distributive.d/dnsmasq.json
+        - tags are consul, distributive, dnsmasq
+
+        line 27
+        // register distributive tests with consul
+        - sudo
+        - copy distributive-dnsmasq-check.json to /etc/consul/ when consul_dc_group is defined
+        - reload consul
+        - tags are consul, distributive, dnsmasq
+
+      /tasks/main.yml
+        - sudo yum install latest versions of packages dnsmasq, bind-utils, NetworkManager
+        - tags are dnsmasq and bootstrap
+
+        line 15
+        //collect nameservers
+        - run shell command on node:  "sudo cat /etc/resolv.conf | grep -i '^nameserver' | cut -d ' ' -f2"
+        - the output of the above command should be set to variable "nameservers_output"
+        - tag is dnsmasq
+
+        line 22
+        - run shell command on node: "cat /etc/resolv.conf | grep -i '^search' | cut -d ' ' -f2- | tr ' ' '\n'"
+        - store output in variable "dns_search_list_output"
+        - tag is dnsmasq
+
+        line 29
+        // set nameservers
+        // establish key-value pairs
+          - nameservers:  "{{ nameservers_output.stdout_lines }}"
+        // tag dnsmasq  
+
+        line 35
+        // set dns search list(key-value pair)
+          - domain_search_list: "{{ dns_search_list_output.stdout_lines }}"
+        // tag is dnsmasq
+
+        line 41
+        // ensure dnsmasq.d directory exists
+          - sudo create directory and subdirectories: /etc/NetworkManager/dnsmasq.d
+        // tag is dnsmasq
+
+        line 49
+        
 `mantl-lvm`
 - create volume group, and save the in `etc/mantl`
 - enable lvmetad service
