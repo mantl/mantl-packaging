@@ -156,7 +156,7 @@ configuration.
 
 [ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/vault-mantl/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/vault-mantl/_latestVersion)
 
-Packages mantl.io specific scripts for Vault. 
+Packages mantl.io specific scripts for Vault.
 
 | Script                          | Description                               |
 |---------------------------------|-------------------------------------------|
@@ -165,9 +165,12 @@ Packages mantl.io specific scripts for Vault.
 | `vault-register-with-consul.sh` | Register the Vault service with Consul    |
 | `vault-unseal.sh`               | Read tokens from Consul and unlock Vault  |
 
+#### distributive-checks
+
+Contain distributive health checks based on the software included in Mantl. Distributive-checks are located in the directory [*distributive*](asteris-llc/mantl-packaging/distributive)
+
 ## Building
 
 If you're on linux, run `hammer` to build all of the packages, which will end up
 in `out`. If you're on another platform, run `./build.sh` to fire up a Vagrant
 VM that will provision itself with hammer and do the same.
-
