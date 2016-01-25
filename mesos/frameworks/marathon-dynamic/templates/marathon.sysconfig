@@ -1,0 +1,11 @@
+# defaults
+MARATHON_MASTER=zk://zookeeper.service.consul:2181/mesos
+MARATHON_LOGGING_LEVEL=info
+
+# overrides
+{{range ls "config/marathon/options"}}MARATHON_{{.Key | toUpper}}={{.Value}}
+{{end}}
+
+# node-specific overrides
+{{range ls (plugin "keyForNode" "config/marathon/nodes/%s/options")}}MARATHON_{{.Key | toUpper}}={{.Value}}
+{{end}}
