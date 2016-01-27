@@ -1,6 +1,6 @@
 ---
 name: nomad
-version: 0.2.0
+version: 0.2.3
 license: MPLv2.0
 iteration: 1
 vendor: Hashicorp
@@ -13,9 +13,9 @@ depends:
   - systemd
 
 resources:
-  - url: https://releases.hashicorp.com/nomad/0.2.0/nomad_0.2.0_linux_amd64.zip
-    hash-type: sha1
-    hash: 926374326494e45efae6a18b3e0b6ee8ffffe509
+  - url: https://releases.hashicorp.com/nomad/{{.Version}}/nomad_{{.Version}}_linux_amd64.zip
+    hash-type: sha256
+    hash: 0f3a7083d160893a291b5f8b4359683c2df7991fa0a3e969f8785ddb40332a8c
 
 targets:
   - src: "{{.BuildRoot}}/nomad"
@@ -26,8 +26,8 @@ targets:
   - src: "{{.SpecRoot}}/nomad.sysconfig"
     dest: /etc/sysconfig/nomad
     config: true
-  - src: "{{.SpecRoot}}/nomad.hcl"
-    dest: /etc/nomad/nomad.hcl
+  - src: "{{.SpecRoot}}/nomad.json"
+    dest: /etc/nomad/nomad.json
     config: true
   - src: "{{empty}}"
     dest: /var/lib/nomad

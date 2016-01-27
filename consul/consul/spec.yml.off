@@ -1,6 +1,6 @@
 ---
 name: consul
-version: 0.6.0
+version: 0.6.3
 license: MPLv2.0
 iteration: 1
 vendor: Hashicorp
@@ -11,20 +11,16 @@ type: rpm
 
 depends:
   - systemd
+  - bash
 
 resources:
   - url: https://releases.hashicorp.com/consul/{{.Version}}/consul_{{.Version}}_linux_amd64.zip
-    hash-type: sha1
-    hash: 6c251f1a9249a8e9599cf54b009cca1b3fea45dc
-  - url: https://releases.hashicorp.com/consul/{{.Version}}/consul_{{.Version}}_web_ui.zip
-    hash-type: sha1
-    hash: 1bfeed05508a029a20977ad6aefeda933f46f512
+    hash-type: sha256
+    hash: b0532c61fec4a4f6d130c893fd8954ec007a6ad93effbe283a39224ed237e250
 
 targets:
   - src: "{{.BuildRoot}}/consul"
     dest: /usr/bin/
-  - src: "{{.BuildRoot}}/web_ui/"
-    dest: /usr/share/consul-ui/
 
   # data storage
   - src: "{{empty}}"
@@ -42,9 +38,6 @@ targets:
   - src: "{{.SpecRoot}}/consul.json"
     dest: /etc/consul/
     config: true
-  - src: "{{.SpecRoot}}/consul-ui.json"
-    dest: /etc/consul/
-    config: true
   - src: "{{empty}}"
     dest: /etc/consul/ssl
     config: true
@@ -53,16 +46,13 @@ scripts:
   build: |
     unzip consul_{{.Version}}_linux_amd64.zip
 
-    mkdir web_ui
-    unzip consul_{{.Version}}_web_ui.zip -d web_ui
-
   before-install: |
     getent group consul > /dev/null || groupadd -r consul
     getent passwd consul > /dev/null || \
         useradd -r \
                 -g consul \
                 -d /var/lib/consul \
-                -s /sbin/nologin \
+                -s /bin/bash \
                 -c "consul.io user" \
                 consul
 
@@ -76,12 +66,19 @@ scripts:
   before-remove: |
     systemctl disable consul.service
 
+  before-upgrade: |
+    usermod -s /bin/bash consul
+
   after-upgrade: |
+    chown consul:consul /var/lib/consul
+    chown consul:consul /etc/consul
+
     systemctl reload-daemon
     systemctl restart consul.service
 
 extra-args: |
   --rpm-os linux
+  --rpm-dist centos
   --rpm-auto-add-directories
   --rpm-auto-add-exclude-directories /etc/systemd
   --rpm-auto-add-exclude-directories /etc/systemd/system

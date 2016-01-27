@@ -1,8 +1,8 @@
 ---
 name: consul-template
-version: 0.10.0
+version: 0.12.2
 license: MPLv2.0
-iteration: 2
+iteration: 1
 vendor: Hashicorp
 url: https://github.com/hashicorp/consul-template
 architecture: x86_64
@@ -10,16 +10,15 @@ description: Generic template rendering and notifications with Consul
 type: rpm
 
 depends:
-  - consul = 0.5.2
   - systemd
 
 resources:
-  - url: https://github.com/hashicorp/consul-template/releases/download/v{{.Version}}/consul-template_{{.Version}}_linux_amd64.tar.gz
-    hash-type: sha1
-    hash: 606678dfe2a50b06c10d5d3872b31e7495f5e8da
+  - url: https://releases.hashicorp.com/consul-template/{{.Version}}/consul-template_{{.Version}}_linux_amd64.zip
+    hash-type: sha256
+    hash: a8780f365bf5bfad47272e4682636084a7475ce74b336cdca87c48a06dd8a193
 
 targets:
-  - src: "{{.BuildRoot}}/consul-template_{{.Version}}_linux_amd64/consul-template"
+  - src: "{{.BuildRoot}}/consul-template"
     dest: /usr/bin/
   - src: "{{.SpecRoot}}/plugins/"
     dest: /usr/bin/
@@ -40,7 +39,7 @@ targets:
 
 scripts:
   build: |
-    tar -xzvf consul-template_{{.Version}}_linux_amd64.tar.gz
+    unzip consul-template_{{.Version}}_linux_amd64.zip
 
   after-install: |
     systemctl enable /etc/systemd/system/consul-template.service

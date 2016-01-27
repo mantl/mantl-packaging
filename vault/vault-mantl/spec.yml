@@ -1,0 +1,30 @@
+---
+name: vault-mantl
+version: 0.1.0
+license: Apache-2.0
+iteration: 1
+vendor: Asteris, LLC.
+architecture: x86_64
+description: Mantl Vault
+type: rpm
+
+depends:
+  - jq
+  - consul
+  - consul-cli
+
+targets:
+  - src: "{{.SpecRoot}}/vault-unseal.sh"
+    dest: /usr/local/bin
+  - src: "{{.SpecRoot}}/vault-bootstrap.sh"
+    dest: /usr/local/bin
+  - src: "{{.SpecRoot}}/vault-health-check.sh"
+    dest: /usr/local/bin
+  - src: "{{.SpecRoot}}/vault-register-with-consul.sh"
+    dest: /usr/local/bin
+
+extra-args: |
+  --rpm-os linux
+  --rpm-auto-add-directories
+  --rpm-auto-add-exclude-directories /etc/systemd
+  --rpm-auto-add-exclude-directories /etc/systemd/system
