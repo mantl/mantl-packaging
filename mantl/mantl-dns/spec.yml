@@ -9,9 +9,9 @@ description: DNS integration with Consul
 type: rpm
 
 depends:
-  - dnsmasq-2.66
-  - bind-utils-9.9.4
-  - NetworkManager-1.0.6
+  - dnsmasq = 2.66
+  - bind-utils = 32:9.9.4
+  - NetworkManager = 1:1.0.6
 
 targets:
   - src: "{{.SpecRoot}}/10-consul"
