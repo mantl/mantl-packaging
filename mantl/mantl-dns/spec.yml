@@ -1,7 +1,7 @@
 ---
 name: mantl-dns
 version: 1.0.0
-license: MPLv2.0
+license: ASL 2.0
 iteration: 1
 vendor: Asteris
 url: https://github.com/asteris-llc/mantl-packaging
