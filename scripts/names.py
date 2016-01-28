@@ -13,6 +13,7 @@ prefixes = {
     'packages/traefik': 'traefik',
     'vault/vault': 'vault',
     'vault/vault-mantl': 'vault-mantl',
+    'mantl/mantl-dns': 'mantl-dns',
 }
 
 def diffed_files(a, b):
