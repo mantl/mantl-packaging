@@ -40,6 +40,9 @@ scripts:
     systemctl enable dnsmasq 2>/dev/null
     systemctl restart NetworkManager dnsmasq
 
+    # start consul again - upgrading NetworkManager turns it off
+    systemctl status consul | grep -q running || systemctl start consul
+
   before-remove: |
     sed -i '/dns=none/d' /etc/NetworkManager/NetworkManager.conf
     mv /etc/resolv.conf.masq /etc/resolv.conf
