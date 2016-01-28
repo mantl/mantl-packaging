@@ -1,0 +1,13 @@
+# Listen on all interfaces
+interface=*
+
+addn-hosts=/etc/hosts
+
+# Be a "good netizen" and don't forward private domains to the root servers
+bogus-priv
+domain-needed
+
+resolv-file=/etc/resolv.conf.masq
+
+# configure DNS resolution to consul servers
+server=/consul/127.0.0.1#8600
