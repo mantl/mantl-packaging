@@ -23,8 +23,6 @@ scripts:
     mkdir -p /etc/dnsmasq.d
 
   after-install: |
-    yum install -y NetworkManager dnsmasq bind-utils
-
     # turn off PEERDNS on all interfaces
     find /etc/sysconfig/network-scripts -name 'ifcfg-*' \
          -exec sed -i 's/PEERDNS=.*/PEERDNS=no/g' {} \;
