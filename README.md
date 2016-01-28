@@ -23,6 +23,8 @@ for building generic Mantl utilities.
         - [Vault Packages](#vault-packages)
             - [vault](#vault)
             - [vault-mantl](#vault-mantl)
+        - [Mantl Packages](#mantl-packages)
+            - [mantl-dns](#mantl-dns)
     - [Building](#building)
 
 <!-- markdown-toc end -->
@@ -156,7 +158,7 @@ configuration.
 
 [ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/vault-mantl/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/vault-mantl/_latestVersion)
 
-Packages mantl.io specific scripts for Vault. 
+Packages mantl.io specific scripts for Vault.
 
 | Script                          | Description                               |
 |---------------------------------|-------------------------------------------|
@@ -165,9 +167,18 @@ Packages mantl.io specific scripts for Vault.
 | `vault-register-with-consul.sh` | Register the Vault service with Consul    |
 | `vault-unseal.sh`               | Read tokens from Consul and unlock Vault  |
 
+### Mantl Packages
+
+#### mantl-dns
+
+[*spec*](consul/consul-dns/spec.yml)
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/mantl-dns/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/mantl-dns/_latestVersion)
+
+DNS setup with dnsmasq and Consul
+
 ## Building
 
 If you're on linux, run `hammer` to build all of the packages, which will end up
 in `out`. If you're on another platform, run `./build.sh` to fire up a Vagrant
 VM that will provision itself with hammer and do the same.
-
