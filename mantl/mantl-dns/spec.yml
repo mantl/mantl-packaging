@@ -2,13 +2,14 @@
 name: mantl-dns
 version: 1.0.0
 license: ASL 2.0
-iteration: 1
+iteration: 2
 vendor: Asteris
 url: https://github.com/asteris-llc/mantl-packaging
 description: DNS integration with Consul
 type: rpm
 
 depends:
+  - consul
   - dnsmasq = 2.66
   - bind-utils = 32:9.9.4
   - NetworkManager = 1:1.0.6
@@ -41,7 +42,7 @@ scripts:
     systemctl restart NetworkManager dnsmasq
 
     # start consul again - upgrading NetworkManager turns it off
-    systemctl status consul | grep -q running || systemctl start consul
+    systemctl start consul
 
   before-remove: |
     sed -i '/dns=none/d' /etc/NetworkManager/NetworkManager.conf
