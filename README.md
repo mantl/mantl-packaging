@@ -23,6 +23,7 @@ for building generic Mantl utilities.
         - [Vault Packages](#vault-packages)
             - [vault](#vault)
             - [vault-mantl](#vault-mantl)
+        - [Distributive Checks](#distributive-checks)
     - [Building](#building)
 
 <!-- markdown-toc end -->
@@ -165,9 +166,10 @@ Packages mantl.io specific scripts for Vault.
 | `vault-register-with-consul.sh` | Register the Vault service with Consul    |
 | `vault-unseal.sh`               | Read tokens from Consul and unlock Vault  |
 
-#### distributive-checks
+### Distributive Checks
 
-Contain distributive health checks based on the software included in Mantl. Distributive-checks are located in the directory asteris-llc/mantl-packaging/distributive
+Distributive checks for various packages are included in
+[the `distributive` directory](distributive).
 
 ## Building
 
