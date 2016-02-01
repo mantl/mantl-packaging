@@ -7,5 +7,5 @@ url: https://github.com/CiscoCloud/distributive
 type: rpm
 
 targets:
-  - src: "{{.SpecRoot}}/distributive-collectd-docker.json"
-    dest: /etc/distributive.d/distributive-collectd-docker.json
+  - src: "{{.SpecRoot}}/collectd-docker.json"
+    dest: /etc/distributive.d/collectd-docker.json
