@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 import sys
+import os
 from subprocess import Popen, PIPE
 
 prefixes = {
@@ -14,6 +15,10 @@ prefixes = {
     'vault/vault': 'vault',
     'vault/vault-mantl': 'vault-mantl',
 }
+
+for dist_name in os.listdir('distributive'):
+    prefixes['distributive/' + dist_name] = dist_name
+
 
 def diffed_files(a, b):
     """get the diffed files between two commits"""
