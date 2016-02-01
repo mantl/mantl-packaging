@@ -25,6 +25,7 @@ for building generic Mantl utilities.
             - [vault-mantl](#vault-mantl)
         - [Mantl Packages](#mantl-packages)
             - [mantl-dns](#mantl-dns)
+        - [Distributive Checks](#distributive-checks)
     - [Building](#building)
 
 <!-- markdown-toc end -->
@@ -176,6 +177,11 @@ Packages mantl.io specific scripts for Vault.
 [ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/mantl-dns/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/mantl-dns/_latestVersion)
 
 DNS setup with dnsmasq and Consul
+
+### Distributive Checks
+
+Distributive checks for various packages are included in
+[the `distributive` directory](distributive).
 
 ## Building
 

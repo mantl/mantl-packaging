@@ -1,0 +1,21 @@
+{
+    "Name": "vault health check",
+    "Notes": "For use with Microservice Infrastructure",
+    "Checklist" : [
+        {
+            "Name": "vault installation",
+            "ID": "installed",
+            "Parameters": ["vault"]
+        },
+        {
+            "Name": "vault systemd service file present",
+            "ID": "file",
+            "Parameters": ["/usr/lib/systemd/system/vault.service"]
+        },
+        {
+            "Name": "vault systemd service enabled",
+            "ID": "systemctlLoaded",
+            "Parameters": ["vault.service"]
+        }
+    ]
+}

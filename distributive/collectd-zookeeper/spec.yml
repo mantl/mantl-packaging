@@ -1,0 +1,11 @@
+name: collectd-zookeeper
+version: 0.2.4
+iteration: 1
+license: ASL 2.0
+description: Collectd-zookeeper provides the collectd health checks for distributive-zookeeper.
+url: https://github.com/CiscoCloud/distributive
+type: rpm
+
+targets:
+  - src: "{{.SpecRoot}}/collectd-zookeeper.json"
+    dest: /etc/distributive.d/collectd-zookeeper.json
