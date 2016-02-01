@@ -1,0 +1,11 @@
+name: distributive-collectd-docker
+version: 0.2.4
+iteration: 1
+license: ASL 2.0
+description: distributive-collectd-docker provides the distributive-collectd health check for distributive-docker.
+url: https://github.com/CiscoCloud/distributive
+type: rpm
+
+targets:
+  - src: "{{.SpecRoot}}/distributive-collectd-docker.json"
+    dest: /etc/distributive.d/distributive-collectd-docker.json

@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 import sys
+import os
+from os import path
 from subprocess import Popen, PIPE
 
 prefixes = {
@@ -16,12 +18,17 @@ prefixes = {
     'mantl/mantl-dns': 'mantl-dns',
 }
 
+for dist_name in os.listdir('distributive'):
+    prefixes[path.join('distributive', dist_name)] = dist_name
+
+
 def diffed_files(a, b):
     """get the diffed files between two commits"""
     git = Popen(["git", "diff", "--name-only", a, b], stdout=PIPE, stderr=PIPE)
     out, err = git.communicate()
 
     return out.split()
+
 
 def main(args):
     names = set()
