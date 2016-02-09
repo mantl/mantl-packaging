@@ -30,4 +30,4 @@ fi
 ###########
 
 mkdir /tmp/out
-PATH=tools/bin:$PATH hammer build --output=/tmp/out $PACKAGE
+PATH=tools/bin:$PATH hammer build --output=/tmp/out --stream-logs-for=$PACKAGE $PACKAGE
