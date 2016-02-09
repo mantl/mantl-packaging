@@ -3,6 +3,39 @@ language: go
 
 sudo: false
 
+env:
+ - PACKAGE=consul
+ - PACKAGE=consul-cli
+ - PACKAGE=consul-template
+ - PACKAGE=consul-ui
+ - PACKAGE=distributive-calico
+ - PACKAGE=distributive-chronos
+ - PACKAGE=distributive-collectd
+ - PACKAGE=distributive-collectd-docker
+ - PACKAGE=distributive-collectd-marathon
+ - PACKAGE=distributive-collectd-zookeeper
+ - PACKAGE=distributive-common
+ - PACKAGE=distributive-consul
+ - PACKAGE=distributive-consul-template
+ - PACKAGE=distributive-dnsmasq
+ - PACKAGE=distributive-docker
+ - PACKAGE=distributive-etcd
+ - PACKAGE=distributive-haproxy
+ - PACKAGE=distributive-logrotate
+ - PACKAGE=distributive-logstash
+ - PACKAGE=distributive-mantlui
+ - PACKAGE=distributive-marathon
+ - PACKAGE=distributive-mesos
+ - PACKAGE=distributive-vault
+ - PACKAGE=distributive-zookeeper
+ - PACKAGE=docker-cleanup
+ - PACKAGE=generate-certificate
+ - PACKAGE=mantl-dns
+ - PACKAGE=nomad
+ - PACKAGE=traefik
+ - PACKAGE=vault
+ - PACKAGE=vault-mantl
+
 addons:
   apt:
     packages:
@@ -10,16 +43,15 @@ addons:
       - rpm
 
 cache:
+  apt: true
   directories:
-    - .build-info
+    - tools
 
 install:
-  # packages for packaging
-  - go get -v github.com/asteris-llc/hammer
-  - gem install fpm
+  - echo "installing moved to script"
 
 script:
-  - ./scripts/travis.sh
+  - ./scripts/ci-build.sh
 
 after_failure:
   - tail logs/*
