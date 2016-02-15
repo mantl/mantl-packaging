@@ -31,6 +31,13 @@ env:
  - PACKAGE=docker-cleanup
  - PACKAGE=generate-certificate
  - PACKAGE=mantl-dns
+ - PACKAGE=marathon
+ - PACKAGE=marathon-dynamic
+ - PACKAGE=mesos
+ - PACKAGE=mesos-master
+ - PACKAGE=mesos-master-dynamic
+ - PACKAGE=mesos-agent
+ - PACKAGE=mesos-agent-dynamic
  - PACKAGE=nomad
  - PACKAGE=traefik
  - PACKAGE=vault
