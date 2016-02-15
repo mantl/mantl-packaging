@@ -1,0 +1,16 @@
+---
+name: distributive
+version: 1.0
+# This iteration reflects the merge of CiscoCloud/distributive-rpm into
+# asteris-llc/mantl-packaging. This package no longer includes checklists.
+iteration: 2
+license: ASL 2.0
+description: Distributive is a tool for running distributed health checks in
+  datacenters.
+url: https://github.com/CiscoCloud/distributive
+vendor: CiscoCloud
+type: rpm
+
+targets:
+  - src: "{{.SpecRoot}}/mantl-checklists/"
+    dest: /etc/distributive.d/mantl-checklists/
