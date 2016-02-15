@@ -1,0 +1,33 @@
+{
+    "Name": "mantlui health checks",
+    "Notes": "For use with Mantl (http://mantl.io)",
+    "Checklist" : [
+        {
+            "Name": "ensure mantlui docker image is present",
+            "ID": "dockerimageregexp",
+            "Parameters": ["mantlui"]
+        },
+        {
+            "Name": "mantlui port 80",
+            "ID": "portTCP",
+            "Parameters": ["80"]
+        },
+        {
+            "Name": "mantlui port 443",
+            "ID": "portTCP",
+            "Parameters": ["443"]
+        },
+        {
+            "ID": "file",
+            "Parameters": ["/usr/share/mesos/webui/master/static/js/controllers.js"]
+        },
+        {
+            "ID": "file",
+            "Parameters": ["/usr/share/mesos/webui/master/static/js/services.js"]
+        },
+        {
+            "ID": "file",
+            "Parameters": ["/usr/share/mesos/webui/master/static/js/app.js"]
+        }
+    ]
+}

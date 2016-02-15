@@ -1,0 +1,16 @@
+{
+    "Name": "haproxy health check",
+    "Notes": "For use with Microservice Infrastructure",
+    "Checklist" : [
+        {
+            "Name": "haproxy environment file",
+            "ID": "file",
+            "Parameters": ["/etc/default/haproxy"]
+        },
+        {
+            "Name": "haproxy configuration file",
+            "ID": "file",
+            "Parameters": ["/usr/lib/systemd/system/haproxy.service"]
+        }
+    ]
+}

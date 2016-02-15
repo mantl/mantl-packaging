@@ -1,6 +1,6 @@
 ---
 name: distributive
-version: 0.2.4
+version: 1.0
 # This iteration reflects the merge of CiscoCloud/distributive-rpm into
 # asteris-llc/mantl-packaging. This package no longer includes checklists.
 iteration: 2
@@ -12,14 +12,5 @@ vendor: CiscoCloud
 type: rpm
 
 targets:
-  - src: "{{empty}}"
-    dest: /etc/distributive.d/
-  - src: "{{empty}}"
-    dest: /usr/share/distributive/
-  - src: "{{.BuildRoot}}/{{.Name}}"
-    dest: /usr/bin/distributive
-
-scripts:
-  build: |
-    git clone '{{.URL}}' '{{.BuildRoot}}'
-    godep go build -o '{{.BuildRoot}}/{{.Name}}' '{{.BuildRoot}}'
+  - src: "{{.SpecRoot}}/mantl-checklists/"
+    dest: /etc/distributive.d/mantl-checklists/
