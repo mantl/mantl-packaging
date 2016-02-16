@@ -188,7 +188,7 @@ Package containing the Distributive binary.
 
 #### distributive-<package>
 
-Distributive checks for various Mantl packages are included in
+Distributive checklists for various Mantl components are included in
 [the `distributive` directory](distributive).
 
 ## Building
