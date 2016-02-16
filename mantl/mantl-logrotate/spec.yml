@@ -1,0 +1,32 @@
+---
+name: mantl-logrotate
+version: 1.0.0
+license: ASL 2.0
+iteration: 1
+vendor: Asteris
+url: https://github.com/asteris-llc/mantl-packaging
+description: logrotate integration with Mantl
+type: rpm
+
+targets:
+  - src: "{{.SpecRoot}}/files/mesos"
+    dest: /etc/mesos.d
+    config: true
+  - src: "{{.SpecRoot}}/files/docker"
+    dest: /etc/docker.d
+    config: true
+  - src: "{{.SpecRoot}}/files/zookeeper"
+    dest: /etc/zookeeper.d
+    config: true
+
+scripts:
+    after-install: |
+      export PATH = $PATH:{{.SpecRoot}}/scripts
+      # set logrotate interval to daily
+      sed 's/\(.*\)^weekly/daily/' /etc/logrotate.conf
+      # set logrotate retention period to 7 days
+      sed 's/\(.*\)^rotate 4/rotate 7/' /etc/logrotate.conf
+      # call on script: when mesos and docker are installed on all nodes and zookeeper is on leader nodes, copy components to logrotate
+      ./copylog.sh
+      # call on script: when mesos and docker are installed on all nodes and zookeeper is on leader nodes, copy components to archive
+      ./copyarchive.sh
