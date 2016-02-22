@@ -16,13 +16,69 @@ The more ansible roles that we port to packages, the faster the build process wi
 If we can remove ansible entirely, we can have mantl bootstrap from terraform, and
 make cluster deployment into a one-step process.
 
-#### Ansible role
+#### Ansible roles -> New Packages
 Here is the list from the `terraform.sample.yml` ansible playbook. For each role that
 we can port to a package, put the package name after it, and list the package description
 below, or make a note. I hope that the ad-hoc formatting here makes sense.
 
+I'm not going to include any package upgrade logic here, either for yum or pip. We will let the user decide what
+versions of packages they want to use
+
 *Roles for all hosts*
 - common: **mantl-common**
+  - System Dependencies
+    - python-pip
+    - httpd-tools
+    - nc
+    - openssh
+    - policycoreutils-python
+    - epel-release
+    - unzip
+  - Ansible defaults: selinux with permissive policy and central configuration
+  - Ansible handlers: update-ca-trust -> run `update-ca-trust` cmd in package script when needed
+  - Ansible main tasks
+    - set timezone to UTC -> `ln -sf /etc/localtime /usr/share/zoneinfo/Etc/UTC`
+    - create `/etc/mantl` to hold metadata for state of cluster pre-consul boot
+    - j2 template for `/etc/hosts` -> consul template for `/etc/hosts`
+    - disable firewalld -> here is a partial go implementation ```
+package main
+import (
+  "fmt"
+  "log"
+  "os/exec"
+)
+
+func main () {
+  // disable firewalld
+  out, err := exec.Command("systemctl disable firewalld").Output()
+  if err != nil{
+    log.Fatal(err)
+  }
+
+  // check state of firewalld
+  out, err := exec.Command("firewalld-cmd --state").Output()
+  if err != nil{
+    log.Fatal(err)
+  }
+  // if the state is NOT not running, disable has failed
+  if out != not running{
+    log.Fatal(err)
+    fmt.println ("Firewalld is not disabled.")
+  }
+}
+    ```
+    - install distributive from ciscocloud's bintray -> separate package??
+    - disable requiretty in sudoers -> sed 's/^.+requiretty$/# Defaults requiretty/' /etc/sudoers #but only last entry
+    - set selinux policy based on ansible defaults 
+  - Ansible users tasks
+    - configure members of wheel group for passwordless sudo -> `sed 's/^%wheel/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers`
+    - create enabled os users, based on `users` ansible var ([docs](http://mantl.readthedocs.org/en/latest/getting_started/ssh_users.html))
+    - set ssh key for `users`
+    - delete disabled `users`
+  - Ansible ssl tasks
+    - copy local path ssl/cacert.pem to remote server /etc/pki/ca-trust/source/anchors/cacert.pem; chown to root
+    - notify handler update-ca-trust -> `update-ca-trust`
+
 - lvm: **mantl-lvm**
 - collectd: **mantl-collectd**
 - logrotate: *I think that this one should be split up and managed by each package*
@@ -47,249 +103,11 @@ below, or make a note. I hope that the ad-hoc formatting here makes sense.
 *Roles for edges*
 - traefik: **mantl-traefik**
 
-#### New packages
-These are high level descriptions of some of the packages that we'll make. We can then use these descriptions
-to write actual hammer specs and package them.
 
-`mantl-collectd`: pushed to asteris-lc/mantl-packaging
-
-collectd/files/collectd_docker_plugin.pp
-
-collectd/handlers/main.yml
-    // restart collectd on hosts
-    solutions:
-       sudo systemctl restart mantl-collectd
-
-collectd/tasks/main.yml
-    // install collectd packages collectd and     libsemanage-python(manage selinux settings here)
-    package solutions:
-     sudo yum -y install collectd libsemanage-python
-
-     line 14
-     // create collectd plugin directory /usr/share/collecd/plugins and set permissions to 0755
-     solutions:
-        sudo mkdir /usr/share/collectd/plugins
-        chmod 0755 /usr/share/collectd/plugins
-
-      line 23
-      // copies collectd.conf.j2 to /etc/collectd.conf
-      // restart collectd
-      packaging solutions: .j2 will be converted to new format and be copied to etc
-
-      line 34
-      // authorize collectd to make tcp connections
-      // sudo
-      // when selinux(ansible) status is enabled and the mode is enforcing
-          // SELinux boolean named collectd_tcp_network_connect is set to yes
-          // collectd_tcp_network_connect should survive a reboot
-      packaging solutions:
-          setsebool -P collectd_tcp_network_connect 1
-
-      line 41
-      // check if collectd is authorized to connect to docker
-      // sudo
-      // when selinux(ansible) status is enabled and the mode is enforcing
-      // run shell command on node: semodule -l(lists policy modules on a system)
-          // store results in variable semodule_list
-          // ansible doesn't report change status (there is already either a return code or output that makes this obvious)
-          // probably the same with failure, ansible doesn't report failure
-      packaging solutions(combine with 51 and 58):
-          # list policy modules on the system
-          semodule -l
-          # if the above output is defined and collectd_docker_plugin does not exist, copy plugin.pp and set permissions
-
-          cp collectd_docker_plugin.pp /tmp/collectd_docker_plugin.pp && chmod 0600
-          #install the plugin
-          semodule -i /tmp/collectd_docker_plugin.pp
-              #after-remove section: remove/disable this plugin
-
-      line 51
-      // copy collectd selinux docker policy
-      // sudo copy plugin.pp and set the mode to 0600
-      // do this when "semodule_list.stdout is defined and
-         semodule_list.stdout.find('collectd_docker_plugin') == -1"
-      packaging solutions(see 41):
-        cp collectd_docker_plugin.pp /tmp/collectd_docker_plugin.pp && chmod 0600
-        // when  "semodule_list.stdout is defined and semodule_list.stdout.find('collectd_docker_plugin') == -1"
-
-      line 58
-      // authorize collectd to connect to docker
-      semodule -i /tmp/collectd_docker_plugin.pp
-      // when  "semodule_list.stdout is defined and semodule_list.stdout.find('collectd_docker_plugin') == -1"
-      packaging solutions:(see 41)
-
-      line 65
-      // start collectd on boot(enable a service)
-      packaging solutions:
-      systemctl enable collectd 2>/dev/null
-
-    templates/collectd.conf.j2
-    packaging solutions:
-       // convert format
-
+* `mantl-collectd`: pushed to asteris-lc/mantl-packaging
 
 `mantl-common`
 
-    - pyhon-pip
-- Reverse Dependencies
-    - mantl-distributive
-    - mantl-consul
-
--Components
-
-    -defaults/main.yml: selinux with permissive policy and central configuration
-
-    -handlers/main.yml: update-ca-trust
-
-    -tasks/main.yml
-        lines 3-9
-            // set time to etc/utc
-            // sudo
-            // force a symlink to the src file in place of the path
-          packaging solutions:
-            - set timezone to UTC (`sudo ln -sf /etc/localtime /usr/share/zoneinfo/Etc/UTC`)
-            - create `/etc/mantl`, a config dir that along with consul/vault k/v stores, can replace ansible facts
-
-        lines 12-19
-            // sudo
-            // add hosts (hosts.j2) to /etc/hosts
-            // set permissions to 644
-            // tag is common
-          packaging solutions:
-             -copy hosts.j2 to /etc/hosts(`sudo cp hosts.j2 /etc/hosts`)
-             -set permissions (`sudo chmod 0644 /etc/hosts`)            
-
-        lines 21-33
-            // install system utilities
-            // sudo
-            // update yum packages(yum -y update)
-            // dependencies/packages
-                - httpd-tools
-                - nc
-                - openssh
-                - policycoreutils-python
-                - unzip
-            // tag is bootstrap
-          packaging solutions:
-            - update packages (`sudo yum -y update httpd-tools nc openssh policycoreutils-python unzip`)                
-
-        lines 35-42
-            // sudo
-            // firewalld is not started on boot
-            // firewalld stopped
-            // fails when the output is not "command_result|failed and 'No such file or directory'"
-          packaging solutions: firewalld-cmd --state; echo $?       252=NOT_RUNNING
-            // disable firwalld (sudo systemctl disable firewalld)
-            // run a script that checks if it is disabled
-                ./firewalld_script
-            // script that checks that it is disabled(ok, go was fun but come up with bash commands instead)
-              #!/go/bin
-              package main
-              import (
-                  "fmt"
-                  "log"
-                  "os/exec"
-              )
-
-              func main () {
-                  // check state of firewalld
-                  out, err := exec.Command("firewalld-cmd --state").Output()
-                  if err != nil{
-                    log.Fatal(err)
-                  }
-                  // if the state is NOT not running, disable has failed
-                  if out != not running{
-                    log.Fatal(err)
-                    fmt.println ("Firewalld is not disabled.")
-                  }      
-              }
-
-        lines 44-48
-            // sudo
-            // update or install epel-release
-           packaging solutions
-           - if it does not exist: sudo yum -y install epel-release
-           - if it does exist: sudo yum -y update epel-release
-
-        lines 50-54
-            // sudo
-            // install or update package python-pip
-           packaging solutions:
-           - if it does not exist: sudo yum -y install python-pip
-           - if it does exist: sudo yum -y update python-pip
-
-        lines 56-63
-            // sudo
-            // update pip and setuptools
-            // dependencies
-                    - pip
-                    - setup tools
-            packaging solutions:
-               sudo yum -y update pip setuptools
-
-        lines 65-71
-            // sudo
-            // install distributive from bintray:
-                //https://bintray.com/artifact/download/ciscocloud/rpm/distributive-0.2.1-5.el7.centos.x86_64.rpm
-            // tag is distributive
-            // use bintray.sh to install
-
-        lines 73-80
-            lineinfile-ensure that a particular line is in a file, or replace an existing line using a back-referenced regular expression
-            // sudo
-            // disable requiretty in sudoers
-                // look for the regular expression ^.+requiretty$ in every line of the file, /etc/sudoers. This regular                         expression should be in this file.
-                // replace the last instance of this regular expression with "# Defaults requiretty"
-            -packaging solutions: write a search and replace script that replaces the last instance      of the string
-
-        lines 82-89
-            // sudo
-            // configure selinux
-                // set the SELinux policy and the SELinux mode
-            // tags are security and bootstrap
-
-        lines 91-92
-            // sudo
-            // dependencies for this file include other files within tasks/
-                - users.yml
-                - ssl.yml
-
-    - tasks/ssl.ym: deploy root ca
-        // sudo
-        // copy local path ssl/cacert.pem to remote server /etc/pki/ca-trust/source/anchors/cacert.pem
-        // root is the owner(chown)
-        // notify handler update-ca-trust
-
-    - tasks/users.yml
-        lines 2-10: configure members of wheel group for passwordlest sudo
-            // sudo
-            // look in file /etc/sudoersfor regular expression "^%wheel" that should be there
-            // replace the last instance of the regular expression with "%wheel ALL=(ALL) NOPASSWD: ALL"
-            // users is tag
-
-        lines 12-20: create os users
-            // sudo
-            // name of user needing modification (form of item.name)
-            // put the user in the wheel group when item.enabled is defined and item.enabled == 1
-            // dependencies
-                - users
-            // tags is users
-
-        lines 22-30: set ssh key for users
-            // sudo
-            // add an ssh authorized key to the user when the key(item.1) is defined and enabled (item.0.enabled == 1)
-            // loop through list of subelements, users|default([]) and pubkeys
-            // users is tags
-
-        lines 32-41: delete os users
-            // sudo
-            // if the user exists remove them (userdel --remove) when item.enabled is defined and item.enabled == 0
-            // dependencies
-                -users
-            // users is tags
-
-        - templates/hosts.j2
-            // sets hosts file, use the template instead of regex
 
 `mantl-docker`
   /docker/defaults/main.yml
