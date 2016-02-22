@@ -40,7 +40,8 @@ versions of packages they want to use
     - set timezone to UTC -> `ln -sf /etc/localtime /usr/share/zoneinfo/Etc/UTC`
     - create `/etc/mantl` to hold metadata for state of cluster pre-consul boot
     - j2 template for `/etc/hosts` -> consul template for `/etc/hosts`
-    - disable firewalld -> here is a partial go implementation ```
+    - disable firewalld -> here is a partial go implementation:
+```
 package main
 import (
   "fmt"
@@ -66,7 +67,7 @@ func main () {
     fmt.println ("Firewalld is not disabled.")
   }
 }
-    ```
+```
     - install distributive from ciscocloud's bintray -> separate package??
     - disable requiretty in sudoers -> sed 's/^.+requiretty$/# Defaults requiretty/' /etc/sudoers #but only last entry
     - set selinux policy based on ansible defaults 
