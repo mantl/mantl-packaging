@@ -255,8 +255,17 @@ NOTES:
           sudo cp skydns.env /etc/default/
           sudo chmod 0644 /etc/default/skydns.env
 
-    /templates/
-      // configurations
+    //templates/consul-check-etcd-member
+        // Consul script that does a health check on a client port
+    //templates/etcd.conf.j2
+        //
+    //templates/etcd.service.j2
+        // runs docker container to start etcd
+    //templates/skydns.env.j2
+        //DNS/Skydns integration
+    //templates/skydns.service.j2
+        //DNS/skydns integtation, runs docker container to start skydns
+
 
 
 `mantl-mesos`
