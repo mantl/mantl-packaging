@@ -21,8 +21,12 @@ Here is the list from the `terraform.sample.yml` ansible playbook. For each role
 we can port to a package, put the package name after it, and list the package description
 below, or make a note. I hope that the ad-hoc formatting here makes sense.
 
-I'm not going to include any package upgrade logic here, either for yum or pip. We will let the user decide what
-versions of packages they want to use
+I'm not going to include any package upgrade logic here, either for yum or pip.
+We will let the user/packages decide what versions to use
+
+Another assumption here is that each of these packages are going to have
+distributive check files associated with them. As of right now, those are in
+the distributive-{component} packages.
 
 *Roles for all hosts*
 - common: **mantl-common**
@@ -40,6 +44,9 @@ versions of packages they want to use
     - set timezone to UTC -> `ln -sf /etc/localtime /usr/share/zoneinfo/Etc/UTC`
     - create `/etc/mantl` to hold metadata for state of cluster pre-consul boot
     - j2 template for `/etc/hosts` -> consul template for `/etc/hosts`
+    - install distributive from ciscocloud's bintray -> separate package (**mantl-distributive**)?
+    - disable requiretty in sudoers -> sed 's/^.+requiretty$/# Defaults requiretty/' /etc/sudoers #but only last entry
+    - set selinux policy based on ansible defaults 
     - disable firewalld -> here is a partial go implementation:
 ```
 package main
@@ -68,9 +75,6 @@ func main () {
   }
 }
 ```
-    - install distributive from ciscocloud's bintray -> separate package??
-    - disable requiretty in sudoers -> sed 's/^.+requiretty$/# Defaults requiretty/' /etc/sudoers #but only last entry
-    - set selinux policy based on ansible defaults 
   - Ansible users tasks
     - configure members of wheel group for passwordless sudo -> `sed 's/^%wheel/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers`
     - create enabled os users, based on `users` ansible var ([docs](http://mantl.readthedocs.org/en/latest/getting_started/ssh_users.html))
@@ -81,22 +85,53 @@ func main () {
     - notify handler update-ca-trust -> `update-ca-trust`
 
 - lvm: **mantl-lvm**
+  - System Dependencies
+    - mantl-common
+    - device-mapper-libs
+    - lvm2
+  - Ansible facts
+    - defaults: lvm_volume_group_name=mantl, lvm_physical_device= different things depending upon provider
+    - volume groups list -> `vgscan`
+  - Ansible volume tasks when volume has not been created
+    - create volume group, based on ansib
+    - enable lvmetad service -> `systemctl enable lvm2-lvmetad 2>/dev/null && systemctl restart lvm2-lvmetad`
+  - Ansible main tasks: set group name to blank if physical device is blank
+
 - collectd: **mantl-collectd**
-- logrotate: *I think that this one should be split up and managed by each package*
+  - PR#36
+- logrotate: *this one should be split up and managed by each package that needs it*
 - consul-template: *this is in the same boat as mantl-consul*
 - docker: **mantl-docker**
+  - Notes
+    - needs logrotate config from ansible role
+    - there's a bunch of stuff here for LVM.
+      - We could create separate package for it **mantl-docker-lvm**
+      - Or, we could include it in **mantl-lvm**
+  - same goes for the collectd docker plugin
+  - System Dependencies
+    - docker
+    - docker-selinux
+    - mantl-common
 - logstash: **mantl-logstash**
 - nginx: **mantl-nginx**
 - consul: **mantl-consul**
+  - Notes
+    - This is a central package for mantl, especially for repackaging. I
+      propose that this package installs consul, consul-template, and
+      consul-ui, and inits the cluster. In fact, could this be in the **mantl-common**?
 - dnsmasq: **mantl-dnsmasq**
+  - PR#26
 
 *Roles for workers*
 - mesos: *Secrets should be managed by vault before this is a package*
+  - needs logrotate config from ansible role
 
 *Roles for controls*
 - vault: **mantl-vault**
 - zookeeper: **mantl-zookeeper**
+  - needs logrotate
 - mesos: **mantl-mesos**
+  - needs logrotate
 - marathon: **mantl-marathon**
 - chronos: **mantl-chronos**
 - mantlui: **mantl-mantlui**
@@ -104,306 +139,7 @@ func main () {
 *Roles for edges*
 - traefik: **mantl-traefik**
 
-
-* `mantl-collectd`: pushed to asteris-lc/mantl-packaging
-
-`mantl-common`
-
-
-`mantl-docker`
-  /docker/defaults/main.yml
-
-`mantl-dnsmasq`: already completed on asteris-lc/mantl-packaging/mantl/mantl-dns
-      /files/distributive-dnsmasq-check.json
-
-      /handlers/main.yml
-        - run 2 commands on nodes
-        - sudo systemctl restart NetworkManager
-        - sudo systemctl restart dnsmasq
-        packaging solutions:
-          ansible all -i plugins/inventory/terraform.py -a "sudo systemctl restart NetworkManager"
-          ansible all -i plugins/inventory/terraform.py -a "sudo systemctl restart dnsmasq"
-
-      /tasks/distributive.yml
-        - create directory (and subdirectories)at destination /etc/consul when consul_dc_group is defined
-        - chmod 0700
-        - tags are consul, distributive, dnsmasq
-        packaging solutions:
-          // export consul_dc_group variable?
-          #!/bin/bash
-          echo ${consul_dc_group:? "consul_dc_group is not defined"}
-          sudo mkdir /etc/consul/
-          sudo chmod 0700 /etc/consul
-
-        line 16
-        - sudo
-        - create a symlink to distributive dnsmasq checklist from
-          /usr/share/distributive/dnsmasq.json to /etc/distributive.d/dnsmasq.json
-        - tags are consul, distributive, dnsmasq
-        packaging solutions:
-          ln -s /etc/distributive.d/dnsmasq.json /usr/share/distributive/dnsmasq.json
-
-        line 27
-        // register distributive tests with consul
-        - sudo
-        - copy distributive-dnsmasq-check.json to /etc/consul/ when consul_dc_group is defined
-        - reload consul
-        - tags are consul, distributive, dnsmasq
-        packaging solutions:
-          // export consul_dc_group variable?
-          #!/bin/bash
-          echo ${consul_dc_group:? "consul_dc_group is not defined"}
-          cp distributive-dnsmasq-check.json /etc/consul/ (check which directory the json file is in)  
-
-      /tasks/main.yml
-        - sudo yum install latest versions of packages dnsmasq, bind-utils, NetworkManager
-        - tags are dnsmasq and bootstrap
-        packaging solutions:
-            sudo yum -y install dnsmasq bind-utils NetworkManager
-
-        line 15
-        //collect nameservers
-        - run shell command on node:  "sudo cat /etc/resolv.conf | grep -i '^nameserver' | cut -d ' ' -f2"
-        - the output of the above command should be set to variable "nameservers_output"
-        - tag is dnsmasq
-        packaging solutions:
-           ansible all -i plugins/inventory/terraform.py -a "nameservers_output = $(sudo cat /etc/resolv.conf | grep -i '^nameserver' | cut -d ' ' -f2)"
-
-        line 22
-        - run shell command on node: "cat /etc/resolv.conf | grep -i '^search' | cut -d ' ' -f2- | tr ' ' '\n'"
-        - store output in variable "dns_search_list_output"
-        - tag is dnsmasq
-        packaging solutions:
-             ansible all -i plugins/inventory/terraform.py -a "dns_search_list_output = $(sudo cat /etc/resolv.conf | grep -i '^search' | cut -d ' ' -f2- | tr ' ' '\n')"
-
-        line 29
-        // set nameservers
-        // establish key-value pairs
-          - nameservers:  "{{ nameservers_output.stdout_lines }}"
-        // tag dnsmasq  
-        packaging solutions: call a python script keyvalue.py(set permissions first). Give the function argument nameservers_output (can you pass arguments to scripts?)
-          // iterate through nameservers_output
-          // set key-value pairs(nameservers: nameservers_output.stdout_lines)
-
-        line 35
-        // set dns search list(key-value pair)
-          - domain_search_list: "{{ dns_search_list_output.stdout_lines }}"
-        // tag is dnsmasq
-        packaging solutions: call keyvalue.py
-
-        line 41
-        // ensure dnsmasq.d directory exists
-          - sudo create directory and subdirectories(if they are there): /etc/NetworkManager/dnsmasq.d
-        // tag is dnsmasq
-        packaging solutions:
-          sudo mkdir /etc/NetworkManager/dnsmasq.d
-
-        line 49
-        // configure dnsmasq for consul
-          // when consul_dc_group is defined
-              // sudo
-              // copy 10-consul to /etc/dnsmasq.d/10-consul
-              // chmod 0755
-              // restart dnsmasq
-          // tag is dnsmasq
-          packaging solutions:
-             sudo cp 10-consul /etc/dnsmasq.d
-             sudo chmod 0755 /etc/dnsmasq.d/10-consul
-             sudo systemctl restart dnsmasq
-
-        line 61
-        // configure dnsmasq for Kubernetes
-          // when cluster_name is defined
-            // sudo
-            // copy 20-kubernetes to /etc/dnsmasq.d/20-kubernetes
-            // chmod 0755
-            // restart dnsmasq
-          // tag is dnsmasq
-          packaging solutions:
-            sudo cp 20-kubernetes /etc/dnsmasq.d/20-kubernetes
-            sudo chmod 0755
-            sudo systemctl restart dnsmasq
-
-        line 73
-        // sudo
-        // start dnsmasq on boot if necessary
-        // dnsmasq is tag
-
-        line 82
-        // configure networkmanager for dnsmasq
-        // sudo
-        // In the file: /etc/NetworkManager/NetworkManager.conf
-        // Insert "dns=none" after the reg expression: "^\\[main\\]$"
-        // restart networkmanager
-        // tag is dnsmasq
-        packaging solutions:
-
-
-        line 93
-        // List network-scripts which need fixup
-        // sudo
-        // run shell command "find /etc/sysconfig/network-scripts -name 'ifcfg-*'"
-        .*// set the above output to variable "list_of_network_scripts"
-        packaging solutions:
-            // combine line 93 and 98 by doing find and executing a sed statement(Is the variable list_of_network_scripts needed anywhere else?)
-            sudo find /etc/sysconfig/network-scripts -name 'ifcfg-*' -exec sed -i '' 's/^PEERDNS=.*/PEERDNS=no/' \{\} \;
-              //   errors  sed: can't read s/^PEERDNS=.*/PEERDNS=no/: No such file or directory
-                  sed: can't read s/^PEERDNS=.*/PEERDNS=no/: No such file or directory
-
-
-        line 98
-        // fixing PEERDNS in network-scripts
-        // loop: for each in the list_of_network_scripts; do ...the following using ${x} ... ; done
-            // sudo
-            // modify file: "{{ item }}"
-            // look for regular expression ^PEERDNS=.*'
-           .*// replace regular expression with "PEERDNS=no"
-        // restart networkmanager
-        // tag is dnsmasq
-        packaging solutions:
-          //combined with line 93
-
-
-        line 110
-        // sudo
-        // copy resolv.conf.j2 (format will have to be changed) to /etc/resolv.conf
-        // chmod 0644
-        // tag is dnsmasq
-
-        - meta: flush_handlers
-          // dependency of flush_handlers contained in role file meta
-
-        - run play distributive.yml(run this subset rather than all of main.yml)
-
-    10-consul
-    20-kubernetes
-    90-base
-    resolv.conf.j2(needs new format)
-
-`mantl-logrotate` : This role will be broken up and placed with the separate    
-    components.
-  tasks/main.yml
-    // set logrotate interval to daily
-    // in file /etc/logrotate.conf
-    // look for reg expression '^weekly'
-    // replace last matching line of reg expression with "daily"
-    packaging solutions:
-      sed 's/\(.*\)^weekly/daily/' /etc/logrotate.conf
-
-    .*// set logrotate retention period to 7 days
-    // in file /etc/logrotate.conf
-    // replace last matching line of reg expression '^rotate 4' with "rotate 7"
-    packaging solutions:
-      sed 's/\(.*\)^rotate 4/\rotate 7/' /etc/logrotate.conf
-
-    .*// copy component logrotate configurations
-    // when mesos=true docker=true and in zookeeper role == 'control'
-        // copy component to logrotate configurations
-            /etc/logrotate/component
-        // set mode to 0644
-    packaging solutions:
-    // call on script: when mesos and docker are installed on all nodes and zookeeper is on leader nodes, copy components to logrotate
-        script:
-           #!/bin/bash
-           for component in "mesos" "docker" "zookeeper"; do
-               systemctl status component
-                  if[ $? == 0 ]; then
-                      cp component /etc/logrotate/
-                      chmod 0644 /etc/logrotate/component
-                  else
-                      echo component not active
-                  fi
-            done
-
-    // create component archives
-        // same conditions as above
-        // copy components to archives
-            // /var/log/component/archive
-    packaging solutions:
-    // call on script: when mesos and docker are installed on all nodes and zookeeper is on leader nodes, copy components to archive
-    script:
-       #!/bin/bash
-       for component in "mesos" "docker" "zookeeper"; do
-           systemctl status component
-              if[ $? == 0 ]; then
-                  sudo cp component /var/log/component/archive
-                  sudo chmod 0644 /var/log/component/archive
-              else
-                  echo component not active
-              fi
-        done
-
- + 3 template files
-
-
-`mantl-lvm`
-- This lvm role optionally creates an LVM Volume group
-Install required software and tools.
-Enable lvmetad daemon.
-Create volume group and add provided extra block device to it as physical volume.
-Register fact with name of created volume group.
-- create volume group, and save the in `etc/mantl`
-- enable lvmetad service
-- Dependencies
-    - mantl-common
-    - device-mapper-libs
-    - lvm2
-
-  roles/lvm/defaults/main.yml
-  // defines variables lvm_volume_group_name and lvm_physical_device
-  solutions: part of spec file
-
-roles/lvm/tasks/main.yml
-// include volume.yml when lvm_physical_device is not null
-// set volume_group_name to null when lvm_physical_device is null
-solutions:
-  //if lvm_physical_device != ""
-      define variables lvm_volume_group_name and lvm_physical_device
-  //else volume_group_name = ""
-
-roles/lvm/tasks/volume.yml
-  line 2
-  // sudo yum install latest device-mapper-libs
-  // tags are docker,bootstrap,lvm2
-  solutions:
-    // part of depends section
-
-  line 13
-  // update lvg ansible modules
-  // run on local host
-  // run one time on the one host
-  // put ansible file (from url) in {{ playbook_dir }}/library/lvg.py
-  // url: https://raw.githubusercontent.com/ansible/ansible-modules-extras/02b68be09dca9760a761d4147f76cfc940c41cba/system/lvg.py
-  // tag is docker
-  solutions: delete, any replacement needed?
-
- line 22
-  // sudo yum install latest lvm2 tools
-  // tags are docker, bootstrap, lvm
-  solutions: part of depends section
-
- line 32
-  // sudo list volume groups with command vgscan and put output in variable volume_groups
-  // tags are docker and lvm
-  solutions: volume_groups=$(vgscan)
-
-  line 40
-  // create volume group
-  // volume group name(from tasks/main.yml) and comma separated devices to use as physical devices
-  // these are created when there is nothing in them
-
-  line 50
-  // enable lvmetad service
-  // start lvm2-lvmetad on boot
-  // tags are docker and lvm
-  packaging solutions:
-    systemctl enable lvm2-lvmetad 2>/dev/null
-    systemctl restart lvm2-lvmetad
-
-  line 60
-  // save lvm_volume_group_name as variable called volume_group_name
-  // tag is lvm
-  solutions: volume_group_name=$(lvm_volume_group_name)
+NOTES:
 
 `mantl-nginx`
   create tls directory
@@ -423,88 +159,6 @@ roles/lvm/tasks/volume.yml
     // sets nginx_admin_password_encrypted as the stdout of this variable to survive between plays of ansible run
 
     solutions: the password has to be different for every install, this step may need to be done outside the context of a package.
-
-`mantl-collectd`: finished
-
-    collectd/files/collectd_docker_plugin.pp
-        // 2.52 KB
-
-    collectd/handlers/main.yml: restart collectd
-        // sudo
-        // service collectd to be restarted
-        // tag is collects
-
-    collectd/tasks/main.yml
-        // sudo
-        // install collectd package
-        // Dependencies
-            - mantl-collectd
-            - libsemanage-python
-        // tags are collectd and bootstrap
-
-        line 14
-        // sudo
-        // create plugins directory /usr/share/collectd/plugins
-        // permissions 0755(chmod)
-        // tag is collectd
-
-        line 23
-        // sudo
-        // collectd.conf.j2 is the path of the Jinja2 formatted template on the local server
-        // render the template to /etc/collectd.conf (on remote machine)
-        // restart collectd
-        // tag is collectd
-
-        line 34: authorizes collectd to make tcp connections
-        // sudo
-        // name of a SELinux boolean: collect_tcp_network_connect
-            // boolean value set to yes
-            // persistent: boolean setting should survive a reboot
-        //  (direct quote)when: ansible_selinux.status == "enabled" and ansible_selinux.mode == "enforcing"
-        // tag is collectd
-
-        line 41: check if collectd is authorized to connect to docker
-        // sudo
-        // shell: semodule -l
-        // register: semodule_list
-        // failed_when: no
-        // changed_when: no
-        // when: ansible_selinux.status == "enabled" and ansible_selinux.mode == "enforcing"
-        // tag is collectd
-
-        line 51: copy collectd selinux docker policy
-        // sudo
-        // copy: src=collectd_docker_plugin.pp dest=/tmp/collectd_docker_plugin.pp owner=root mode=0600
-        // when: "semodule_list.stdout is defined and semodule_list.stdout.find('collectd_docker_plugin') == -1"
-        // tag is collectd
-
-        line 58: authorize collectd to connect to docker
-        // sudo
-        shell: semodule -i /tmp/collectd_docker_plugin.pp
-        when: "semodule_list.stdout is defined and semodule_list.stdout.find('collectd_docker_plugin') == -1"
-        // tag is collectd
-
-        line 65: enable collectd
-        // sudo
-        // collectd starts on boot
-        // start collectd if not running(idempotent actions)
-
-        microservices-infrastructure/roles/collectd/templates/collectd.conf.j2
-        //
-
-`mantl-consul`
-This package is important during the bootstrapping process,
-so it's getting mentioned here
-- Dependencies
-    - mantl-common
-
-`mantl-docker`
-Container manager and scheduler.
-- Dependencies
-    - lvm
-    - docker
-    - docker-selinux
-    - collectd.yml
 
 `mantl-etcd`
   defaults/main.yml
@@ -605,23 +259,6 @@ Container manager and scheduler.
       // configurations
 
 
-`mantl-logstash`
-Deploys and manages Logstash 1.5 with Docker and systemd.
-- Dependencies
-
-`mantl-nginx`
-Web and proxy server.
-- Dependencies
-    - distributive.yml
-
-`mantl-dnsmasq`
-Configures each host to use :doc:`consul` for DNS
-- Dependencies
-    - dnsmasq
-    - bind-utils
-    - NetworkManager
-    - distributive.yml
-
 `mantl-mesos`
 Distributed system kernel that manages resources across multiple nodes. When combined with :doc:`marathon`, you can basically think of it as a distributed init system.
 
@@ -678,7 +315,7 @@ Chronos is a distributed and fault-tolerant scheduler that runs on top of Apache
     - src: chronos-consul.cfg
       dest: /etc/consul-template/config.d
 
-`mantl-mantllui`
+`mantl-ui`
 Mantlui consolidates the web UIs of various components in Mantl, including Mesos, Marathon, Chronos, and Consul at a single url on port 80 (http) or 443 (https).
 - Dependencies
     - src: mesos/controllers.js
@@ -747,8 +384,3 @@ Mantlui consolidates the web UIs of various components in Mantl, including Mesos
 
       roles/traefik/templates
       // traefik.toml.j2
-
-`mantl-distributive`
-This is a package that installs distributive, then configures it
-- Dependencies
-    - mantl-common
