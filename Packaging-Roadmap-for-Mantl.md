@@ -70,7 +70,7 @@ func main () {
 ```
     - install distributive from ciscocloud's bintray -> separate package??
     - disable requiretty in sudoers -> sed 's/^.+requiretty$/# Defaults requiretty/' /etc/sudoers #but only last entry
-    - set selinux policy based on ansible defaults 
+    - set selinux policy based on ansible defaults
   - Ansible users tasks
     - configure members of wheel group for passwordless sudo -> `sed 's/^%wheel/%wheel ALL=(ALL) NOPASSWD: ALL/' /etc/sudoers`
     - create enabled os users, based on `users` ansible var ([docs](http://mantl.readthedocs.org/en/latest/getting_started/ssh_users.html))
@@ -601,8 +601,17 @@ Container manager and scheduler.
           sudo cp skydns.env /etc/default/
           sudo chmod 0644 /etc/default/skydns.env
 
-    /templates/
-      // configurations
+    //templates/consul-check-etcd-member
+        // Consul script that does a health check on a client port
+    //templates/etcd.conf.j2
+        //
+    //templates/etcd.service.j2
+        // runs docker container to start etcd
+    //templates/skydns.env.j2
+        //DNS/Skydns integration
+    //templates/skydns.service.j2
+        //DNS/skydns integtation, runs docker container to start skydns
+
 
 
 `mantl-logstash`
