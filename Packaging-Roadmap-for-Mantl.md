@@ -461,7 +461,8 @@ collectd/tasks/main.yml
     90-base
     resolv.conf.j2(needs new format)
 
-`mantl-logrotate` : finished and pushed to asteris-lc/mantlpackaging
+`mantl-logrotate` : This role will be broken up and placed with the separate    
+    components.
   tasks/main.yml
     // set logrotate interval to daily
     // in file /etc/logrotate.conf
