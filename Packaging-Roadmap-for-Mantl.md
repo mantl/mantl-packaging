@@ -686,6 +686,105 @@ Container manager and scheduler.
     - docker-selinux
     - collectd.yml
 
+`mantl-etcd`
+  defaults/main.yml
+    // variables
+
+  files/etcd-service-start.sh
+  files/etc-service.json
+
+  handlers/main.yml
+    // sudo systemctl restart etcd
+    // sudo systmectl restart skydns
+
+  meta/main.yml
+    // dependent on handlers role
+
+  tasks/main.yml
+    // sudo install version of etcd specified in variables
+
+    10// generate systemd environment file
+      // copy /etcd.conf.j2  /etc/etcd.conf
+      // chmod 0644
+      // reload systemd
+      // restart etcd
+      solutions:
+        sudo cp -p templates/etcd.conf /etc/etcd.conf
+        sudo chmod 0644 /etc/etcd.conf
+        sudo systemctl daemon-reload
+        sudo systemctl restart etcd
+
+      24// install etcd launch script
+      // sudo
+      // copy etcd-service-start.sh to /usr/local/bin
+      // chmod 0755
+      //restart etcd
+      solutions:
+        sudo cp etcd-service-start.sh /usr/local/bin/
+        sudo chmod 0755 /usr/local/bin/etcd-service-start.sh
+        sudo systemctl restart etcd
+
+      35// create directory /etc/systemd/system/etcd.service.d
+      solutions:
+        sudo mkdir -p /etc/systemd/system/etcd.service.d
+
+      43// create local etcd service override
+          // gives the config these contents
+            //   [Service]
+      ExecStart=
+      ExecStart=/usr/local/bin/etcd-service-start.sh
+      to
+      /etc/systemd/system/etcd.service.d/local.conf
+
+      56// install consul check script
+        // when consul_dc_group is defined
+          // copy consul-check-etcd-member to /usr/local/bin
+          // chmod 0755
+        solutions:
+          //when consul_dc_group is defined
+          sudo cp consul-check-etcd-member /usr/local/bin/
+          chmod 0755 /usr/local/bin/consul-check-etcd-member
+
+      66// when consul_dc_group is defined
+        // sudo copy etcd-service.json to /etc/consul
+        // reload consul
+        solutions:
+          // when consul_dc_group is defined
+          sudo cp etcd-service.json /etc/consul/
+          sudo systemctl reload consul
+
+      77// enable and start etcd service
+      solutions:
+      sudo systemctl enable etcd 2>/dev/null
+      sudo systemctl start etcd
+
+      86 // when dns_setup is defined include skydns.yml
+
+      89 // meta: flush_handlers
+
+    /tasks/skydns.yml
+      // sudo
+        // cp skydns.service.j2 /usr/lib/systemd/system/skydns.service
+        // chmod 0644
+        // reload systemd
+        // restart skydns
+      solutions:
+        sudo cp skydns.service /usr/lib/systemd/system/skydns.service
+        sudo chmod 0644 /usr/lib/systemd/system/skydns.service
+        sudo systemctl daemon-reload
+        sudo systemctl restart skydns
+
+      // sudo
+        // cp skydns.env.j2 /etc/default/skydns.env
+        // mode 0644?
+        solutions:
+          sudo cp skydns.env /etc/default/
+          sudo chmod 0644 /etc/default/skydns.env
+
+    /templates/
+      // configurations
+
+
 `mantl-logstash`
 Deploys and manages Logstash 1.5 with Docker and systemd.
 - Dependencies
@@ -780,6 +879,54 @@ Mantlui consolidates the web UIs of various components in Mantl, including Mesos
 - copy traefik consul service to `/etc/consul/`
 - Dependencies
     - mantl-consul
+
+   traefik/defaults/main.yml
+    // defines traefik variables
+
+   traefik/files/traefik-consul.json
+    // json config
+
+    traefik/handlers/main.yml
+      // sudo systemctl reload consul
+      // sudo systemctl restart traefik
+
+    traefik/tasks/main.yml
+      // uses traefik variables to download traefik-consul
+        // download traefik_download
+        // run checksum(traefik_sha256-checksum)
+        // install in /root/traefik_filename
+
+      // sudo install traefik in /root/traefik_filename
+        // state is present
+
+      // make certificate directory /etc/traefik/certs
+      solutions:
+        sudo mkdir /etc/traefik/certs
+
+      // copy ssl/certs/traefik-admin.cert.pem  ssl/private/traefik-admin.key.pem  to the certs directory
+      solutions:
+        sudo cp -p ssl/certs/traefik-admin.cert.pem /etc/traefik/certs/
+        sudo cp -p ssl/private/traefik-admin.key.pem /etc/traefik/certs/
+
+      // configure traefik
+          // copy traefik.toml.j2 to /etc/traefik/traefik.toml
+          // backup file
+          // permission 0644
+          // restart traefik
+        solutions:
+          sudo cp traefik.toml /etc/traefik/
+          sudo chmod 0644 /etc/traefik/traefik.toml
+
+
+      // generate traefik consul service
+        // sudo copy traefik-consul.json to /etc/consul/traefik.json
+        // reload consul
+        solutions:
+          sudo cp traefik-consul.json /etc/consul/traefik.json
+          sudo systemctl reload consul
+
+      roles/traefik/templates
+      // traefik.toml.j2
 
 `mantl-distributive`
 This is a package that installs distributive, then configures it
