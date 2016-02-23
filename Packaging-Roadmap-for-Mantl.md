@@ -46,7 +46,7 @@ the distributive-{component} packages.
     - j2 template for `/etc/hosts` -> consul template for `/etc/hosts`
     - install distributive from ciscocloud's bintray -> separate package (**mantl-distributive**)?
     - disable requiretty in sudoers -> sed 's/^.+requiretty$/# Defaults requiretty/' /etc/sudoers #but only last entry
-    - set selinux policy based on ansible defaults 
+    - set selinux policy based on ansible defaults
     - disable firewalld -> here is a partial go implementation:
 ```
 package main
@@ -142,7 +142,7 @@ func main () {
 NOTES:
 
 `mantl-nginx`
-  create tls directory
+- create tls directory
   solution:
     sudo mkdir -p /etc/nginx/ssl && chmod 0700
 
@@ -160,111 +160,111 @@ NOTES:
 
     solutions: the password has to be different for every install, this step may need to be done outside the context of a package.
 
-`mantl-etcd`
+- etcd: **mantl-etcd**
   defaults/main.yml
     // variables
 
-  files/etcd-service-start.sh
-  files/etc-service.json
+  - files/etcd-service-start.sh
+  - files/etc-service.json
 
-  handlers/main.yml
-    // sudo systemctl restart etcd
-    // sudo systmectl restart skydns
+  - handlers/main.yml
+    -> `sudo systemctl restart etcd`
+    -> `sudo systmectl restart skydns`
 
-  meta/main.yml
-    // dependent on handlers role
+  - meta/main.yml
+    - dependent on handlers role
 
-  tasks/main.yml
-    // sudo install version of etcd specified in variables
+  - tasks/main.yml
+    - sudo install version of etcd specified in variables
 
-    10// generate systemd environment file
-      // copy /etcd.conf.j2  /etc/etcd.conf
-      // chmod 0644
-      // reload systemd
-      // restart etcd
-      solutions:
-        sudo cp -p templates/etcd.conf /etc/etcd.conf
-        sudo chmod 0644 /etc/etcd.conf
-        sudo systemctl daemon-reload
-        sudo systemctl restart etcd
-
-      24// install etcd launch script
-      // sudo
-      // copy etcd-service-start.sh to /usr/local/bin
-      // chmod 0755
-      //restart etcd
-      solutions:
-        sudo cp etcd-service-start.sh /usr/local/bin/
-        sudo chmod 0755 /usr/local/bin/etcd-service-start.sh
-        sudo systemctl restart etcd
-
-      35// create directory /etc/systemd/system/etcd.service.d
-      solutions:
-        sudo mkdir -p /etc/systemd/system/etcd.service.d
-
-      43// create local etcd service override
-          // gives the config these contents
-            //   [Service]
-      ExecStart=
-      ExecStart=/usr/local/bin/etcd-service-start.sh
-      to
-      /etc/systemd/system/etcd.service.d/local.conf
-
-      56// install consul check script
-        // when consul_dc_group is defined
-          // copy consul-check-etcd-member to /usr/local/bin
-          // chmod 0755
+     - 10// generate systemd environment file
+         - copy /etcd.conf.j2  /etc/etcd.conf
+         - chmod 0644
+         - reload systemd
+         - restart etcd
         solutions:
-          //when consul_dc_group is defined
-          sudo cp consul-check-etcd-member /usr/local/bin/
-          chmod 0755 /usr/local/bin/consul-check-etcd-member
+         -> `sudo cp -p templates/etcd.conf /etc/etcd.conf`
+         -> `sudo chmod 0644 /etc/etcd.conf`
+         -> `sudo systemctl daemon-reload`
+         -> `sudo systemctl restart etcd`
 
-      66// when consul_dc_group is defined
-        // sudo copy etcd-service.json to /etc/consul
-        // reload consul
+      - 24// install etcd launch script
+        - sudo
+        - copy etcd-service-start.sh to /usr/local/bin
+        - chmod 0755
+        - restart etcd
         solutions:
-          // when consul_dc_group is defined
-          sudo cp etcd-service.json /etc/consul/
-          sudo systemctl reload consul
+         -> `sudo cp etcd-service-start.sh /usr/local/bin/`
+         -> `sudo chmod 0755 /usr/local/bin/etcd-service-start.sh`
+         -> `sudo systemctl restart etcd`
 
-      77// enable and start etcd service
-      solutions:
-      sudo systemctl enable etcd 2>/dev/null
-      sudo systemctl start etcd
+      - 35// create directory /etc/systemd/system/etcd.service.d
+       solutions:
+        -> `sudo mkdir -p /etc/systemd/system/etcd.service.d`
 
-      86 // when dns_setup is defined include skydns.yml
+      - 43// create local etcd service override
+          - gives the config these contents
+               [Service]
+                 ExecStart=
+                 ExecStart=/usr/local/bin/etcd-service-start.sh
+                  to
+                  /etc/systemd/system/etcd.service.d/local.conf
 
-      89 // meta: flush_handlers
+       - 56// install consul check script
+          - when consul_dc_group is defined
+          - copy consul-check-etcd-member to /usr/local/bin
+          - chmod 0755
+         solutions:
+          -> when consul_dc_group is defined
+          -> `sudo cp consul-check-etcd-member /usr/local/bin/`
+          -> `chmod 0755 /usr/local/bin/consul-check-etcd-member`
+
+       - 66// when consul_dc_group is defined
+          - sudo copy etcd-service.json to /etc/consul
+          - reload consul
+         solutions:
+          -> when consul_dc_group is defined
+          -> `sudo cp etcd-service.json /etc/consul/`
+          -> `sudo systemctl reload consul`
+
+       - 77// enable and start etcd service
+         solutions:
+         -> `sudo systemctl enable etcd 2>/dev/null`
+         -> `sudo systemctl start etcd`
+
+       - 86 // when dns_setup is defined include skydns.yml
+
+       - 89 // meta: flush_handlers
 
     /tasks/skydns.yml
-      // sudo
-        // cp skydns.service.j2 /usr/lib/systemd/system/skydns.service
-        // chmod 0644
-        // reload systemd
-        // restart skydns
+      - sudo
+      - cp skydns.service.j2 /usr/lib/systemd/system/skydns.service
+      - chmod 0644
+      - reload systemd
+      - restart skydns
       solutions:
-        sudo cp skydns.service /usr/lib/systemd/system/skydns.service
-        sudo chmod 0644 /usr/lib/systemd/system/skydns.service
-        sudo systemctl daemon-reload
-        sudo systemctl restart skydns
+        -> `sudo cp skydns.service /usr/lib/systemd/system/skydns.service`
+        -> `sudo chmod 0644 /usr/lib/systemd/system/skydns.service`
+        -> `sudo systemctl daemon-reload`
+        -> `sudo systemctl restart skydns`
 
-      // sudo
-        // cp skydns.env.j2 /etc/default/skydns.env
-        // mode 0644?
-        solutions:
-          sudo cp skydns.env /etc/default/
-          sudo chmod 0644 /etc/default/skydns.env
+       - sudo
+       - cp skydns.env.j2 /etc/default/skydns.env
+       - mode 0644?
+       solutions:
+        -> `sudo cp skydns.env /etc/default/`
+        -> `sudo chmod 0644 /etc/default/skydns.env`
 
     //templates/consul-check-etcd-member
-        // Consul script that does a health check on a client port
+        - Consul script that does a health check on a client port
     //templates/etcd.conf.j2
-        //
+        -
     //templates/etcd.service.j2
-        // runs docker container to start etcd
+        - runs docker container to start etcd
     //templates/skydns.env.j2
-        //DNS/Skydns integration
+        - DNS/Skydns integration
     //templates/skydns.service.j2
-        //DNS/skydns integtation, runs docker container to start skydns
+        - DNS/skydns integration, runs docker container to start skydns
 
 
 
