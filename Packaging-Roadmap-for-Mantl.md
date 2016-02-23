@@ -114,11 +114,14 @@ func main () {
     - mantl-common
 - logstash: **mantl-logstash**
 - nginx: **mantl-nginx**
+  - System dependencies
+    - nginx
+  - Ansible main tasks
+    - make tls directory -> `mkdir -p /etc/nginx/ssl && chmod 0700 /etc/nginx/ssl`
+    - deploy tls files
+    - encrypt admin password -> look at mantl PR#1058 for adding passwd to consul
 - consul: **mantl-consul**
-  - Notes
-    - This is a central package for mantl, especially for repackaging. I
-      propose that this package installs consul, consul-template, and
-      consul-ui, and inits the cluster. In fact, could this be in the **mantl-common**?
+  - Question: could this be in **mantl-common**?
 - dnsmasq: **mantl-dnsmasq**
   - PR#26
 
@@ -128,8 +131,14 @@ func main () {
 
 *Roles for controls*
 - vault: **mantl-vault**
+  - Question: could this be in **mantl-common**?
 - zookeeper: **mantl-zookeeper**
-  - needs logrotate
+  - needs logrotate, and collectd
+  - Files installed
+    - zookeeper_check.sh
+    - zookeeper-wait-for-listen.sh
+    - zookeeper_digest.sh
+    - zookeeper-update-mantl-0.5-0.6.sh
 - mesos: **mantl-mesos**
   - needs logrotate
 - marathon: **mantl-marathon**
@@ -140,25 +149,6 @@ func main () {
 - traefik: **mantl-traefik**
 
 NOTES:
-
-`mantl-nginx`
-  create tls directory
-  solution:
-    sudo mkdir -p /etc/nginx/ssl && chmod 0700
-
-  deploy tls files
-  solution(check to see if this works):
-    sudo cp -p ssl/certs/nginx.cert.pem /etc/nginx/ssl/nginx.cert && chmod 0444 /etc/nginx/ssl/nginx.cert
-    sudo cp -p ssl/private/nginx.key.pem /etc/nginx/ssl/nginx.key && chmod 0444 /etc/nginx/ssl/nginx.key
-
-  encrypt admin password
-    // run shell command: htpasswd -Bnb admin {{ nginx_admin_password | quote }} | cut -f 2 -d ':'
-    // store in variable nginx_admin_password_encrypted
-
-  set admin password variable
-    // sets nginx_admin_password_encrypted as the stdout of this variable to survive between plays of ansible run
-
-    solutions: the password has to be different for every install, this step may need to be done outside the context of a package.
 
 `mantl-etcd`
   defaults/main.yml
@@ -265,27 +255,6 @@ NOTES:
         //DNS/Skydns integration
     //templates/skydns.service.j2
         //DNS/skydns integtation, runs docker container to start skydns
-
-
-
-`mantl-mesos`
-Distributed system kernel that manages resources across multiple nodes. When combined with :doc:`marathon`, you can basically think of it as a distributed init system.
-
-`mantl-vault`
-"Secures, stores, and tightly controls access to tokens, passwords, certificates, API keys, and other secrets in modern computing."
-- Dependencies
-    - bootstrap.yml
-    - distributive.yml
-
-`mantl-zookeeper`
-ZooKeeper is used for coordination among Mesos and Marathon nodes.
-- Dependencies
-    - zookeeper_check.sh
-    - zookeeper-wait-for-listen.sh
-    - zookeeper_digest.sh
-    - zookeeper-update-mantl-0.5-0.6.sh
-    - collectd.yml
-    - distributive.yml
 
 `mantl-marathon`
 - Dependencies
