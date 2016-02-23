@@ -52,7 +52,7 @@ scripts:
     systemctl disable consul-template.service
 
   after-upgrade: |
-    systemctl reload-daemon
+    systemctl daemon-reload
     systemctl restart consul-template.service
 
 extra-args: |
