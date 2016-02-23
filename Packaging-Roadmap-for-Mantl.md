@@ -114,30 +114,25 @@ func main () {
     - mantl-common
 - logstash: **mantl-logstash**
 - nginx: **mantl-nginx**
+  - System dependencies
+    - nginx
+    - mantl-common
+  - Ansible main tasks
+    - make tls directory -> `mkdir -p /etc/nginx/ssl && chmod 0700 /etc/nginx/ssl`
+    - deploy tls files
+    - encrypt admin password -> look at mantl PR#1058 for adding passwd to consul
 - consul: **mantl-consul**
-  - Notes
-    - This is a central package for mantl, especially for repackaging. I
-      propose that this package installs consul, consul-template, and
-      consul-ui, and inits the cluster. In fact, could this be in the **mantl-common**?
+  - Question: could this be in **mantl-common**?
 - dnsmasq: **mantl-dnsmasq**
   - PR#26
 
-*Roles for workers*
-- mesos: *Secrets should be managed by vault before this is a package*
-  - needs logrotate config from ansible role
-
 *Roles for controls*
 - vault: **mantl-vault**
-- zookeeper: **mantl-zookeeper**
-  - needs logrotate
-- mesos: **mantl-mesos**
-  - needs logrotate
-- marathon: **mantl-marathon**
-- chronos: **mantl-chronos**
-- mantlui: **mantl-mantlui**
+  - Question: could this be in **mantl-common**?
 
 *Roles for edges*
 - traefik: **mantl-traefik**
+<<<<<<< HEAD
 
 NOTES:
 
@@ -393,3 +388,16 @@ Mantlui consolidates the web UIs of various components in Mantl, including Mesos
 
       roles/traefik/templates
       // traefik.toml.j2
+=======
+  - Notes
+    - This will install the traefik binary, and configure the certs, but that depends on how we bootstrap the cluster
+
+*Addon packages:
+- calico + etcd ansible roles -> **mantl-addon-calico**
+- mesos ansible role with leader/follower configs -> **mantl-mesos-{common?, leader, follower}**
+  - common package installs and configures zookeeper?
+  - follower package configures node to pull from vault
+- marathon ansible role -> **mantl-marathon** package that depends upon **mantl-mesos**
+- marathon ansible role -> **mantl-chronos** package that depends upon **mantl-mesos**
+- mantlui -> **mantl-ui**
+>>>>>>> 15037340335cbc5e4e76fea8c2e83b60c5623756
