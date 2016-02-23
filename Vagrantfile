@@ -12,4 +12,7 @@ Vagrant.configure(2) do |config|
     vb.customize ["modifyvm", :id, "--cpus", "4"]
     vb.customize ["modifyvm", :id, "--memory", "8192"]
   end
+  config.vm.provision "shell" do |s|
+    s.path = "scripts/build_dependencies.sh"
+  end
 end
