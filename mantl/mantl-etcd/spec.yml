@@ -1,0 +1,52 @@
+---
+name: mantl-etcd
+version: 1.0.0
+iteration: 1
+vendor: Asteris
+url: https://github.com/asteris-llc/mantl-packaging
+description: etcd integration with Mantl
+type: rpm
+
+targets:
+  #cp etcd-service.json /etc/consul/
+  - src: "{{.SpecRoot}}/templates/etcd-service.json"
+    dest: /etc/consul/etcd-service.json
+    config: true
+  - src: "{{.SpecRoot}}/templates/etcd.conf"
+    dest: /etc/etcd.conf
+    config: true
+  - src: "{{.SpecRoot}}/templates/skydns.service"
+    dest: /usr/lib/systemd/system/skydns.service
+    config: true
+  - src: {{.SpecRoot}}/templates/skydns.env
+    dest: /etc/default/skydns.env
+    config: yes
+  - src: "{{.SpecRoot}}/scripts/etcd-service-start.sh"
+    dest: /usr/local/bin/etcd-service-start.sh
+  - src: "{{.SpecRoot}}/scripts/consul-check-etcd-member"
+    dest: /usr/local/bin/consul-check-etcd-member
+    #cp skydns.service.j2 /usr/lib/systemd/system/skydns.service
+
+    #cp skydns.env.j2 /etc/default/skydns.env
+
+# generate systemd environment file
+# copy /etcd.conf /etc/etcd.conf
+# install etcd launch script
+# copy etcd-service-start.sh to /usr/local/bin
+# create etcd.service.d directory
+# make file /etc/systemd/system/etcd.service.d/local.conf
+# cp local.conf to etcd.service.d directory
+
+scripts:
+  before-install: |
+    mkdir -p /etc/systemd/system/etcd.service.d
+    touch -p /etc/systemd/system/etcd.service.d/local.conf
+    cp -p templates/local.conf /etc/systemd/system/etcd.service.d/
+
+
+  after-install: |
+    systmectl restart skydns
+    systemctl daemon-reload
+    systemctl enable etcd 2>/dev/null
+    systemctl start etcd
+    systemctl reload consul
