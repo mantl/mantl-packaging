@@ -1,6 +1,6 @@
 ---
 name: mesos-agent-dynamic
-version: 0.26.0
+version: 0.27.1
 license: ASL 2.0
 iteration: 2
 vendor: Asteris

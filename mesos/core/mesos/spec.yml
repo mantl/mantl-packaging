@@ -1,6 +1,6 @@
 ---
 name: mesos
-version: 0.26.0
+version: 0.27.1
 license: ASL 2.0
 iteration: 2
 vendor: Mesos
@@ -12,12 +12,13 @@ type: rpm
 depends:
   - cyrus-sasl
   - cyrus-sasl-md5
-  - subversion-libs
+  - subversion-devel
+  - protobuf-devel
 
 resources:
   - url: http://archive.apache.org/dist/mesos/{{.Version}}/mesos-{{.Version}}.tar.gz
     hash-type: sha1
-    hash: c621c292b308f1b53e8dfacdb8c32af0a7443805
+    hash: 461d99aef2aab49cdfab09a9d160835894b178c4
 
 targets:
   - src: '{{.BuildRoot}}/out/'
