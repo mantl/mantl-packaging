@@ -48,14 +48,21 @@ cache:
   directories:
     - tools
 
+before_install: ./scripts/evaluate-build.sh
+
+# TODO: cache fpm
 install:
-  - echo "installing moved to script"
+  - mkdir -p tools/bin || true
+  - >
+    'which hammer || (go get -v github.com/asteris-llc/hammer
+    &&  go build -o tools/bin/hammer github.com/asteris-llc/hammer)'
+  - gem install fpm
 
 script:
-  - ./scripts/ci-build.sh
+  - mkdir /tmp/out
+  - PATH=tools/bin:$PATH hammer build --output=/tmp/out --stream-logs-for=$PACKAGE $PACKAGE
 
-after_failure:
-  - tail logs/*
+after_failure: tail logs/*
 
 deploy:
   provider: script
