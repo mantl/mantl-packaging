@@ -25,7 +25,6 @@ for building generic Mantl utilities.
             - [vault-mantl](#vault-mantl)
         - [Mantl Packages](#mantl-packages)
             - [mantl-dns](#mantl-dns)
-        - [Distributive Checks](#distributive-checks)
         - [Mesos Packages](#mesos-packages)
             - [mesos](#mesos)
             - [mesos-master](#mesos-master)
@@ -35,6 +34,9 @@ for building generic Mantl utilities.
         - [Mesos Frameworks](#mesos-frameworks)
             - [marathon](#marathon)
             - [marathon-dynamic](#marathon-dynamic)
+        - [Distributive Packages](#distributive-packages)
+            - [distributive](#distributive)
+            - [distributive-<package>](#distributive-<package>)
     - [Building](#building)
 
 <!-- markdown-toc end -->
@@ -187,9 +189,15 @@ Packages mantl.io specific scripts for Vault.
 
 DNS setup with dnsmasq and Consul
 
-### Distributive Checks
+### Distributive Packages
 
-Distributive checks for various packages are included in
+#### distributive
+
+Package containing the Distributive binary.
+
+#### distributive-<package>
+
+Distributive checklists for various Mantl components are included in
 [the `distributive` directory](distributive).
 
 ### Mesos Packages

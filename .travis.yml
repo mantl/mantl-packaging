@@ -8,6 +8,7 @@ env:
  - PACKAGE=consul-cli
  - PACKAGE=consul-template
  - PACKAGE=consul-ui
+ - PACKAGE=distributive
  - PACKAGE=distributive-calico
  - PACKAGE=distributive-chronos
  - PACKAGE=distributive-collectd
