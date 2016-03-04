@@ -1,0 +1,23 @@
+# defaults
+MESOS_FIREWALL_RULES=file:///etc/sysconfig/mesos-agent-firewall-rules.json
+MESOS_LOG_DIR=/var/log/mesos
+MESOS_LOGGING_LEVEL=INFO
+MESOS_PORT=5051
+MESOS_MASTER=zk://zookeeper.service.consul:2181/mesos
+MESOS_WORK_DIR=/var/lib/mesos
+
+# overrides
+{{range ls "config/mesos/agent/options"}}MESOS_{{.Key | toUpper}}={{.Value}}
+{{end}}
+
+# node-specific overrides
+{{with key (plugin "keyForNode" "config/nodes/%s/internal_ip")}}MESOS_IP={{.Value}}{{else}}# MESOS_IP=unset (set via {{plugin "keyForNode" "config/nodes/%s/external_ip"}})){{end}}
+{{with key (plugin "keyForNode" "config/nodes/%s/hostname")}}MESOS_HOSTNAME={{.Value}}{{else}}# MESOS_HOSTNAME=unset (set via {{plugin "keyForNode" "config/nodes/%s/hostname"}})){{end}}
+
+{{range ls (plugin "keyForNode" "config/mesos/agent/nodes/%s/options")}}MESOS_{{.Key | toUpper}}={{.Value}}
+{{end}}
+
+# credentials
+{{if not (and (key (plugin "keyForNode" "config/mesos/agents/%s/principal")) (key (plugin "keyForNode" "config/mesos/agents/%s/secret")))}}# {{end}}MESOS_CREDENTIAL=file:///etc/sysconfig/mesos-credential
+
+EXTRA_OPTS="{{key "config/mesos/agent/extra_options"}}"
