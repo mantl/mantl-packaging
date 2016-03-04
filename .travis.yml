@@ -39,6 +39,11 @@ env:
  - PACKAGE=mesos-master-dynamic
  - PACKAGE=mesos-agent
  - PACKAGE=mesos-agent-dynamic
+ - PACKAGE=mesos-27.1
+ - PACKAGE=mesos-master-27.1
+ - PACKAGE=mesos-master-dynamic-27.1
+ - PACKAGE=mesos-agent-27.1
+ - PACKAGE=mesos-agent-dynamic-27.1
  - PACKAGE=nomad
  - PACKAGE=traefik
  - PACKAGE=vault
