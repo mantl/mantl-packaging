@@ -196,3 +196,9 @@ Distributive checklists for various Mantl components are included in
 If you're on linux, run `hammer` to build all of the packages, which will end up
 in `out`. If you're on another platform, run `./build.sh` to fire up a Vagrant
 VM that will provision itself with hammer and do the same.
+
+## Contributing
+
+If you add a new package, make sure to add its root directory to
+`scripts/paths`, and to add its name to the build matrix in `.travis.yml`.
+Otherwise, the CI build won't pick it up.

@@ -48,14 +48,15 @@ cache:
   directories:
     - tools
 
-install:
-  - echo "installing moved to script"
+before_install: ./scripts/evaluate-build.sh
+
+install: ./scripts/install.sh
 
 script:
-  - ./scripts/ci-build.sh
+  - mkdir /tmp/out
+  - PATH=tools/bin:$PATH hammer build --output=/tmp/out --stream-logs-for=$PACKAGE $PACKAGE
 
-after_failure:
-  - tail logs/*
+after_failure: tail logs/*
 
 deploy:
   provider: script
