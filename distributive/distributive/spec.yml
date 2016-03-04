@@ -24,4 +24,5 @@ scripts:
     mkdir -p '{{.BuildRoot}}/src/github.com/{{.Vendor}}'
     git clone '{{.URL}}' '{{.BuildRoot}}/src/github.com/{{.Vendor}}/{{.Name}}'
     cd '{{.BuildRoot}}/src/github.com/{{.Vendor}}/{{.Name}}'
+    git checkout '{{.Version}}'
     GOPATH=$GOPATH:{{.BuildRoot}} godep go build -o '{{.BuildRoot}}/{{.Name}}' .
