@@ -1,8 +1,8 @@
 ---
 name: mantl-dns
-version: 1.0.0
+version: 1.1.0
 license: ASL 2.0
-iteration: 2
+iteration: 1
 vendor: Asteris
 url: https://github.com/asteris-llc/mantl-packaging
 description: DNS integration with Consul
@@ -34,8 +34,14 @@ scripts:
 
     # move the existing resolv.conf and direct *all* queries to localhost.
     # dnsmasq will read the resolv.conf.masq and forward traffic accordingly
+    #
+    # this configuration also adds search paths to resolv.conf so that the
+    # system can address nodes by their simplest name (x.node.consul becomes
+    # x.node or simply x.) This will work for service addressing as well, so
+    # you can use y.service instead of y.service.consul
     mv /etc/resolv.conf /etc/resolv.conf.masq
-    echo nameserver 127.0.0.1 > /etc/resolv.conf
+    echo search node.consul consul > /etc/resolv.conf
+    echo nameserver 127.0.0.1 >> /etc/resolv.conf
 
     # restart everything to pick up the new changes
     systemctl enable dnsmasq 2>/dev/null
