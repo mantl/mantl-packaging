@@ -50,13 +50,7 @@ cache:
 
 before_install: ./scripts/evaluate-build.sh
 
-# TODO: cache fpm
-install:
-  - mkdir -p tools/bin || true
-  - >
-    'which hammer || (go get -v github.com/asteris-llc/hammer
-    &&  go build -o tools/bin/hammer github.com/asteris-llc/hammer)'
-  - gem install fpm
+install: ./scripts/install.sh
 
 script:
   - mkdir /tmp/out
