@@ -28,6 +28,14 @@ scripts:
     mv /etc/resolv.conf /etc/resolv.conf.masq
     ln -s /etc/resolv.conf.mantl-dns /etc/resolv.conf
 
+  before-upgrade: |
+    if [ ! -f /etc/resolv.conf.masq ]; then
+        mv /etc/resolv.conf /etc/resolv.conf.masq
+    else
+        rm /etc/resolv.conf
+        ln -s /etc/resolv.conf.mantl-dns /etc/resolv.conf
+    fi
+
   after-install: |
     # turn off PEERDNS on all interfaces
     find /etc/sysconfig/network-scripts -name 'ifcfg-*' \
