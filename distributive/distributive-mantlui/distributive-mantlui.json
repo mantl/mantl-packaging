@@ -3,11 +3,6 @@
     "Notes": "For use with Mantl (http://mantl.io)",
     "Checklist" : [
         {
-            "Name": "mantlui nginx configuration",
-            "ID": "file",
-            "Parameters": ["/etc/mantlui.nginx"]
-        },
-        {
             "Name": "ensure mantlui docker image is present",
             "ID": "dockerimageregexp",
             "Parameters": ["mantlui"]
