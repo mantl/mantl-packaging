@@ -42,11 +42,17 @@ def main(args):
             ])
         ]
 
+    if 'mesos' in names:
+        stream_for = 'mesos'
+    elif 'marathon' in names:
+        stream_for = 'marathon'
+    elif len(names) == 1:
+        stream_for = names[0]
+    else:
+        stream_for = None
+
     if names:
-        build(
-            names,
-            stream_for='mesos' if 'mesos' in names else 'marathon' if 'marathon' in names else None
-        )
+        build(names, stream_for)
     else:
         print 'nothing to build, skipping'
 
