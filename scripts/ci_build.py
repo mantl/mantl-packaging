@@ -29,6 +29,8 @@ def build(names, stream_for=None):
 
 
 def main(args):
+    print 'Evaluating whether to build %s' % ' to '.join(COMMIT_RANGE)
+
     if 'ci: all' in check_output(['git', 'log'] + COMMIT_RANGE):
         names = PATHS.keys()
     else:
