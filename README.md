@@ -27,7 +27,7 @@ for building generic Mantl utilities.
             - [mantl-dns](#mantl-dns)
         - [Distributive Packages](#distributive-packages)
             - [distributive](#distributive)
-            - [distributive-<package>](#distributive-<package>)
+            - [distributive-<package>](#distributive-package)
     - [Building](#building)
 
 <!-- markdown-toc end -->
@@ -145,6 +145,8 @@ currently released version.
 > A Distributed, Highly Available, Datacenter-Aware Scheduler
 
 - [Nomad's Project Page](https://nomadproject.io/)
+
+### Vault Packages
 
 #### vault
 
