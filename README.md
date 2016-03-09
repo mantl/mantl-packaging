@@ -27,7 +27,7 @@ for building generic Mantl utilities.
             - [mantl-dns](#mantl-dns)
         - [Distributive Packages](#distributive-packages)
             - [distributive](#distributive)
-            - [distributive-<package>](#distributive-<package>)
+            - [distributive-<package>](#distributive-package)
     - [Building](#building)
 
 <!-- markdown-toc end -->
@@ -146,6 +146,8 @@ currently released version.
 
 - [Nomad's Project Page](https://nomadproject.io/)
 
+### Vault Packages
+
 #### vault
 
 [*spec*](vault/vault/spec.yml)
@@ -196,3 +198,6 @@ Distributive checklists for various Mantl components are included in
 If you're on linux, run `hammer` to build all of the packages, which will end up
 in `out`. If you're on another platform, run `./build.sh` to fire up a Vagrant
 VM that will provision itself with hammer and do the same.
+
+If you add a new package, be sure to run `make scripts/paths` so that it will be
+picked up by CI.
