@@ -36,7 +36,7 @@ for building generic Mantl utilities.
             - [marathon-dynamic](#marathon-dynamic)
         - [Distributive Packages](#distributive-packages)
             - [distributive](#distributive)
-            - [distributive-<package>](#distributive-<package>)
+            - [distributive-<package>](#distributive-package)
     - [Building](#building)
 
 <!-- markdown-toc end -->
@@ -154,6 +154,8 @@ currently released version.
 > A Distributed, Highly Available, Datacenter-Aware Scheduler
 
 - [Nomad's Project Page](https://nomadproject.io/)
+
+### Vault Packages
 
 #### vault
 
@@ -316,3 +318,6 @@ Available configuration:
 If you're on linux, run `hammer` to build all of the packages, which will end up
 in `out`. If you're on another platform, run `./build.sh` to fire up a Vagrant
 VM that will provision itself with hammer and do the same.
+
+If you add a new package, be sure to run `make scripts/paths` so that it will be
+picked up by CI.

@@ -1,9 +1,7 @@
 ---
 name: distributive
 version: 0.2.4
-# This iteration reflects the merge of CiscoCloud/distributive-rpm into
-# asteris-llc/mantl-packaging. This package no longer includes checklists.
-iteration: 2
+iteration: 3
 license: ASL 2.0
 description: Distributive is a tool for running distributed health checks in
   datacenters.
@@ -21,6 +19,8 @@ targets:
 
 scripts:
   build: |
-    git clone '{{.URL}}' '{{.BuildRoot}}'
-    cd '{{.BuildRoot}}'
-    godep go build -o '{{.BuildRoot}}/{{.Name}}' .
+    mkdir -p '{{.BuildRoot}}/src/github.com/{{.Vendor}}'
+    git clone '{{.URL}}' '{{.BuildRoot}}/src/github.com/{{.Vendor}}/{{.Name}}'
+    cd '{{.BuildRoot}}/src/github.com/{{.Vendor}}/{{.Name}}'
+    git checkout '{{.Version}}'
+    GOPATH=$GOPATH:{{.BuildRoot}} godep go build -o '{{.BuildRoot}}/{{.Name}}' .

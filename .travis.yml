@@ -3,52 +3,6 @@ language: go
 
 sudo: false
 
-env:
- - PACKAGE=consul
- - PACKAGE=consul-cli
- - PACKAGE=consul-template
- - PACKAGE=consul-ui
- - PACKAGE=distributive
- - PACKAGE=distributive-calico
- - PACKAGE=distributive-chronos
- - PACKAGE=distributive-collectd
- - PACKAGE=distributive-collectd-docker
- - PACKAGE=distributive-collectd-marathon
- - PACKAGE=distributive-collectd-zookeeper
- - PACKAGE=distributive-common
- - PACKAGE=distributive-consul
- - PACKAGE=distributive-consul-template
- - PACKAGE=distributive-dnsmasq
- - PACKAGE=distributive-docker
- - PACKAGE=distributive-etcd
- - PACKAGE=distributive-haproxy
- - PACKAGE=distributive-logrotate
- - PACKAGE=distributive-logstash
- - PACKAGE=distributive-mantlui
- - PACKAGE=distributive-marathon
- - PACKAGE=distributive-mesos
- - PACKAGE=distributive-vault
- - PACKAGE=distributive-zookeeper
- - PACKAGE=docker-cleanup
- - PACKAGE=generate-certificate
- - PACKAGE=mantl-dns
- - PACKAGE=marathon
- - PACKAGE=marathon-dynamic
- - PACKAGE=mesos
- - PACKAGE=mesos-master
- - PACKAGE=mesos-master-dynamic
- - PACKAGE=mesos-agent
- - PACKAGE=mesos-agent-dynamic
- - PACKAGE=mesos-27.1
- - PACKAGE=mesos-master-27.1
- - PACKAGE=mesos-master-dynamic-27.1
- - PACKAGE=mesos-agent-27.1
- - PACKAGE=mesos-agent-dynamic-27.1
- - PACKAGE=nomad
- - PACKAGE=traefik
- - PACKAGE=vault
- - PACKAGE=vault-mantl
-
 addons:
   apt:
     packages:
@@ -61,10 +15,11 @@ cache:
     - tools
 
 install:
-  - echo "installing moved to script"
+  - scripts/travis-cache.sh
 
 script:
-  - ./scripts/ci-build.sh
+  - mkdir -p /tmp/out
+  - ./scripts/ci_build.py
 
 after_failure:
   - tail logs/*
