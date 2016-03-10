@@ -1,8 +1,8 @@
 ---
 name: mantl-dns
-version: 1.0.0
+version: 1.1.0
 license: ASL 2.0
-iteration: 3
+iteration: 1
 vendor: Asteris
 url: https://github.com/asteris-llc/mantl-packaging
 description: DNS integration with Consul
