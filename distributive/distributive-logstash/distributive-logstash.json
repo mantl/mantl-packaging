@@ -28,11 +28,6 @@
             "Parameters": ["8125"]
         },
         {
-            "Name": "logstashd collectd port",
-            "ID": "PortUDP",
-            "Parameters": ["25826"]
-        },
-        {
             "Name": "logstashd syslog port",
             "ID": "port",
             "Parameters": ["1514"]
