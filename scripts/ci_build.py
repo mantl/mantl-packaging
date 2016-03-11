@@ -54,7 +54,11 @@ def main(args):
         stream_for = None
 
     if names:
-        build(names, stream_for)
+        try:
+            build(names, stream_for)
+        except subprocess.CalledProcessError as e:
+            sys.stderr.write('`%s` returned non-zero exit code %d' % (' '.join(e.cmd), e.returncode))
+            return 1
     else:
         print 'nothing to build, skipping'
 
