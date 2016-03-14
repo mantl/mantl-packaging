@@ -1,0 +1,42 @@
+---
+name: mantl-storage-setup
+version: 0.1.0
+epoch: 1
+iteration: 1
+license: APL 2.0 
+vendor: Asteris, LLC
+architecture: noarch
+type: rpm
+description: Set up LVM for mantl clsuters
+
+dependencies:
+  - python
+
+
+targets:
+  - src: '{{.SpecRoot}}/{{.Name}}.py'
+    dest: '/usr/sbin/{{.Name}}.py'
+  - src: '{{.SpecRoot}}/{{.Name}}.service'
+    dest: '/usr/lib/systemd/system/{{.Name}}.service'
+  - src: '{{empty}}'
+    dest: /etc/mantl
+  - src: '{{empty}}'
+    dest: /etc/mantl/filesystems.d
+
+
+scripts:
+  after-install: |
+    systemctl enable /etc/systemd/system/{{.Name}}.service 2>/dev/null
+    systemctl start {{.Name}}.service
+
+  after-upgrade: |
+    systemctl daemon-reload
+    systemctl restart {{.Name}}.service
+
+  before-remove: |
+    systemctl stop {{.Name}}.service
+    systemctl disable {{.Name}}.service 2>/dev/null
+
+  after-remove: |
+    systemctl daemon-reload
+
