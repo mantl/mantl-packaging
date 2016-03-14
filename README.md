@@ -25,6 +25,8 @@ for building generic Mantl utilities.
             - [vault-mantl](#vault-mantl)
         - [Mantl Packages](#mantl-packages)
             - [mantl-dns](#mantl-dns)
+        - [Calico Packages](#calico-packages)
+            - [calico](#calico)
         - [Distributive Packages](#distributive-packages)
             - [distributive](#distributive)
             - [distributive-<package>](#distributive-package)
@@ -181,6 +183,15 @@ Packages mantl.io specific scripts for Vault.
 [ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/mantl-dns/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/mantl-dns/_latestVersion)
 
 DNS setup with dnsmasq and Consul
+
+
+### Calico packages
+
+#### calico
+
+[*spec*](calico/calico/spec.yml)
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/calico/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/calico/_latestVersion)
 
 ### Distributive Packages
 
