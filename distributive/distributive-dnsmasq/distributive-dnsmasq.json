@@ -39,7 +39,7 @@
         },
         {
             "Name": "resolv.conf exists",
-            "ID": "file",
+            "ID": "symlink",
             "Parameters": ["/etc/resolv.conf"]
         }
     ]
