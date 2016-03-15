@@ -15,14 +15,7 @@ PATHS = dict([
     if PATH_RE.match(line) is not None
 ])
 
-if os.environ['TRAVIS_COMMIT_RANGE'] == '':
-    COMMITS = os.environ['TRAVIS_COMMIT_RANGE']
-    COMMIT_RANGE = COMMITS
-    DIFF_COMMAND = ['git', 'diff', '--name-only', COMMITS]
-else:
-    COMMITS = os.environ['TRAVIS_COMMIT']
-    COMMIT_RANGE = ''
-    DIFF_COMMAND = ['git', 'show', '--name-only', '--pretty=format:', COMMITS]
+COMMIT_RANGE = os.environ['TRAVIS_COMMIT_RANGE'] or os.environ['TRAVIS_COMMIT']
 
 
 def build(names, stream_for=None):
@@ -36,9 +29,9 @@ def build(names, stream_for=None):
 
 
 def main(args):
-    print 'Evaluating whether to build %s' % COMMITS
+    print 'Evaluating whether to build %s' % COMMIT_RANGE
 
-    if COMMIT_RANGE and 'ci: all' in check_output(['git', 'log', COMMIT_RANGE]):
+    if COMMIT_RANGE and 'ci: all' in check_output(['git', 'show', '--pretty=short', COMMIT_RANGE]):
         names = PATHS.keys()
     else:
         names = [
@@ -46,7 +39,7 @@ def main(args):
             in PATHS.items()
             if 0 != len([
                 line for line
-                in check_output(DIFF_COMMAND).split()
+                in check_output(['git', 'show', '--name-only', '--pretty=format:', COMMIT_RANGE]).split()
                 if line.startswith(path)
             ])
         ]
