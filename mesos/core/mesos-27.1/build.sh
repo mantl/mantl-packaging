@@ -41,7 +41,8 @@ popd
 
 
 ## Net-modules
-git clone https://github.com/mesosphere/net-modules.git -b integration/0.26
+cd {{.BuildRoot}}
+git clone https://github.com/mesosphere/net-modules.git 
 cd net-modules/isolator
 
 # Configure and build
@@ -53,7 +54,7 @@ popd
 mkdir build 
 cd build
 ../configure --with-mesos=${INSTALL}/usr --with-protobuf=/usr 
-make 
+make -j {{.CPUs}}
 make install DESTDIR="$INSTALL" 
 
 pushd ${INSTALL}/usr/
