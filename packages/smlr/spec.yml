@@ -1,0 +1,26 @@
+---
+name: smlr
+version: 0.0.1
+license: APL 2.0
+iteration: 1
+vendor: Asteris
+url: https://github.com/asteris-llc/smlr
+architecture: x86_64
+description: smlr waits for service dependencies
+type: rpm
+
+resources:
+  - url: https://github.com/asteris-llc/smlr/releases/download/{{.Version}}/smlr_{{.Version}}_linux_amd64.tar.gz
+    hash-type: sha256
+    hash: f1cf30ab0ebe02d341b4498ae473d0d5bc04183aec816ecb881edd8198121147
+
+targets:
+  - src: '{{.BuildRoot}}/smlr_{{.Version}}_linux_amd64'
+    dest: /usr/bin/
+
+scripts:
+  build: |
+    tar -xzvf smlr_{{.Version}}_linux_amd64.tar.gz
+
+extra-args: |
+  --rpm-os linux

@@ -14,6 +14,7 @@ for building generic Mantl utilities.
             - [generate-certificate](#generate-certificate)
             - [traefik](#traefik)
             - [docker-cleanup](#docker-cleanup)
+            - [smlr](#smlr)
             - [nomad](#nomad)
         - [Consul Packages](#consul-packages)
             - [consul](#consul)
@@ -25,6 +26,11 @@ for building generic Mantl utilities.
             - [vault-mantl](#vault-mantl)
         - [Mantl Packages](#mantl-packages)
             - [mantl-dns](#mantl-dns)
+        - [Calico packages](#calico-packages)
+            - [calico](#calico)
+        - [Distributive Packages](#distributive-packages)
+            - [distributive](#distributive)
+            - [distributive-<package>](#distributive-package)
         - [Mesos Packages](#mesos-packages)
             - [mesos](#mesos)
             - [mesos-master](#mesos-master)
@@ -34,11 +40,6 @@ for building generic Mantl utilities.
         - [Mesos Frameworks](#mesos-frameworks)
             - [marathon](#marathon)
             - [marathon-dynamic](#marathon-dynamic)
-        - [Calico Packages](#calico-packages)
-            - [calico](#calico)
-        - [Distributive Packages](#distributive-packages)
-            - [distributive](#distributive)
-            - [distributive-<package>](#distributive-package)
     - [Building](#building)
 
 <!-- markdown-toc end -->
@@ -105,6 +106,16 @@ for your reference.
 
 Second, `martin/docker-cleanup-volumes` removes orphaned Docker volumes, something that removing containers with docker
 commands normally does not do. Docker version 1.9 is beginning to address this issue, but this adds support for previous versions.
+
+#### smlr
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/smlr/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/smlr/_latestVersion)
+
+[*spec*](packages/smlr/spec.yml)
+
+> smlr waits for service dependencies.
+
+- [smlr's README](https://github.com/asteris-llc/smlr)
 
 #### nomad
 
