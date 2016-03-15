@@ -22,7 +22,7 @@ if os.environ['TRAVIS_COMMIT_RANGE'] == '':
 else:
     COMMITS = os.environ['TRAVIS_COMMIT']
     COMMIT_RANGE = ''
-    DIFF_COMMAND = ['git', 'show', '--name-only', "--pretty='format:'", COMMITS]
+    DIFF_COMMAND = ['git', 'show', '--name-only', '--pretty=format:', COMMITS]
 
 
 def build(names, stream_for=None):
