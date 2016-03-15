@@ -2,7 +2,7 @@
 import sys
 import os
 from os import path
-from subprocess import check_call, check_output
+from subprocess import check_call, check_output, CalledProcessError
 import re
 
 DIR = path.abspath(path.dirname(__file__))
@@ -56,7 +56,7 @@ def main(args):
     if names:
         try:
             build(names, stream_for)
-        except subprocess.CalledProcessError as e:
+        except CalledProcessError as e:
             sys.stderr.write('`%s` returned non-zero exit code %d' % (' '.join(e.cmd), e.returncode))
             return 1
     else:
