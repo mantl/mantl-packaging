@@ -52,10 +52,11 @@ popd
 
 ./bootstrap
 mkdir build 
-cd build
+pushd build
 ../configure --with-mesos=${INSTALL}/usr --with-protobuf=/usr 
 make -j {{.CPUs}}
 make install DESTDIR="$INSTALL" 
+popd
 
 pushd ${INSTALL}/usr/
 rm -f lib64
