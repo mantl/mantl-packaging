@@ -2,7 +2,7 @@
 name: consul-template
 version: 0.12.2
 license: MPLv2.0
-iteration: 1
+iteration: 2
 vendor: Hashicorp
 url: https://github.com/hashicorp/consul-template
 architecture: x86_64
@@ -52,7 +52,7 @@ scripts:
     systemctl disable consul-template.service
 
   after-upgrade: |
-    systemctl reload-daemon
+    systemctl daemon-reload
     systemctl restart consul-template.service
 
 extra-args: |

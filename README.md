@@ -34,6 +34,8 @@ for building generic Mantl utilities.
         - [Mesos Frameworks](#mesos-frameworks)
             - [marathon](#marathon)
             - [marathon-dynamic](#marathon-dynamic)
+        - [Calico Packages](#calico-packages)
+            - [calico](#calico)
         - [Distributive Packages](#distributive-packages)
             - [distributive](#distributive)
             - [distributive-<package>](#distributive-package)
@@ -191,6 +193,15 @@ Packages mantl.io specific scripts for Vault.
 
 DNS setup with dnsmasq and Consul
 
+
+### Calico packages
+
+#### calico
+
+[*spec*](calico/calico/spec.yml)
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/calico/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/calico/_latestVersion)
+
 ### Distributive Packages
 
 #### distributive
@@ -311,7 +322,6 @@ Available configuration:
 |-----|-------------|
 | `config/marathon/options/{key}` | any key from the [command line flags](http://mesosphere.github.io/marathon/docs/command-line-flags.html). Value will be uppercased to become an environment variable. |
 | `config/marathon/hosts/{node}/options/{key}` | the same as `marathon/config/{key}`, but the flags will only be applied to the specified node |
->>>>>>> 02423c4... Add mesos packaging info to README
 
 ## Building
 

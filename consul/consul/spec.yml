@@ -2,7 +2,7 @@
 name: consul
 version: 0.6.3
 license: MPLv2.0
-iteration: 3
+iteration: 4
 vendor: Hashicorp
 url: https://consul.io
 architecture: x86_64
@@ -70,7 +70,7 @@ scripts:
     chown consul:consul /var/lib/consul
     chown consul:consul /etc/consul
 
-    systemctl reload-daemon
+    systemctl daemon-reload
 
 extra-args: |
   --rpm-os linux
