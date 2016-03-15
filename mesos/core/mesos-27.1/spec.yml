@@ -1,0 +1,42 @@
+---
+name: mesos-27.1
+version: 0.27.1
+license: ASL 2.0
+iteration: 2
+vendor: Mesos
+architecture: x86_64
+url: http://mesos.apache.org/
+description: Apache Mesos abstracts CPU, memory, storage, and other compute resources away from machines (physical or virtual), enabling fault-tolerant and elastic distributed systems to easily be built and run effectively.
+type: rpm
+
+depends:
+  - cyrus-sasl
+  - cyrus-sasl-md5
+  - subversion-devel
+  - protobuf-devel
+
+resources:
+  - url: http://archive.apache.org/dist/mesos/{{.Version}}/mesos-{{.Version}}.tar.gz
+    hash-type: sha1
+    hash: 461d99aef2aab49cdfab09a9d160835894b178c4
+
+targets:
+  - src: '{{.BuildRoot}}/out/'
+    dest: /
+
+scripts:
+  build: |
+    {{includeTemplate (specFile "build.sh")}}
+
+  before-install: |
+    {{include (specFile "before-install.sh")}}
+
+  after-install: |
+    ldconfig
+
+extra-args: |
+  --rpm-os linux
+  --rpm-auto-add-directories
+  --rpm-auto-add-exclude-directories /usr/share/java
+  --rpm-auto-add-exclude-directories /usr/lib/python2.7
+  --rpm-auto-add-exclude-directories /usr/lib/python2.7/site-packages

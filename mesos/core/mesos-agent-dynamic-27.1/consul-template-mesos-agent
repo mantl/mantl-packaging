@@ -1,0 +1,2 @@
+consul	ALL=(ALL)	NOPASSWD:	/usr/bin/systemctl restart mesos-agent.service
+
