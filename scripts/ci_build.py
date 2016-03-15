@@ -16,9 +16,13 @@ PATHS = dict([
 ])
 
 if os.environ['TRAVIS_COMMIT_RANGE'] == '':
-    DIFF_COMMAND = ['git', 'diff', '--name-only', os.environ['TRAVIS_COMMIT_RANGE']]
+    COMMITS = os.environ['TRAVIS_COMMIT_RANGE']
+    COMMIT_RANGE = COMMITS
+    DIFF_COMMAND = ['git', 'diff', '--name-only', COMMITS]
 else:
-    DIFF_COMMAND = ['git', 'show', '--name-only', "--pretty='format:'", os.environ['TRAVIS_COMMIT']]
+    COMMITS = os.environ['TRAVIS_COMMIT']
+    COMMIT_RANGE = ''
+    DIFF_COMMAND = ['git', 'show', '--name-only', "--pretty='format:'", COMMITS]
 
 
 def build(names, stream_for=None):
@@ -32,9 +36,9 @@ def build(names, stream_for=None):
 
 
 def main(args):
-    print 'Evaluating whether to build %s' % COMMIT_RANGE
+    print 'Evaluating whether to build %s' % COMMITS
 
-    if 'ci: all' in check_output(['git', 'log', COMMIT_RANGE]):
+    if COMMIT_RANGE and 'ci: all' in check_output(['git', 'log', COMMIT_RANGE]):
         names = PATHS.keys()
     else:
         names = [
