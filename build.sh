@@ -1,4 +1,4 @@
-#/usr/bin/env bash
+#!/usr/bin/env bash
 # make sure the VM is running
 if [ "$(vagrant status | grep 'running')" == "" ]; then
     vagrant up
