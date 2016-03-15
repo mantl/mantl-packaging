@@ -15,7 +15,7 @@ cache:
     - tools
 
 install:
-  - scripts/travis-cache.sh
+  - source scripts/travis-cache.sh
 
 script:
   - mkdir -p /tmp/out

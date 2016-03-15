@@ -20,7 +20,7 @@ COMMIT_RANGE = os.environ['TRAVIS_COMMIT_RANGE'] or os.environ['TRAVIS_COMMIT']
 
 def build(names, stream_for=None):
     print 'Building %s' % ', '.join(names)
-    args = ['tools/bin/hammer', 'build', '--output=/tmp/out']
+    args = ['hammer', 'build', '--output=/tmp/out']
     if stream_for:
         args.append('--stream-logs-for=%s' % stream_for)
 
@@ -31,7 +31,7 @@ def build(names, stream_for=None):
 def main(args):
     print 'Evaluating whether to build %s' % COMMIT_RANGE
 
-    if COMMIT_RANGE and 'ci: all' in check_output(['git', 'show', '--pretty=short', COMMIT_RANGE]):
+    if COMMIT_RANGE and 'ci: all' in check_output(['git', 'show', '--pretty=full', COMMIT_RANGE]):
         names = PATHS.keys()
     else:
         names = [

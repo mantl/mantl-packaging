@@ -14,3 +14,5 @@ if ! which hammer; then
 fi
 
 which fpm || gem install fpm # TODO: cache me!
+
+export PATH=tools/bin:$PATH
