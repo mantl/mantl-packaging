@@ -1,0 +1,22 @@
+---
+name: zookeepercli
+version: 1.0.10
+license: APL 2.0
+iteration: 1
+vendor: Outbrain
+url: https://github.com/outbrain/zookeepercli
+architecture: x86_64
+description: Simple, lightweight, dependable CLI for ZooKeeper
+type: rpm
+
+resources:
+  - url: https://github.com/outbrain/zookeepercli/releases/download/v{{.Version}}/zookeepercli
+    hash-type: sha256
+    hash: 0d9c36b8248e8f5b6bb8a1aae1dbd3a8ea454b1e3a92da0a98524e3ad910f04f
+
+targets:
+  - src: '{{.BuildRoot}}/zookeepercli'
+    dest: /usr/bin/
+
+extra-args: |
+  --rpm-os linux

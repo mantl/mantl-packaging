@@ -28,5 +28,6 @@
 |generate-certificate| packages/generate-certificate/
 |smlr| packages/smlr/
 |traefik| packages/traefik/
+|zookeepercli| packages/zookeepercli/
 |vault| vault/vault/
 |vault-mantl| vault/vault-mantl/
