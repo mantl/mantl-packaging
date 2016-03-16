@@ -1,5 +1,5 @@
 ---
-name: mesos-agent-27.1
+name: mesos-agent
 version: 0.27.1
 license: ASL 2.0
 iteration: 1
