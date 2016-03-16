@@ -26,15 +26,12 @@ targets:
 
 scripts:
   after-install: |
-    systemctl enable /etc/systemd/system/{{.Name}}.service 2>/dev/null
-    systemctl start {{.Name}}.service
+    systemctl enable {{.Name}}.service 2>/dev/null
 
   after-upgrade: |
     systemctl daemon-reload
-    systemctl restart {{.Name}}.service
 
   before-remove: |
-    systemctl stop {{.Name}}.service
     systemctl disable {{.Name}}.service 2>/dev/null
 
   after-remove: |
