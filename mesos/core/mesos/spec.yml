@@ -39,4 +39,3 @@ extra-args: |
   --rpm-auto-add-exclude-directories /usr/share/java
   --rpm-auto-add-exclude-directories /usr/lib/python2.7
   --rpm-auto-add-exclude-directories /usr/lib/python2.7/site-packages
-
