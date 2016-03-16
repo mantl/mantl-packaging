@@ -14,6 +14,7 @@ for building generic Mantl utilities.
             - [generate-certificate](#generate-certificate)
             - [traefik](#traefik)
             - [docker-cleanup](#docker-cleanup)
+            - [mantl-storage-setup](#mantl-storage-setup)
             - [nomad](#nomad)
         - [Consul Packages](#consul-packages)
             - [consul](#consul)
@@ -85,6 +86,14 @@ for your reference.
 
 Second, `martin/docker-cleanup-volumes` removes orphaned Docker volumes, something that removing containers with docker
 commands normally does not do. Docker version 1.9 is beginning to address this issue, but this adds support for previous versions.
+
+#### mantl-storage-setup
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/mantl-storage-setup/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/mantl-storage-setup/_latestVersion)
+
+[*spec*](packages/mantl-storage-setup/spec.yml)
+
+A script that configures LVM on a system based on information in `/etc/mantl/filesystems.d`.
 
 #### nomad
 
