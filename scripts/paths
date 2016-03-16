@@ -1,3 +1,4 @@
+|calico| calico/calico/
 |consul| consul/consul/
 |consul-cli| consul/consul-cli/
 |consul-template| consul/consul-template/
@@ -23,6 +24,18 @@
 |distributive-vault| distributive/distributive-vault/
 |distributive-zookeeper| distributive/distributive-zookeeper/
 |mantl-dns| mantl/mantl-dns/
+|mesos| mesos/core/mesos/
+|mesos| mesos/core/mesos-27.1/
+|mesos-agent| mesos/core/mesos-agent/
+|mesos-agent| mesos/core/mesos-agent-27.1/
+|mesos-agent-dynamic| mesos/core/mesos-agent-dynamic/
+|mesos-agent-dynamic| mesos/core/mesos-agent-dynamic-27.1/
+|mesos-master| mesos/core/mesos-master/
+|mesos-master| mesos/core/mesos-master-27.1/
+|mesos-master-dynamic| mesos/core/mesos-master-dynamic/
+|mesos-master-dynamic| mesos/core/mesos-master-dynamic-27.1/
+|marathon| mesos/frameworks/marathon/
+|marathon-dynamic| mesos/frameworks/marathon-dynamic/
 |nomad| nomad/nomad/
 |docker-cleanup| packages/docker-cleanup/
 |generate-certificate| packages/generate-certificate/
