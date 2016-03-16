@@ -35,3 +35,4 @@ deploy:
   script: /bin/bash scripts/bintray.sh /tmp/out
   on:
     branch: master
+
