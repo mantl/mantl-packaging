@@ -1,6 +1,6 @@
 ---
 name: consul
-version: 0.5.2
+version: 0.6.3
 license: MPLv2.0
 iteration: 4
 vendor: Hashicorp
@@ -11,39 +11,40 @@ type: rpm
 
 depends:
   - systemd
+  - bash
 
 resources:
-  - url: https://dl.bintray.com/mitchellh/consul/{{.Version}}_linux_amd64.zip
-    hash-type: sha1
-    hash: b3ae610c670fc3b81737d44724ebde969da66ebf
-  - url: https://dl.bintray.com/mitchellh/consul/{{.Version}}_web_ui.zip
-    hash-type: sha1
-    hash: 67a2665e3c6aa6ca95c24d6176641010a1002cd6
+  - url: https://releases.hashicorp.com/consul/{{.Version}}/consul_{{.Version}}_linux_amd64.zip
+    hash-type: sha256
+    hash: b0532c61fec4a4f6d130c893fd8954ec007a6ad93effbe283a39224ed237e250
 
 targets:
   - src: "{{.BuildRoot}}/consul"
     dest: /usr/bin/
-  - src: "{{.BuildRoot}}/dist/"
-    dest: /usr/share/consul-ui/
-  - src: "{{.SpecRoot}}/consul.service"
-    dest: /etc/systemd/system/consul.service
-    template: true
-  - src: "{{.SpecRoot}}/consul.json"
-    dest: /etc/consul/
-    config: true
-  - src: "{{.SpecRoot}}/consul-ui.json"
-    dest: /etc/consul/
-    config: true
-  - src: "{{.SpecRoot}}/consul.sysconfig"
-    dest: /etc/sysconfig/consul
-    config: true
+
+  # data storage
   - src: "{{empty}}"
     dest: /var/lib/consul/
 
+  # service
+  - src: "{{.SpecRoot}}/consul.service"
+    dest: /etc/systemd/system/consul.service
+    template: true
+  - src: "{{.SpecRoot}}/consul.sysconfig"
+    dest: /etc/sysconfig/consul
+    config: true
+
+  # configuration
+  - src: "{{.SpecRoot}}/consul.json"
+    dest: /etc/consul/
+    config: true
+  - src: "{{empty}}"
+    dest: /etc/consul/ssl
+    config: true
+
 scripts:
   build: |
-    unzip {{.Version}}_linux_amd64.zip
-    unzip {{.Version}}_web_ui.zip
+    unzip consul_{{.Version}}_linux_amd64.zip
 
   before-install: |
     getent group consul > /dev/null || groupadd -r consul
@@ -51,25 +52,29 @@ scripts:
         useradd -r \
                 -g consul \
                 -d /var/lib/consul \
-                -s /sbin/nologin \
+                -s /bin/bash \
                 -c "consul.io user" \
                 consul
 
   after-install: |
     chown -R consul:consul /var/lib/consul
-
-    systemctl enable /etc/systemd/system/consul.service
-    systemctl start consul.service
+    chown -R consul:consul /etc/consul
 
   before-remove: |
     systemctl disable consul.service
 
+  before-upgrade: |
+    usermod -s /bin/bash consul
+
   after-upgrade: |
-    systemctl reload-daemon
-    systemctl restart consul.service
+    chown consul:consul /var/lib/consul
+    chown consul:consul /etc/consul
+
+    systemctl daemon-reload
 
 extra-args: |
   --rpm-os linux
+  --rpm-dist centos
   --rpm-auto-add-directories
   --rpm-auto-add-exclude-directories /etc/systemd
   --rpm-auto-add-exclude-directories /etc/systemd/system

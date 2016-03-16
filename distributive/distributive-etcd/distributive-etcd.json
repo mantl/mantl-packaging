@@ -1,0 +1,41 @@
+{
+    "Name": "etcd health check",
+    "Notes": "For use with Microservice Infrastructure",
+    "Checklist" : [
+        {
+            "Name": "etcd service loaded",
+            "ID": "systemctlLoaded",
+            "Parameters": ["etcd.service"]
+        },
+        {
+            "Name": "etcd service active",
+            "ID": "systemctlActive",
+            "Parameters": ["etcd.service"]
+        },
+        {
+            "Name": "etcd consul service",
+            "ID": "file",
+            "Parameters": ["/etc/consul/etcd-service.json"]
+        },
+        {
+            "Name": "etcd client port",
+            "ID": "port",
+            "Parameters": ["2379"]
+        },
+        {
+            "Name": "etcd peer port",
+            "ID": "port",
+            "Parameters": ["2380"]
+        },
+        {
+            "Name": "check-etcd-member script existence",
+            "ID": "file",
+            "Parameters": ["/usr/local/bin/check-etcd-member"]
+        },
+        {
+            "Name": "check-etcd-member script",
+            "ID": "command",
+            "Parameters": ["/usr/local/bin/check-etcd-member"]
+        }
+    ]
+}

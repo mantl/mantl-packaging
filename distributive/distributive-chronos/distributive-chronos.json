@@ -1,0 +1,61 @@
+{
+    "Name": "chronos health check",
+    "Notes": "For use with Microservice Infrastructure",
+    "Checklist" : [
+        {
+            "Name": "chronos package installed",
+            "ID": "installed",
+            "Parameters": ["chronos"]
+        },
+        {
+            "Name": "chronos configuration directory present",
+            "ID": "directory",
+            "Parameters": ["/etc/chronos/conf"]
+        },
+        {
+            "Name": "chronos systemd service file present",
+            "ID": "file",
+            "Parameters": ["/usr/lib/systemd/system/chronos.service"]
+        },
+        {
+            "Name": "chronos binary present",
+            "ID": "file",
+            "Parameters": ["/usr/bin/chronos"]
+        },
+        {
+            "Name": "chronos zk_hosts configuration present",
+            "ID": "file",
+            "Parameters": ["/etc/chronos/conf/zk_hosts"]
+        },
+        {
+            "Name": "chronos master configuration present",
+            "ID": "file",
+            "Parameters": ["/etc/chronos/conf/master"]
+        },
+        {
+            "Name": "chronos hostname configuration present",
+            "ID": "file",
+            "Parameters": ["/etc/chronos/conf/hostname"]
+        },
+        {
+            "Name": "chronos http_port configuration present",
+            "ID": "file",
+            "Parameters": ["/etc/chronos/conf/http_port"]
+        },
+        {
+            "Name": "chronos mesos_framework_name configuration present",
+            "ID": "file",
+            "Parameters": ["/etc/chronos/conf/mesos_framework_name"]
+        },
+        {
+            "Name": "chronos systemd service symlink present",
+            "ID": "symlink",
+            "Parameters": ["/etc/systemd/system/multi-user.target.wants/chronos.service"]
+        },
+        {
+            "Name": "chronos systemd service enabled",
+            "ID": "systemctlLoaded",
+            "Parameters": ["chronos.service"]
+        }
+    ]
+}

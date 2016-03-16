@@ -1,8 +1,7 @@
 ---
 name: traefik
 version: 0.0.0
-epoch: 285
-iteration: 5
+iteration: 11
 license: MIT
 vendor: Emile Vauge
 architecture: x86_64
@@ -10,15 +9,20 @@ type: rpm
 url: https://github.com/EmileVauge/traefik
 description: Træfɪk, a modern reverse proxy
 
+# this field means nothing now that they've switched from numbers to git hashes.
+# However, we need to keep it around until the version actually changes. Bump
+# this and iteration until then.
+epoch: 413
+
 dependencies:
   - libcap
   - python
   - sudo
 
 resources:
-  - url: https://github.com/emilevauge/traefik/releases/download/v1.0.alpha.285/traefik_linux-amd64
+  - url: https://github.com/containous/traefik/releases/download/v1.0.alpha.9830086790caf40ce30eb9ed5d317917f8157708/traefik_linux-amd64
     hash-type: sha1
-    hash: 01564a14919fd364000e085e4aa2a29d134d3d90
+    hash: 612575e288157f814cecbceb7a91a6c5072b0586
 
 targets:
   # base
@@ -31,6 +35,16 @@ targets:
     dest: /etc/traefik
   - src: '{{empty}}'
     dest: /etc/traefik/configs
+
+  # logging
+  - src: '{{.SpecRoot}}/logrotate/traefik'
+    dest: /etc/logrotate.d/traefik
+  - src: '{{.SpecRoot}}/logrotate/traefik-access'
+    dest: /etc/logrotate.d/traefik-access
+  - src: "{{empty}}"
+    dest: /var/log/{{.Name}}
+  - src: "{{empty}}"
+    dest: /var/log/{{.Name}}/archive
 
   # config generation scripts
   - src: '{{.SpecRoot}}/config/'
@@ -51,6 +65,7 @@ scripts:
 
   after-install: |
     chown -R {{.Name}}:{{.Name}} /etc/{{.Name}}
+    chown -R {{.Name}}:{{.Name}} /var/log/{{.Name}}
 
     setcap 'cap_net_bind_service=+ep' /usr/bin/{{.Name}}
 
@@ -61,6 +76,8 @@ scripts:
     sudo -u {{.Name}} traefik-web --address=:8080
 
   after-upgrade: |
+    chown -R {{.Name}}:{{.Name}} /var/log/{{.Name}}
+
     setcap 'cap_net_bind_service=+ep' /usr/bin/{{.Name}}
 
     systemctl daemon-reload
@@ -79,3 +96,4 @@ extra-args: |
   --rpm-auto-add-exclude-directories /etc/systemd
   --rpm-auto-add-exclude-directories /etc/systemd/system
   --rpm-auto-add-exclude-directories /etc/sudoers.d
+  --rpm-auto-add-exclude-directories /etc/logrotate.d

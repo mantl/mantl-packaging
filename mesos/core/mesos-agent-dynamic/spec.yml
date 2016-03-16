@@ -1,0 +1,54 @@
+---
+name: mesos-agent-dynamic
+version: 0.25.0
+license: ASL 2.0
+iteration: 2
+vendor: Asteris
+url: http://github.com/asteris-llc/mantl-packaging
+architecture: noarch
+description: dynamic reconfiguration of mesos-agent with Consul
+type: rpm
+
+depends:
+  - consul-template >= 0.10.0
+  - mesos-agent = {{.Version}}
+
+targets:
+  - src: '{{specFile "mesos-agent.hcl"}}'
+    dest: /etc/consul-template/config.d/mesos-agent.hcl
+  - src: '{{specFile "templates"}}/'
+    dest: /etc/consul-template/templates/
+  - src: '{{specFile "consul-template-mesos-agent"}}'
+    dest: /etc/sudoers.d/
+
+scripts:
+  after-install: |
+    # move existing configurations out of the way
+    for file in mesos-agent mesos-credential mesos-agent-firewall-rules.json; do
+      ln -sb --suffix=.pre-dynamic /var/run/consul-template/${file} /etc/sysconfig/${file}
+    done
+
+    # TODO: figure out what other configs here are going to be important and
+    # include them but not much else, since we don't want to re-render *all* the
+    # templates, just the ones for mesos-agent
+    sudo -u consul consul-template -config /etc/consul-template/config.d/mesos-agent.hcl -once
+    systemctl restart mesos-agent.service
+
+    systemctl restart consul-template.service
+
+  after-upgrade: |
+    systemctl restart consul-template.service
+
+  after-remove: |
+    systemctl restart consul-template.service
+
+    # restart services which were being templated
+    for file in mesos-agent mesos-credential mesos-agent-firewall-rules.json; do
+      rm /etc/sysconfig/${file}
+      mv /etc/sysconfig/${file}.pre-dynamic /etc/sysconfig/${file}
+    done
+
+    systemctl restart mesos-agent.service
+
+extra-args:
+  --rpm-os linux

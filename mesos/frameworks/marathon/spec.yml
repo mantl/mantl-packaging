@@ -1,0 +1,55 @@
+---
+name: marathon
+version: 0.15.3
+license: ASL 2.0
+iteration: 1
+vendor: Mesosphere
+architecture: x86_64
+url: http://mesosphere.github.io/marathon
+description: A cluster-wide init and control system for services in cgroups or Docker containers
+type: rpm
+
+depends:
+  - java-1.8.0-openjdk-headless
+
+resources:
+  - url: https://github.com/mesosphere/marathon/archive/v{{.Version}}.tar.gz
+    hash-type: sha1
+    hash: d1fda04b58258e116b6ce8abaaa691c55622cc58
+  - url: https://dl.bintray.com/sbt/native-packages/sbt/0.13.9/sbt-0.13.9.tgz
+    hash-type: sha1
+    hash: 879ee72d049f1718a29551f55590aa94972f4c96
+
+targets:
+  - src: '{{.BuildRoot}}/marathon-{{.Version}}/target/marathon-runnable.jar'
+    dest: /usr/bin/marathon
+  - src: '{{.SpecRoot}}/marathon.service'
+    dest: /etc/systemd/system/
+    template: true
+  - src: '{{.SpecRoot}}/marathon.sysconfig'
+    dest: /etc/sysconfig/marathon
+
+scripts:
+  build: |
+    set -e
+    tar -xzf v{{.Version}}.tar.gz
+    tar -xzf sbt-0.13.9.tgz
+    cd marathon-{{.Version}}
+    {{.BuildRoot}}/sbt/bin/sbt assembly
+    ./bin/build-distribution
+    chmod +x target/marathon-runnable.jar
+
+  after-install: |
+    systemctl enable /etc/systemd/system/marathon.service
+    systemctl start marathon.service
+
+  before-remove: |
+    systemctl stop marathon.service
+    systemctl disable marathon.service
+
+  after-upgrade: |
+    systemctl daemon-reload
+    systemctl restart marathon.service
+
+extra-args: |
+  --rpm-os linux

@@ -1,0 +1,51 @@
+---
+name: calico 
+version: 0.15.0
+license: ASL 2.0
+iteration: 1
+vendor: Metaswitch
+architecture: x86_64
+url: http://www.projectcalico.org/
+description: Project Calico represents a new approach to virtual networking, based on the same scalable IP networking principles as the Internet. Unlike other virtual networking approaches, Calico does not use overlays, instead providing a pure Layer 3 approach to data center networking. Calico is simple to deploy and diagnose, provides a rich security policy, supports both IPv4 and IPv6 and can be used across a combination of bare-metal, VM and container workloads.
+type: rpm
+
+resources:
+  - url: https://github.com/projectcalico/calico-containers/releases/download/v{{.Version}}/calicoctl
+    hash-type: sha1
+    hash: 55b7a6182c8fed8db6ed373b6d2f20a91f99f1fa
+  - url: https://github.com/projectcalico/calico-mesos/releases/download/v0.1.3/calico_mesos
+    hash-type: sha1
+    hash: 7335589f4f26b0379b82cf4b145add9266718c98
+  - url: https://github.com/projectcalico/calico-cni/releases/download/v1.0.0/calico
+    hash-type: sha1
+    hash: 90d5ff6c91360b1f64cedf7a4500fec29ef4a059
+  - url: https://github.com/projectcalico/calico-cni/releases/download/v1.0.0/calico-ipam
+    hash-type: sha1
+    hash: 6d3d9286f4ca534a87595a832ad424f7e28f02ad
+
+targets:
+  - src: '{{.BuildRoot}}/calicoctl'
+    dest: /usr/bin/calicoctl
+  - src: '{{.BuildRoot}}/calico_mesos'
+    dest: /usr/local/bin/calico_mesos
+  - src: '{{.BuildRoot}}/calico'
+    dest: /opt/cni/bin/calico
+  - src: '{{.BuildRoot}}/calico-ipam'
+    dest: /opt/cni/bin/calico-ipam
+
+scripts:
+  before-install: |
+    modprobe xt_set
+    echo "xt_set" > /etc/modules-load.d/calico-modules.conf
+    sysctl -w net.ipv4.ip_forward=1
+  after-install: |
+    chmod +x /opt/cni/bin/calico-ipam 
+    chmod +x /opt/cni/bin/calico 
+    chmod +x /usr/local/bin/calico_mesos 
+
+extra-args: |
+  --rpm-os linux
+  --rpm-auto-add-directories
+  --rpm-auto-add-exclude-directories /usr/share/java
+  --rpm-auto-add-exclude-directories /usr/lib/python2.7
+  --rpm-auto-add-exclude-directories /usr/lib/python2.7/site-packages

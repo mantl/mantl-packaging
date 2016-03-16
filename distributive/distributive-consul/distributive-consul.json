@@ -1,0 +1,51 @@
+{
+    "Name": "consul health check",
+    "Notes": "For use with Microservice Infrastructure",
+    "Checklist" : [
+        {
+            "Name": "consul installation check",
+            "ID": "installed",
+            "Parameters": ["consul"]
+        },
+        {
+            "Name": "consul health check configuration file check",
+            "ID": "file",
+            "Parameters": ["/etc/consul/consul.json"]
+        },
+        {
+            "Name": "docker health check configuration check",
+            "ID": "file",
+            "Parameters": ["/etc/consul/docker-service.json"]
+        },
+        {
+            "Name": "ssl directory check",
+            "ID": "directory",
+            "Parameters": ["/etc/consul/ssl/"]
+        },
+        {
+            "Name": "ACL existence check",
+            "ID": "file",
+            "Parameters": ["/etc/consul/acl.json"]
+        },
+        {
+            "Name": "wait for leader script check",
+            "ID": "file",
+            "Parameters": ["/usr/local/bin/consul-wait-for-leader.sh"]
+        },
+        {
+            "Name": "rolling restart script check",
+            "ID": "file",
+            "Parameters": ["/usr/local/bin/consul-rolling-restart.sh"]
+        },
+        {
+            "Name": "service active binary existence check",
+            "ID": "file",
+            "Parameters": ["/usr/local/bin/check-service-active"]
+        },
+        {
+            "Name": "nginx-consul docker container",
+            "ID": "dockerRunningRegexp",
+            "Parameters": ["ciscocloud/nginx-consul"]
+        }
+    ]
+}

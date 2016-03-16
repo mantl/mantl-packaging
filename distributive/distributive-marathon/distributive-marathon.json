@@ -1,0 +1,41 @@
+{
+    "Name": "marathon health check",
+    "Notes": "For use with Microservice Infrastructure",
+    "Checklist" : [
+        {
+            "Name": "marathon installation",
+            "ID": "installed",
+            "Parameters": ["marathon"]
+        },
+        {
+            "Name": "marathon wait script",
+            "ID": "file",
+            "Parameters": ["/usr/local/bin/marathon-wait-for-listen.sh"]
+        },
+        {
+            "Name": "marathon systemd unit file",
+            "ID": "file",
+            "Parameters": ["/usr/lib/systemd/system/marathon.service"]
+        },
+        {
+            "Name": "marathon nginx configuration",
+            "ID": "file",
+            "Parameters": ["/etc/marathon/marathon.nginx"]
+        },
+        {
+            "Name": "nginx-marathon unit file",
+            "ID": "file",
+            "Parameters": ["/usr/lib/systemd/system/nginx-marathon.service"]
+        },
+        {
+            "Name": "nginx-marathon env file",
+            "ID": "file",
+            "Parameters": ["/etc/default/nginx-marathon.env"]
+        },
+        {
+            "Name": "nginx-marathon service enabled",
+            "ID": "systemctlLoaded",
+            "Parameters": ["nginx-marathon.service"]
+        }
+    ]
+}

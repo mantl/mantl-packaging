@@ -1,0 +1,55 @@
+---
+name: marathon-dynamic
+version: 0.15.3
+license: ASL 2.0
+iteration: 1
+vendor: Asteris
+url: http://github.com/asteris-llc/mantl-packaging
+architecture: noarch
+description: dynamic reconfiguration of marathon with Consul
+type: rpm
+
+depends:
+  - consul-template >= 0.10.0
+  - marathon = {{.Version}}
+
+targets:
+  - src: '{{.SpecRoot}}/marathon.hcl'
+    dest: /etc/consul-template/config.d/marathon.hcl
+  - src: '{{.SpecRoot}}/templates/'
+    dest: /etc/consul-template/templates/
+  - src: '{{.SpecRoot}}/consul-template-marathon'
+    dest: /etc/sudoers.d/
+
+scripts:
+  after-install: |
+    # move existing configurations out of the way
+    for file in marathon; do
+      ln -sb --suffix=.pre-dynamic /var/run/consul-template/${file} /etc/sysconfig/${file}
+    done
+
+    # TODO: figure out what other configs here are going to be important and
+    # include them but not much else, since we don't want to re-render *all* the
+    # templates, just the ones for mesos-master
+    sudo -u consul consul-template -config /etc/consul-template/config.d/marathon.hcl -once
+    systemctl restart marathon.service
+
+    systemctl restart consul-template.service
+
+  after-upgrade: |
+    systemctl restart consul-template.service
+
+  after-remove: |
+    systemctl restart consul-template.service
+
+    # restore configs and remove rendered versions
+    for file in marathon; do
+      rm /etc/sysconfig/${file}
+      rm /var/run/consul-template/${file}
+      mv /etc/sysconfig/${file}.pre-dynamic /etc/sysconfig/${file}
+    done
+
+    systemctl restart marathon.service
+
+extra-args:
+  --rpm-os linux

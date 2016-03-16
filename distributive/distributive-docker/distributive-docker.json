@@ -1,0 +1,26 @@
+{
+    "Name": "docker health check",
+    "Notes": "For use with Microservices Infrastructure",
+    "Checklist" : [
+        {
+            "Name": "device-mapper-libs installation check",
+            "ID": "installed",
+            "Parameters": ["device-mapper-libs"]
+        },
+        {
+            "Name": "docker installation check",
+            "ID": "installed",
+            "Parameters": ["docker"]
+        },
+        {
+            "Name": "docker dns configuration file",
+            "ID": "file",
+            "Parameters": ["/etc/sysconfig/docker-network"]
+        },
+        {
+            "Name": "docker systemd service enabled",
+            "ID": "systemctlLoaded",
+            "Parameters": ["docker.service"]
+        } 
+    ]
+}

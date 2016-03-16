@@ -1,0 +1,22 @@
+# common configuration
+MESOS_FIREWALL_RULES=file:///etc/sysconfig/mesos-master-firewall-rules.json
+MESOS_PORT=5050
+
+# master configuration
+
+# required
+MESOS_QUORUM=1
+MESOS_WORK_DIR=/var/lib/mesos
+MESOS_ZK=zk://localhost:2181/mesos
+
+# optional
+MESOS_CLUSTER=mesos
+
+# uncomment the following based on what kind of credentials are in your
+# credential file below.
+#
+# MESOS_AUTHENTICATE=1
+# MESOS_AUTHENTICATE_SLAVES=1
+MESOS_CREDENTAILS=file:///etc/sysconfig/mesos-credentials
+
+EXTRA_OPTS=""
