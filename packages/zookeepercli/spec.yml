@@ -16,7 +16,7 @@ resources:
 
 targets:
   - src: '{{.BuildRoot}}/zookeepercli'
-    dest: /usr/bin/
+    dest: /usr/bin/{{.Name}}
 
 extra-args: |
   --rpm-os linux
