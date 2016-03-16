@@ -5,14 +5,18 @@ sudo: false
 
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
       # hammer
       - rpm
+      - g++-4.8
 
 cache:
   apt: true
   directories:
     - tools
+
 
 install:
   - source scripts/travis-cache.sh
