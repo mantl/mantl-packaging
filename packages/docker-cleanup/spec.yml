@@ -1,22 +1,30 @@
 ---
 name: docker-cleanup
-version: 0.0.1
+version: 0.1.0
 license: ASL 2.0
 iteration: 1
 vendor: Asteris
 architecture: noarch
 type: rpm
+description:
+  Cleans up docker containers and volumes
 
 targets:
   - src: '{{.SpecRoot}}/docker-cleanup-cron'
     dest: /etc/cron.hourly/docker-cleanup
+  - src: '{{.SpecRoot}}/docker-gc'
+    dest: /usr/sbin/docker-gc
   - src: '{{.SpecRoot}}/docker-cleanup-etc/docker-gc-exclude'
     dest: /etc/docker-cleanup/docker-gc-exclude
     config: true
   - src: '{{.SpecRoot}}/docker-cleanup-etc/docker-gc-exclude-containers'
     dest: /etc/docker-cleanup/docker-gc-exclude-containers
     config: true
+  - src: '{{.SpecRoot}}/docker-cleanup-var/'
+    dest: /var/lib/docker-gc
+    config: true
 
 scripts:
   after-install: |
     chmod a+x /etc/cron.hourly/docker-cleanup
+    chmod 755 /usr/sbin/docker-gc
