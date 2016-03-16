@@ -17,6 +17,8 @@ cache:
   directories:
     - tools
 
+before-install:
+  - export CXX="g++-4.8" CC="gcc-4.8"
 
 install:
   - source scripts/travis-cache.sh
