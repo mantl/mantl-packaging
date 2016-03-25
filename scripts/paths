@@ -30,3 +30,4 @@
 |traefik| packages/traefik/
 |vault| vault/vault/
 |vault-mantl| vault/vault-mantl/
+|vaultfs| vault/vaultfs/
