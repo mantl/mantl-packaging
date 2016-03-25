@@ -25,6 +25,7 @@ for building generic Mantl utilities.
         - [Vault Packages](#vault-packages)
             - [vault](#vault)
             - [vault-mantl](#vault-mantl)
+            - [vaultfs](#vaultfs)
         - [Mantl Packages](#mantl-packages)
             - [mantl-dns](#mantl-dns)
         - [Calico packages](#calico-packages)
@@ -202,6 +203,15 @@ Packages mantl.io specific scripts for Vault.
 | `vault-health-check.sh`         | Consul health check script for Vault      |
 | `vault-register-with-consul.sh` | Register the Vault service with Consul    |
 | `vault-unseal.sh`               | Read tokens from Consul and unlock Vault  |
+
+#### vaultfs
+
+[*spec*](vault/vaultfs/spec.yml)
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/vaultfs/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/vaultfs/_latestVersion)
+
+Packages [vaultfs](https://github.com/asteris-llc/vaultfs), a filesystem for
+vault secrets.
 
 ### Mantl Packages
 
