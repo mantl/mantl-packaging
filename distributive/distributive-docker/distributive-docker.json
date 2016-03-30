@@ -21,6 +21,11 @@
             "Name": "docker systemd service enabled",
             "ID": "systemctlLoaded",
             "Parameters": ["docker.service"]
-        } 
+        },
+        {
+            "Name": "docker disk usage is below 90%",
+            "ID": "diskUsage",
+            "Parameters": ["/var/lib/docker", "90%"]
+        }
     ]
 }
