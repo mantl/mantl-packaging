@@ -18,11 +18,6 @@
             "Parameters": ["openssh"]
         },
         {
-            "Name": "firewalld disabled",
-            "ID": "systemctlUnitFileStatus",
-            "Parameters": ["firewalld.service", "disabled"]
-        },
-        {
             "Name": "pip installation",
             "ID": "installed",
             "Parameters": ["python-pip"]
