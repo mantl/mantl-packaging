@@ -1,8 +1,8 @@
 ---
 name: consul
-version: 0.6.3
+version: 0.6.4
 license: MPLv2.0
-iteration: 4
+iteration: 1
 vendor: Hashicorp
 url: https://consul.io
 architecture: x86_64
@@ -16,7 +16,7 @@ depends:
 resources:
   - url: https://releases.hashicorp.com/consul/{{.Version}}/consul_{{.Version}}_linux_amd64.zip
     hash-type: sha256
-    hash: b0532c61fec4a4f6d130c893fd8954ec007a6ad93effbe283a39224ed237e250
+    hash: abdf0e1856292468e2c9971420d73b805e93888e006c76324ae39416edcf0627
 
 targets:
   - src: "{{.BuildRoot}}/consul"
