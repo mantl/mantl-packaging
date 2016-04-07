@@ -22,7 +22,7 @@ dependencies:
 resources:
   - url: https://github.com/containous/traefik/releases/download/v1.0.0-beta.408/traefik_linux-amd64
     hash-type: sha1
-    hash: 612575e288157f814cecbceb7a91a6c5072b0586
+    hash: 25cbad4d5657a104ed8ad731620ff9e7866e4d7b
 
 targets:
   # base
