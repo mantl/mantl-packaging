@@ -7,9 +7,13 @@ Wants=network-online.target
 [Service]
 User={{.Name}}
 Group={{.Name}}
-ExecStart=/usr/bin/{{.Name}} /etc/{{.Name}}/{{.Name}}.toml
+ExecStartPre=/bin/touch /var/log/{{.Name}}/access.log
+ExecStartPre=/bin/touch /var/log/{{.Name}}/traefik.log
+ExecStart=/usr/bin/{{.Name}} -c /etc/{{.Name}}/{{.Name}}.toml
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
+LimitNOFILE=65536
 
 [Install]
 WantedBy=multi-user.target
+Restart=on-failure

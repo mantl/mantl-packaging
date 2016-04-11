@@ -1,0 +1,11 @@
+name: distributive-collectd
+version: 0.2.4
+iteration: 1
+license: ASL 2.0
+description: distributive-collectd is a configuration for distributed health checks.
+url: https://github.com/CiscoCloud/distributive
+type: rpm
+
+targets:
+  - src: "{{.SpecRoot}}/distributive-collectd.json"
+    dest: /etc/distributive.d/distributive-collectd.json

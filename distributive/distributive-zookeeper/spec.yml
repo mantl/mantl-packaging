@@ -1,0 +1,12 @@
+
+name: distributive-zookeeper
+version: 0.2.4
+iteration: 1
+license: ASL 2.0
+description: Distributive-zookeeper is a configuration for running distributed health checks.
+url: https://github.com/CiscoCloud/distributive
+type: rpm
+
+targets:
+  - src: "{{.SpecRoot}}/distributive-zookeeper.json"
+    dest: /etc/distributive.d/distributive-zookeeper.json

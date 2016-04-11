@@ -1,0 +1,17 @@
+[Unit]
+Description=Mesos Agent
+After=network.target
+Wants=network.target
+
+[Service]
+EnvironmentFile=/etc/sysconfig/mesos-agent
+ExecStart=/usr/sbin/mesos-slave $EXTRA_OPTS
+KillMode=process
+Restart=always
+RestartSec=20
+LimitNOFILE=16384
+CPUAccounting=true
+MemoryAccounting=true
+
+[Install]
+WantedBy=multi-user.target

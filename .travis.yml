@@ -10,16 +10,16 @@ addons:
       - rpm
 
 cache:
+  apt: true
   directories:
-    - .build-info
+    - tools
 
 install:
-  # packages for packaging
-  - go get -v github.com/asteris-llc/hammer
-  - gem install fpm
+  - source scripts/travis-cache.sh
 
 script:
-  - ./scripts/travis.sh
+  - mkdir -p /tmp/out
+  - ./scripts/ci_build.py
 
 after_failure:
   - tail logs/*

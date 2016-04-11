@@ -1,0 +1,43 @@
+---
+name: mesos-agent
+version: 0.27.1
+license: ASL 2.0
+iteration: 1
+vendor: Mesos
+url: http://mesos.apache.org/
+architecture: noarch
+description: configuration files for the mesos-agent
+type: rpm
+
+depends:
+  - mesos = {{.Version}}
+  - systemd
+
+targets:
+  - src: '{{specFile "mesos-agent.service"}}'
+    dest: /etc/systemd/system/mesos-agent.service
+  - src: '{{specFile "mesos-agent.sysconfig"}}'
+    dest: /etc/sysconfig/mesos-agent
+    config: true
+  - src: '{{specFile "mesos-agent-firewall-rules.json"}}'
+    dest: /etc/sysconfig/mesos-agent-firewall-rules.json
+    config: true
+  - src: '{{specFile "mesos-credential"}}'
+    dest: /etc/sysconfig/mesos-credential
+    config: true
+
+scripts:
+  after-install: |
+    systemctl enable /etc/systemd/system/mesos-agent.service 2> /dev/null
+    systemctl start mesos-agent.service
+
+  before-remove: |
+    systemctl stop mesos-agent.service
+    systemctl disable mesos-agent.service 2> /dev/null
+
+  after-upgrade: |
+    systemctl daemon-reload
+    systemctl restart mesos-agent.service
+
+extra-args: |
+  --rpm-os linux

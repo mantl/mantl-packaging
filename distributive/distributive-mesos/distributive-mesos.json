@@ -1,0 +1,61 @@
+{
+    "Name": "mesos health check",
+    "Notes": "For use with Microservice Infrastructure",
+    "Checklist" : [
+        {
+            "Name": "mesos client port",
+            "ID": "port",
+            "Parameters": ["5050"]
+        },
+        {
+           "Name": "mesos UI",
+           "ID": "responseMatchesInsecure",
+           "Parameters":["https://localhost:5050","401"]
+        },
+        {
+            "Name": "mesos installation",
+            "ID": "installed",
+            "Parameters": ["mesos"]
+        },
+        {
+            "Name": "cyrus-sasl-md5 installation",
+            "ID": "installed",
+            "Parameters": ["cyrus-sasl-md5"]
+        },
+        {
+            "Name": "mesos zookeeper config",
+            "ID": "file",
+            "Parameters": ["/etc/mesos/zk"]
+        },
+        {
+            "Name": "mesos hostname config",
+            "ID": "file",
+            "Parameters": ["/etc/mesos/hostname"]
+        },
+        {
+            "Name": "mesos master systemd service present",
+            "ID": "file",
+            "Parameters": ["/usr/lib/systemd/system/mesos-master.service"]
+        },
+        {
+            "Name": "mesos nginx configuration",
+            "ID": "file",
+            "Parameters": ["/etc/mesos-leader.nginx"]
+        },
+        {
+            "Name": "mesos nginx unit file",
+            "ID": "file",
+            "Parameters": ["/usr/lib/systemd/system/nginx-mesos-leader.service"]
+        },
+        {
+            "Name": "mesos nginx env file",
+            "ID": "file",
+            "Parameters": ["/etc/default/nginx-mesos-leader.env"]
+        },
+        {
+            "Name": "nginx-mesos-leader service enabled",
+            "ID": "systemctlLoaded",
+            "Parameters": ["nginx-mesos-leader.service"]
+        }
+    ]
+}

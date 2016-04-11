@@ -1,0 +1,26 @@
+{
+    "Name": "collectd health check",
+    "Notes": "For use with Microservice Infrastructure",
+    "Checklist" : [
+        {
+            "Name": "collectd installation",
+            "ID": "installed",
+            "Parameters": ["collectd"]
+        },
+        {
+            "Name": "collectd plugin directory",
+            "ID": "directory",
+            "Parameters": ["/usr/share/collectd/plugins/"]
+        },
+        {
+            "Name": "collectd configuration file",
+            "ID": "file",
+            "Parameters": ["/etc/collectd.conf"]
+        },
+        {
+            "Name": "collectd systemd service enabled",
+            "ID": "systemctlLoaded",
+            "Parameters": ["collectd.service"]
+        }
+    ]
+}

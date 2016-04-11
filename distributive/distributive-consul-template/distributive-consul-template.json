@@ -1,0 +1,21 @@
+{
+    "Name": "consul-template health check",
+    "Notes": "For use with Microservice Infrastructure",
+    "Checklist" : [
+        {
+            "Name": "consul-template installation",
+            "ID": "installed",
+            "Parameters": ["consul-template"]
+        },
+        {
+            "Name": "consul-template configuration file",
+            "ID": "directory",
+            "Parameters": ["/etc/consul-template/config.d"]
+        },
+        {
+            "Name": "consul-template systemd service enabled",
+            "ID": "systemctlLoaded",
+            "Parameters": ["consul-template.service"]
+        }
+    ]
+}

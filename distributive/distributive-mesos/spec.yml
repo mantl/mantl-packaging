@@ -1,0 +1,12 @@
+
+name: distributive-mesos
+version: 0.2.4
+iteration: 1
+license: ASL 2.0
+description: Distributive-mesos is a configuration for distributed health checks.
+url: https://github.com/CiscoCloud/distributive
+type: rpm
+
+targets:
+  - src: "{{.SpecRoot}}/distributive-mesos.json"
+    dest: /etc/distributive.d/distributive-mesos.json
