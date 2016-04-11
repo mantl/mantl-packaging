@@ -1,0 +1,8 @@
+[Unit]
+Description=Remove unused docker images
+Wants=docker.service
+After=docker-gc-containers.service
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c '/bin/docker images -fq dangling=true  | xargs --no-run-if-empty docker rmi'
