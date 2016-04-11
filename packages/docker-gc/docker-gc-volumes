@@ -1,0 +1,1 @@
+docker volume ls -fq dangling=true | xargs --no-run-if-empty docker volume rm

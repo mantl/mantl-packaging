@@ -1,0 +1,11 @@
+[Unit]
+Description=Timer for docker-gc-volumes
+After=docker-gc-images.service
+
+[Timer]
+Unit=docker-gc-volumes.service
+OnBootSec=10min
+OnUnitActiveSec=1h
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,9 @@
+[Unit]
+Description=Remove unused docker volumes
+Wants=docker.service
+After=docker-gc-images.service
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c '/bin/docker volume ls -fq dangling=true | xargs --no-run-if-empty docker volume rm'
+
