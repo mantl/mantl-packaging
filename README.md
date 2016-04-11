@@ -13,7 +13,7 @@ for building generic Mantl utilities.
         - [Core](#core)
             - [generate-certificate](#generate-certificate)
             - [traefik](#traefik)
-            - [docker-cleanup](#docker-cleanup)
+            - [docker-gc](#docker-gc)
             - [nomad](#nomad)
         - [Consul Packages](#consul-packages)
             - [consul](#consul)
@@ -68,23 +68,21 @@ A script to generate certificates with a number of sensible defaults set.
 
 - [Traefik's README](https://github.com/EmileVauge/traefik)
 
-#### docker-cleanup
+#### docker-agc
 
-[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/docker-cleanup/images/download.svg) ](https://bintray/asteris/mantl-rpm/docker-cleanup/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/docker-gc/images/download.svg) ](https://bintray/asteris/mantl-rpm/docker-gc/_latestVersion)
 
-[*spec*](packages/docker-cleanup/spec.yml)
+[*spec*](packages/docker-gc/spec.yml)
 
-A cron.hourly script and a few configuration files to take out the garbage.
-Uses `spotify/docker-gc` and `martin/docker-cleanup-volumes` Docker containers in tandem.
+Systemd timers that purge unsued docker containers, images, and volumes. 
 
-First, `spotify/docker-gc` runs, and removes any containers that have been in an exit status for more than an hour.
-Spotify's container also supports excluding containers at this step. Two files control this:
-`/etc/docker-cleanup/docker-gc-exclude` to match image names and docker hashes, and
-`/etc/docker-cleanup/docker-gc-exclude-containers` to match container names. Both of these files have example lines
-for your reference.
+To check the status of the timers:
+`systemctl list-timers`
 
-Second, `martin/docker-cleanup-volumes` removes orphaned Docker volumes, something that removing containers with docker
-commands normally does not do. Docker version 1.9 is beginning to address this issue, but this adds support for previous versions.
+To run manually:
+`systemctl start docker-gc-containers.service`
+`systemctl start docker-gc-images.service`
+`systemctl start docker-gc-volumes.service`
 
 #### nomad
 
