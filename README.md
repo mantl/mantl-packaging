@@ -90,7 +90,7 @@ A script to generate certificates with a number of sensible defaults set.
 
 - [Traefik's README](https://github.com/EmileVauge/traefik)
 
-#### docker-agc
+#### docker-gc
 
 [ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/docker-gc/images/download.svg) ](https://bintray/asteris/mantl-rpm/docker-gc/_latestVersion)
 
