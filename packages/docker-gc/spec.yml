@@ -1,6 +1,6 @@
 ---
 name: docker-gc
-version: 0.1.0
+version: 0.1.1
 license: ASL 2.0
 iteration: 1
 vendor: Asteris
@@ -22,6 +22,8 @@ targets:
   - src: '{{.SpecRoot}}/docker-gc-volumes.timer'
     dest: /usr/lib/systemd/system/docker-gc-volumes.timer
 scripts:
+  after-upgrade: |
+    systemctl daemon-reload
   after-install: |
     systemctl enable docker-gc-containers.timer
     systemctl start docker-gc-containers.timer
