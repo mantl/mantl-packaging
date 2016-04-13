@@ -24,7 +24,7 @@
 |distributive-zookeeper| distributive/distributive-zookeeper/
 |mantl-dns| mantl/mantl-dns/
 |nomad| nomad/nomad/
-|docker-cleanup| packages/docker-cleanup/
+|docker-gc| packages/docker-gc/
 |generate-certificate| packages/generate-certificate/
 |smlr| packages/smlr/
 |traefik| packages/traefik/
