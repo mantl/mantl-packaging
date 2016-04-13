@@ -5,4 +5,4 @@ After=docker-gc-containers.service
 
 [Service]
 Type=simple
-ExecStart=/bin/bash -c '/bin/docker images -fq dangling=true  | xargs --no-run-if-empty docker rmi'
+ExecStart=/bin/bash -c '/bin/docker images -q | xargs --no-run-if-empty docker rmi || true'
