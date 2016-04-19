@@ -2,7 +2,7 @@
 name: smlr
 version: 0.0.1
 license: APL 2.0
-iteration: 1
+iteration: 2
 vendor: Asteris
 url: https://github.com/asteris-llc/smlr
 architecture: x86_64
@@ -16,7 +16,7 @@ resources:
 
 targets:
   - src: '{{.BuildRoot}}/smlr_{{.Version}}_linux_amd64'
-    dest: /usr/bin/
+    dest: /usr/bin/{{.Name}}
 
 scripts:
   build: |

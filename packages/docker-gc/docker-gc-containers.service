@@ -1,0 +1,7 @@
+[Unit]
+Description=Remove exited docker containers
+Wants=docker.service
+
+[Service]
+Type=simple
+ExecStart=/bin/bash -c '/bin/docker ps -a -q -f status=exited | xargs --no-run-if-empty docker rm'

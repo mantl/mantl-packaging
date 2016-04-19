@@ -1,0 +1,10 @@
+[Unit]
+Description=Timer for docker-gc-containers
+
+[Timer]
+Unit=docker-gc-containers.service
+OnBootSec=10min
+OnUnitActiveSec=1h
+
+[Install]
+WantedBy=multi-user.target

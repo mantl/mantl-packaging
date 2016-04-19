@@ -1,0 +1,41 @@
+---
+name: docker-gc
+version: 0.1.1
+license: ASL 2.0
+iteration: 1
+vendor: Asteris
+architecture: noarch
+type: rpm
+description: Cleans up docker containers, images, and volumes
+
+targets:
+  - src: '{{.SpecRoot}}/docker-gc-containers.service'
+    dest: /usr/lib/systemd/system/docker-gc-containers.service
+  - src: '{{.SpecRoot}}/docker-gc-containers.timer'
+    dest: /usr/lib/systemd/system/docker-gc-containers.timer
+  - src: '{{.SpecRoot}}/docker-gc-images.service'
+    dest: /usr/lib/systemd/system/docker-gc-images.service
+  - src: '{{.SpecRoot}}/docker-gc-images.timer'
+    dest: /usr/lib/systemd/system/docker-gc-images.timer
+  - src: '{{.SpecRoot}}/docker-gc-volumes.service'
+    dest: /usr/lib/systemd/system/docker-gc-volumes.service
+  - src: '{{.SpecRoot}}/docker-gc-volumes.timer'
+    dest: /usr/lib/systemd/system/docker-gc-volumes.timer
+scripts:
+  after-upgrade: |
+    systemctl daemon-reload
+  after-install: |
+    systemctl enable docker-gc-containers.timer
+    systemctl start docker-gc-containers.timer
+    systemctl enable docker-gc-images.timer
+    systemctl start docker-gc-images.timer
+    systemctl enable docker-gc-volumes.timer
+    systemctl start docker-gc-volumes.timer
+  before-remove: |
+    systemctl disable docker-gc-containers.timer
+    systemctl stop docker-gc-containers.timer
+    systemctl disable docker-gc-images.timer
+    systemctl stop docker-gc-images.timer
+    systemctl disable docker-gc-volumes.timer
+    systemctl stop docker-gc-volumes.timer
+
