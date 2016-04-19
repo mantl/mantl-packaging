@@ -1,6 +1,6 @@
 ---
 name: mantl-storage-setup
-version: 0.1.0
+version: 0.2.0
 epoch: 1
 iteration: 1
 license: APL 2.0 
@@ -15,7 +15,7 @@ dependencies:
 
 targets:
   - src: '{{.SpecRoot}}/{{.Name}}.py'
-    dest: '/usr/sbin/{{.Name}}.py'
+    dest: '/usr/sbin/{{.Name}}'
   - src: '{{.SpecRoot}}/{{.Name}}.service'
     dest: '/usr/lib/systemd/system/{{.Name}}.service'
   - src: '{{empty}}'
