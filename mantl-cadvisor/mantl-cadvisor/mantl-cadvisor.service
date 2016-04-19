@@ -1,0 +1,27 @@
+[Unit]
+Description={{.Description}}
+After=network.target
+Wants=network.target
+
+[Service]
+Restart=on-failure
+RestartSec=20
+TimeoutStartSec=2
+
+ExecStartPre=-/bin/docker rm cadvisor
+
+ExecStart=/bin/docker run \
+  --volume=/:/rootfs:ro \
+  --volume=/var/run:/var/run:rw \
+  --volume=/sys:/sys:ro \
+  --volume=/var/lib/docker/:/var/lib/docker:ro \
+  --publish=8080:8080 \
+  --name=cadvisor \
+  arichardet/cadvisor:latest \
+  -storage_driver_kafka_broker_list=10.10.10.38:9092,10.10.10.37:9092,10.10.10.34:9092 -storage_driver=kafka
+KillSignal=SIGINT
+
+ExecStop=-/bin/docker stop cadvisor
+
+[Install]
+WantedBy=multi-user.target
