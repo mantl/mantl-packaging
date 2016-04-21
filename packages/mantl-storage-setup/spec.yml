@@ -2,7 +2,7 @@
 name: mantl-storage-setup
 version: 0.2.0
 epoch: 1
-iteration: 1
+iteration: 2
 license: APL 2.0 
 vendor: Asteris, LLC
 architecture: noarch
@@ -15,7 +15,7 @@ dependencies:
 
 targets:
   - src: '{{.SpecRoot}}/{{.Name}}.py'
-    dest: '/usr/sbin/{{.Name}}'
+    dest: '/usr/bin/{{.Name}}'
   - src: '{{.SpecRoot}}/{{.Name}}.service'
     dest: '/usr/lib/systemd/system/{{.Name}}.service'
   - src: '{{empty}}'
