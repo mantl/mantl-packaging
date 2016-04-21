@@ -1,12 +1,10 @@
 [Unit]
-Before=local-fs.target
-Description=Configure lvm storage
-Documentation=http://docs.mantl.io/
+Before=local-fs.target docker.service docker-storage-setup.service
 
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/usr/sbin/mantl-storage-setup.py
+ExecStart=/usr/bin/mantl-storage-setup
 
 [Install]
 RequiredBy=local-fs.target docker.service docker-storage-setup.service

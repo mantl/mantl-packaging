@@ -15,7 +15,9 @@ PATHS = dict([
     if PATH_RE.match(line) is not None
 ])
 
-COMMIT_RANGE = os.environ['TRAVIS_COMMIT_RANGE'] or os.environ['TRAVIS_COMMIT']
+COMMIT_RANGE = os.environ['TRAVIS_COMMIT_RANGE']
+TRAVIS_COMMIT = os.environ['TRAVIS_COMMIT']
+TRAVIS_BRANCH = os.environ['TRAVIS_BRANCH']
 
 
 def build(names, stream_for=None):
@@ -31,7 +33,24 @@ def build(names, stream_for=None):
 def main(args):
     print 'Evaluating whether to build %s' % COMMIT_RANGE
 
-    if COMMIT_RANGE and 'ci: all' in check_output(['git', 'show', '--pretty=full', COMMIT_RANGE]):
+    if COMMIT_RANGE:
+        old, new = filter(None, COMMIT_RANGE.split("."))
+        try:
+            check_call(['git', 'merge-base', '--is-ancestor', old, new ])
+        except CalledProcessError:
+            # Branch rebased, "old" hash is previous head of same branch
+            print "Branch rebased, %s hash is previous head of same branch (%s)" % (old, TRAVIS_BRANCH)
+            ancestor = check_output(['git', 'merge-base', TRAVIS_BRANCH, new]).strip()
+            print "Common ancestor for merge: %s, check against it" % (ancestor)
+            commit_range = "%s..%s" % (ancestor, new)
+        else:
+            commit_range = COMMIT_RANGE
+    else:
+        # Single commit case
+        commit_range = "%s^1..%s" % (TRAVIS_COMMIT, TRAVIS_COMMIT)
+        print "Single commit, use '%s' as range" % commit_range
+
+    if 'ci: all' in check_output(['git', 'log', '--pretty=full', '--ancestry-path',  commit_range]):
         names = PATHS.keys()
     else:
         names = [
@@ -39,7 +58,7 @@ def main(args):
             in PATHS.items()
             if 0 != len([
                 line for line
-                in check_output(['git', 'show', '--name-only', '--pretty=format:', COMMIT_RANGE]).split()
+                in check_output(['git', 'show', '--name-only', '--pretty=format:', commit_range]).split()
                 if line.startswith(path)
             ])
         ]

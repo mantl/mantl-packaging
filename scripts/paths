@@ -26,6 +26,7 @@
 |nomad| nomad/nomad/
 |docker-gc| packages/docker-gc/
 |generate-certificate| packages/generate-certificate/
+|mantl-storage-setup| packages/mantl-storage-setup/
 |smlr| packages/smlr/
 |traefik| packages/traefik/
 |vault| vault/vault/
