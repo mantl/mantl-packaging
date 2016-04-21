@@ -1,7 +1,7 @@
 name: mantl-cadvisor
 version: 0.20.4
 license: APL 2.0
-iteration: 1
+iteration: 2
 vendor: Google
 url: https://github.com/google/cadvisor
 architecture: x86_64
@@ -12,8 +12,14 @@ targets:
   - src: '{{.SpecRoot}}/mantl-cadvisor.service'
     dest: /usr/lib/systemd/system/
     template: true
+  - src: '{{.SpecRoot}}/mantl-cadvisor.sysconfig'
+    dest: /etc/sysconfig/mantl-cadvisor
+    config: true
 
 scripts:
+  after-upgrade:
+    systemctl daemon-reload
+    systemctl restart mantl-cadvisor.service
   after-install: |
     systemctl daemon-reload
     systemctl enable /etc/systemd/system/mantl-cadvisor.service 2>/dev/null

@@ -22,6 +22,7 @@
 |distributive-mesos| distributive/distributive-mesos/
 |distributive-vault| distributive/distributive-vault/
 |distributive-zookeeper| distributive/distributive-zookeeper/
+|mantl-cadvisor| mantl-cadvisor/mantl-cadvisor/
 |mantl-dns| mantl/mantl-dns/
 |nomad| nomad/nomad/
 |docker-cleanup| packages/docker-cleanup/

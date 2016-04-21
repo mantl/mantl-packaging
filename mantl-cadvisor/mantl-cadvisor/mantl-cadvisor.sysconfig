@@ -1,0 +1,3 @@
+CADVISOR_IMAGE=arichardet/cadvisor:latest
+KAFKA_BROKER_LIST=localhost:9092
+CADVISOR_OPTS=
