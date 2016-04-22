@@ -1,3 +1,4 @@
 CADVISOR_IMAGE=arichardet/cadvisor:latest
 KAFKA_BROKER_LIST=localhost:9092
+KAFKA_TOPIC=metrics
 CADVISOR_OPTS=
