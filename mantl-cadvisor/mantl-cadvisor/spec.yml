@@ -1,7 +1,7 @@
 name: mantl-cadvisor
 version: 0.20.4
 license: APL 2.0
-iteration: 3
+iteration: 4
 vendor: Google
 url: https://github.com/google/cadvisor
 architecture: x86_64

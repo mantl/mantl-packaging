@@ -20,7 +20,7 @@ ExecStart=/bin/docker run \
   --publish=8080:8080 \
   --name=mantl-cadvisor \
   ${CADVISOR_IMAGE} \
-  -storage_driver_kafka_broker_list=${KAFKA_BROKER_LIST} -storage_driver_kafka_topic=${KAFKA_TOPIC} -storage_driver=kafka ${CADVISOR_OPTS}
+  -housekeeping_interval=${HOUSEKEEPING_INTERVAL} -storage_driver_kafka_broker_list=${KAFKA_BROKER_LIST} -storage_driver_kafka_topic=${KAFKA_TOPIC} -storage_driver=kafka ${CADVISOR_OPTS}
 
 KillSignal=SIGINT
 
