@@ -17,6 +17,7 @@ for building generic Mantl utilities.
             - [mantl-storage-setup](#mantl-storage-setup)
             - [smlr](#smlr)
             - [nomad](#nomad)
+            - [zookeepercli](#zookeepercli)
         - [Consul Packages](#consul-packages)
             - [consul](#consul)
             - [consul-ui](#consul-ui)
@@ -133,6 +134,17 @@ A script that configures LVM on a system based on information in `/etc/mantl/fil
 > A Distributed, Highly Available, Datacenter-Aware Scheduler
 
 - [Nomad's Project Page](https://nomadproject.io/)
+
+#### zookeepercli
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/zookeepercli/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/zookeepercli/_latestVersion)
+
+[*spec*](packages/zookeepercli/spec.yml)
+
+> Zookeepercli is a simple, lightweight, dependable CLI for ZooKeeper
+
+- [zookeepercli's README](https://github.com/outbrain/zookeepercli)
+
 
 ### Consul Packages
 
