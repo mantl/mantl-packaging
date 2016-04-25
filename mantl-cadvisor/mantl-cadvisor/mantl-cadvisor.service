@@ -1,0 +1,30 @@
+[Unit]
+Description={{.Description}}
+After=network.target
+Wants=network.target
+
+[Service]
+Restart=on-failure
+RestartSec=20
+TimeoutStartSec=2
+
+ExecStartPre=-/bin/docker rm mantl-cadvisor
+
+EnvironmentFile=/etc/sysconfig/mantl-cadvisor
+
+ExecStart=/bin/docker run \
+  --volume=/:/rootfs:ro \
+  --volume=/var/run:/var/run:rw \
+  --volume=/sys:/sys:ro \
+  --volume=/var/lib/docker/:/var/lib/docker:ro \
+  --publish=8080:8080 \
+  --name=mantl-cadvisor \
+  ${CADVISOR_IMAGE} \
+  -housekeeping_interval=${HOUSEKEEPING_INTERVAL} -storage_driver_kafka_broker_list=${KAFKA_BROKER_LIST} -storage_driver_kafka_topic=${KAFKA_TOPIC} -storage_driver=kafka ${CADVISOR_OPTS}
+
+KillSignal=SIGINT
+
+ExecStop=-/bin/docker stop mantl-cadvisor
+
+[Install]
+WantedBy=multi-user.target

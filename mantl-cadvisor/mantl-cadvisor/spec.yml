@@ -1,0 +1,39 @@
+name: mantl-cadvisor
+version: 0.20.4
+license: APL 2.0
+iteration: 4
+vendor: Google
+url: https://github.com/google/cadvisor
+architecture: x86_64
+description: cAdvisor monitors resource usage and performance of running containers
+type: rpm
+
+targets:
+  - src: '{{.SpecRoot}}/mantl-cadvisor.service'
+    dest: /usr/lib/systemd/system/
+    template: true
+  - src: '{{.SpecRoot}}/mantl-cadvisor.sysconfig'
+    dest: /etc/sysconfig/mantl-cadvisor
+    config: true
+
+scripts:
+  after-upgrade:
+    systemctl daemon-reload
+    systemctl restart mantl-cadvisor.service
+  after-install: |
+    systemctl daemon-reload
+    systemctl enable /etc/systemd/system/mantl-cadvisor.service 2>/dev/null
+    systemctl start mantl-cadvisor.service
+  before-remove: |
+    if [ "${1}" -gt 0 ]; then exit 0; fi # we only want these to run if completely removing
+    systemctl disable mantl-cadvisor.service 2>/dev/null
+    systemctl stop mantl-cadvisor.service
+  after-remove: |
+    if [ "${1}" -gt 0 ]; then exit 0; fi # we only want these to run if completely removing
+    systemctl daemon-reload
+
+extra-args: |
+  --rpm-os linux
+  --rpm-auto-add-directories
+  --rpm-auto-add-exclude-directories /usr/lib/systemd
+  --rpm-auto-add-exclude-directories /usr/lib/systemd/system
