@@ -13,6 +13,7 @@ ExecStart=/usr/bin/{{.Name}} -c /etc/{{.Name}}/{{.Name}}.toml
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
 LimitNOFILE=65536
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
