@@ -1,4 +1,10 @@
-<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+# Mantl Packaging
+
+This repository contains [Hammer](https://github.com/asteris-llc/hammer) specs
+for building generic Mantl utilities.
+
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-generate-toc again -->
+**Table of Contents**
 
 - [Mantl Packaging](#mantl-packaging)
 	- [Dynamic Configuration](#dynamic-configuration)
@@ -39,52 +45,6 @@
 		- [Mantl-Cadvisor Packages](#mantl-cadvisor-packages)
 			- [mantl-cadvisor](#mantl-cadvisor)
 	- [Building](#building)
-
-<!-- /TOC --># Mantl Packaging
-
-This repository contains [Hammer](https://github.com/asteris-llc/hammer) specs
-for building generic Mantl utilities.
-
-<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-generate-toc again -->
-**Table of Contents**
-
-- [Mantl Packaging](#mantl-packaging)
-    - [Dynamic Configuration](#dynamic-configuration)
-        - [Per-node Configuration](#per-node-configuration)
-    - [Packages](#packages)
-        - [Core](#core)
-            - [generate-certificate](#generate-certificate)
-            - [traefik](#traefik)
-            - [docker-gc](#docker-gc)
-            - [mantl-storage-setup](#mantl-storage-setup)
-            - [smlr](#smlr)
-            - [nomad](#nomad)
-            - [zookeepercli](#zookeepercli)
-        - [Consul Packages](#consul-packages)
-            - [consul](#consul)
-            - [consul-ui](#consul-ui)
-            - [consul-template](#consul-template)
-            - [consul-cli](#consul-cli)
-        - [Vault Packages](#vault-packages)
-            - [vault](#vault)
-            - [vault-mantl](#vault-mantl)
-        - [Mantl Packages](#mantl-packages)
-            - [mantl-dns](#mantl-dns)
-        - [Calico packages](#calico-packages)
-            - [calico](#calico)
-        - [Distributive Packages](#distributive-packages)
-            - [distributive](#distributive)
-            - [distributive-<package>](#distributive-package)
-        - [Mesos Packages](#mesos-packages)
-            - [mesos](#mesos)
-            - [mesos-master](#mesos-master)
-            - [mesos-master-dynamic](#mesos-master-dynamic)
-            - [mesos-agent](#mesos-agent)
-            - [mesos-agent-dynamic](#mesos-agent-dynamic)
-        - [Mesos Frameworks](#mesos-frameworks)
-            - [marathon](#marathon)
-            - [marathon-dynamic](#marathon-dynamic)
-    - [Building](#building)
 
 <!-- markdown-toc end -->
 
