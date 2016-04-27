@@ -1,0 +1,41 @@
+---
+name: distributive-vault-consul-config
+version: 0.1.0
+iteration: 1
+license: ASL 2.0
+description: A Consul health check configuration that executes Distributive.
+url: https://github.com/asteris-llc/mantl-packaging
+type: rpm
+
+vars:
+  current_role: vault
+
+targets:
+  - src: "{{.SpecRoot}}/../health-check-config.json.tmpl"
+    dest: /etc/consul/distributive-vault.json
+    template: true
+
+scripts:
+  before-install: |
+      mkdir /etc/consul || true
+      chown -R consul:consul /etc/consul
+      # Allow Consul to run docker commands
+      echo 'consul ALL=(ALL)    NOPASSWD:   /bin/docker' > /etc/sudoers.d/consul-docker-auth
+      chown root:root '/etc/sudoers.d/consul-docker-auth'
+      visudo -c -f '/etc/sudoers.d/consul-docker-auth'
+      # Remove previous (deprecated) check
+      rm -f '/etc/distributive.d/{{variable "current_role"}}.json'
+      rm -f '/etc/consul/distributive-{{variable "current_role"}}-check.json'
+
+  after-install: |
+      systemctl reload-daemon
+      systemctl reload consul.service
+
+  after-remove: |
+      rm -f '/etc/consul/distributive-{{variable "current_role"}}.json'
+      systemctl reload-daemon
+      systemctl reload consul.service
+
+  after-upgrade: |
+      systemctl reload-daemon
+      systemctl reload consul.service
