@@ -2,7 +2,7 @@
 name: mantl-dns
 version: 1.1.0
 license: ASL 2.0
-iteration: 1
+iteration: 2
 vendor: Asteris
 url: https://github.com/asteris-llc/mantl-packaging
 description: DNS integration with Consul
@@ -55,16 +55,16 @@ scripts:
     fi
 
   before-remove: |
-    if [ "${0}" -gt 0 ]; then exit 0; fi # we only want these to run if completely removing
+    if [ "${1}" -gt 0 ]; then exit 0; fi # we only want these to run if completely removing
 
     sed -i '/dns=none/d' /etc/NetworkManager/NetworkManager.conf
-    if [ -f /etc/resolv.conf.masq]; then
+    if [ -f /etc/resolv.conf.masq ]; then
         rm /etc/resolv.conf
         mv /etc/resolv.conf.masq /etc/resolv.conf
     fi
 
   after-remove: |
-    if [ "${0}" -gt 0 ]; then exit 0; fi # we only want these to run if completely removing
+    if [ "${1}" -gt 0 ]; then exit 0; fi # we only want these to run if completely removing
 
     # not disabling dnsmasq here because the user might be using it still.
     systemctl restart NetworkManager dnsmasq
