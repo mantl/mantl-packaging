@@ -58,7 +58,7 @@ scripts:
     if [ "${1}" -gt 0 ]; then exit 0; fi # we only want these to run if completely removing
 
     sed -i '/dns=none/d' /etc/NetworkManager/NetworkManager.conf
-    if [ -f /etc/resolv.conf.masq]; then
+    if [ -f /etc/resolv.conf.masq ]; then
         rm /etc/resolv.conf
         mv /etc/resolv.conf.masq /etc/resolv.conf
     fi
