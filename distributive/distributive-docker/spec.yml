@@ -1,6 +1,6 @@
 
 name: distributive-docker
-version: 0.2.4
+version: 0.2.5
 iteration: 1
 license: ASL 2.0
 description: Distributive-docker is a configuration for distributed health checks.
