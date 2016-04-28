@@ -7,42 +7,44 @@ for building generic Mantl utilities.
 **Table of Contents**
 
 - [Mantl Packaging](#mantl-packaging)
-    - [Dynamic Configuration](#dynamic-configuration)
-        - [Per-node Configuration](#per-node-configuration)
-    - [Packages](#packages)
-        - [Core](#core)
-            - [generate-certificate](#generate-certificate)
-            - [traefik](#traefik)
-            - [docker-gc](#docker-gc)
-            - [mantl-storage-setup](#mantl-storage-setup)
-            - [smlr](#smlr)
-            - [nomad](#nomad)
-            - [zookeepercli](#zookeepercli)
-        - [Consul Packages](#consul-packages)
-            - [consul](#consul)
-            - [consul-ui](#consul-ui)
-            - [consul-template](#consul-template)
-            - [consul-cli](#consul-cli)
-        - [Vault Packages](#vault-packages)
-            - [vault](#vault)
-            - [vault-mantl](#vault-mantl)
-        - [Mantl Packages](#mantl-packages)
-            - [mantl-dns](#mantl-dns)
-        - [Calico packages](#calico-packages)
-            - [calico](#calico)
-        - [Distributive Packages](#distributive-packages)
-            - [distributive](#distributive)
-            - [distributive-<package>](#distributive-package)
-        - [Mesos Packages](#mesos-packages)
-            - [mesos](#mesos)
-            - [mesos-master](#mesos-master)
-            - [mesos-master-dynamic](#mesos-master-dynamic)
-            - [mesos-agent](#mesos-agent)
-            - [mesos-agent-dynamic](#mesos-agent-dynamic)
-        - [Mesos Frameworks](#mesos-frameworks)
-            - [marathon](#marathon)
-            - [marathon-dynamic](#marathon-dynamic)
-    - [Building](#building)
+	- [Dynamic Configuration](#dynamic-configuration)
+		- [Per-node Configuration](#per-node-configuration)
+	- [Packages](#packages)
+		- [Core](#core)
+			- [generate-certificate](#generate-certificate)
+			- [traefik](#traefik)
+			- [docker-gc](#docker-gc)
+			- [mantl-storage-setup](#mantl-storage-setup)
+			- [smlr](#smlr)
+			- [nomad](#nomad)
+			- [zookeepercli](#zookeepercli)
+		- [Consul Packages](#consul-packages)
+			- [consul](#consul)
+			- [consul-ui](#consul-ui)
+			- [consul-template](#consul-template)
+			- [consul-cli](#consul-cli)
+		- [Vault Packages](#vault-packages)
+			- [vault](#vault)
+			- [vault-mantl](#vault-mantl)
+		- [Mantl Packages](#mantl-packages)
+			- [mantl-dns](#mantl-dns)
+		- [Calico packages](#calico-packages)
+			- [calico](#calico)
+		- [Distributive Packages](#distributive-packages)
+			- [distributive](#distributive)
+			- [distributive-<package>](#distributive-package)
+		- [Mesos Packages](#mesos-packages)
+			- [mesos](#mesos)
+			- [mesos-master](#mesos-master)
+			- [mesos-master-dynamic](#mesos-master-dynamic)
+			- [mesos-agent](#mesos-agent)
+			- [mesos-agent-dynamic](#mesos-agent-dynamic)
+		- [Mesos Frameworks](#mesos-frameworks)
+			- [marathon](#marathon)
+			- [marathon-dynamic](#marathon-dynamic)
+		- [Mantl-Cadvisor Packages](#mantl-cadvisor-packages)
+			- [mantl-cadvisor](#mantl-cadvisor)
+	- [Building](#building)
 
 <!-- markdown-toc end -->
 
@@ -97,7 +99,7 @@ A script to generate certificates with a number of sensible defaults set.
 
 [*spec*](packages/docker-gc/spec.yml)
 
-Systemd timers that purge unsued docker containers, images, and volumes. 
+Systemd timers that purge unsued docker containers, images, and volumes.
 
 To check the status of the timers:
 `systemctl list-timers`
@@ -352,6 +354,17 @@ Available configuration:
 |-----|-------------|
 | `config/marathon/options/{key}` | any key from the [command line flags](http://mesosphere.github.io/marathon/docs/command-line-flags.html). Value will be uppercased to become an environment variable. |
 | `config/marathon/hosts/{node}/options/{key}` | the same as `marathon/config/{key}`, but the flags will only be applied to the specified node |
+
+### Mantl-Cadvisor Packages
+
+#### mantl-cadvisor
+
+[*spec*](mantl-cadvisor/mantl-cadvisor/spec.yml)
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/mantl-cadvisor/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/mantl-cadvisor/_latestVersion)
+
+cAdvisor customized for Mantl clusters
+
 
 ## Building
 
