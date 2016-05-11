@@ -2,9 +2,11 @@
 name: generate-certificate
 version: 0.0.1
 license: ASL 2.0
-iteration: 1
+iteration: 2
 vendor: Asteris
 architecture: noarch
+description: >
+  A script to generate certificates with a number of sensible defaults set.
 type: rpm
 
 depends:
