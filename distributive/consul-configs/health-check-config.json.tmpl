@@ -1,0 +1,10 @@
+{
+    "check": {
+        "id": "distributive-{{ variable "current_role" }}-checks",
+        "name": "{{ variable "current_role" }} Distributive Mantl Health Checks",
+        "script": "/bin/distributive -f /etc/distributive.d/distributive-{{ variable "current_role" }}.json --verbosity=info",
+        {{ if eq (variable "current_role") "chronos" }}"service_id": "chronos",{{ end }}
+        "interval": "60s",
+        "timeout": "30s"
+    }
+}
