@@ -4,7 +4,20 @@ set -e
 OUTPUT=${1:-out}
 
 for PKG in $(ls $OUTPUT); do
+    if curl -s -I "https://api.bintray.com/repos/$BINTRAY_PROJECT" | grep -q 404; then
+        echo "package repository not found, creating repository"
+        curl -u$BINTRAY_USER:$BINTRAY_API_KEY -X POST -I "https://api.bintray.com/repos/$BINTRAY_PROJECT"
+    fi
+
+    if curl -s -I "https://api.bintray.com/packages/$BINTRAY_PROJECT/$PKG" | grep -q 404; then
+        echo "package $PKG not found, creating package "
+        PKG_NAME=$(echo $PKG | sed -E "s|^(([a-zA-Z\-]+)-([0-9\.\-]+)\..*)$|\2|")
+        PKG_METADATA='{"name": "$PKG_NAME", "licenses": ["Apache-2.0"], "vcs_url": "https://github.com/mantl-pkg/stub-url"}'
+        echo $PKG_METADATA | curl  -u$BINTRAY_USER:$BINTRAY_API_KEY -d @- https://api.bintray.com/packages/$BINTRAY_PROJECT --header "Content-Type:application/json"
+    fi
+
     DOWNLOAD_URL="https://bintray.com/artifact/download/$BINTRAY_PROJECT/$PKG"
+
     if curl -s -I $DOWNLOAD_URL | grep -q 302; then
         echo "$PKG:	found, not uploading"
         continue
