@@ -1,7 +1,7 @@
 name: mantl-cadvisor
-version: 0.20.4
+version: 0.23.1
 license: APL 2.0
-iteration: 4
+iteration: 6
 vendor: Google
 url: https://github.com/google/cadvisor
 architecture: x86_64
@@ -22,7 +22,7 @@ scripts:
     systemctl restart mantl-cadvisor.service
   after-install: |
     systemctl daemon-reload
-    systemctl enable /etc/systemd/system/mantl-cadvisor.service 2>/dev/null
+    systemctl enable mantl-cadvisor.service 2>/dev/null
     systemctl start mantl-cadvisor.service
   before-remove: |
     if [ "${1}" -gt 0 ]; then exit 0; fi # we only want these to run if completely removing
