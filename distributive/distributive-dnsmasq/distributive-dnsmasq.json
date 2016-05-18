@@ -36,11 +36,6 @@
             "Name": "NetworkManager configuration exists",
             "ID": "file",
             "Parameters": ["/etc/NetworkManager/NetworkManager.conf"]
-        },
-        {
-            "Name": "resolv.conf exists",
-            "ID": "symlink",
-            "Parameters": ["/etc/resolv.conf"]
         }
     ]
 }

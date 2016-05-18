@@ -1,6 +1,6 @@
 
 name: distributive-dnsmasq
-version: 0.2.5
+version: 0.2.6
 iteration: 1
 license: ASL 2.0
 description: Distributive-dnsmasq is a configuration for distributed health checks.
