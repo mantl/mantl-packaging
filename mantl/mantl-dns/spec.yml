@@ -2,7 +2,7 @@
 name: mantl-dns
 version: 1.1.0
 license: ASL 2.0
-iteration: 4
+iteration: 5
 vendor: Asteris
 url: https://github.com/asteris-llc/mantl-packaging
 description: DNS integration with Consul
@@ -29,7 +29,7 @@ scripts:
 
   after-install: |
     # update the installed config search list with resolv.conf values
-    search=$(grep ^search /etc/resolv.conf.masq)
+    search=$(grep ^search /etc/resolv.conf.masq | sed -e "s/consul\s//")
     sed -i -e "s/\(^search.*$\)/$search/" /etc/resolv.conf.mantl-dns
 
     # link the installed config
@@ -60,7 +60,7 @@ scripts:
 
   after-upgrade: |
     # update the installed config search list with resolv.conf values
-    search=$(grep ^search /etc/resolv.conf.masq)
+    search=$(grep ^search /etc/resolv.conf.masq | sed -e "s/consul\s//")
     sed -i -e "s/\(^search.*$\)/$search/" /etc/resolv.conf.mantl-dns
 
   before-remove: |
