@@ -1,0 +1,31 @@
+---
+name: zookeeper
+version: 3.4.6
+license: APL 2.0
+iteration: 999
+vendor: Apache
+url: https://github.com/asteris-llc/mantl-packages
+architecture: x86_64
+description: Simple, lightweight, dependable CLI for ZooKeeper
+type: rpm
+
+resources:
+  - url: http://mirror.cogentco.com/pub/apache/zookeeper/zookeeper-{{.Version}}/zookeeper-{{.Version}}.tar.gz
+    hash-type: sha256
+    hash: 0d9c36b8248e8f5b6bb8a1aae1dbd3a8ea454b1e3a92da0a98524e3ad910f04f
+
+targets:
+  - src: '{{.BuildRoot}}/zookeeper-{{.Version}}.jar'
+    dest: /opt/mantl/zookeeper/lib/zookeeper-{{.Version}}.jar
+  - src: '{{.BuildRoot}}/lib/'
+    dest: /opt/mantl/zookeeper/lib
+  - src: '{{.BuildRoot}}/conf'
+    dest: /etc/zookeeper/conf'
+    config: true
+
+scripts:
+  - build: |
+      tar -xzvf zookeeper-{{.Version}}.tar.gz --strip=1
+
+extra-args: |
+  --rpm-os linux
