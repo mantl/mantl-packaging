@@ -1,0 +1,75 @@
+---
+name: zookeeper
+version: 3.4.6
+license: APL 2.0
+iteration: 999
+vendor: Apache
+url: https://github.com/asteris-llc/mantl-packages
+architecture: x86_64
+description: ZooKeeper
+type: rpm
+
+dependencies:
+  - nc
+  - java-1.8.0-openjdk-headless
+
+obsoletes:
+  - mesosphere-zookeeper
+
+resources:
+  - url: http://mirror.cogentco.com/pub/apache/zookeeper/zookeeper-{{.Version}}/zookeeper-{{.Version}}.tar.gz
+    hash-type: sha256
+    hash: 01b3938547cd620dc4c93efe07c0360411f4a66962a70500b163b59014046994 
+
+targets:
+  - src: '{{.BuildRoot}}/zookeeper-{{.Version}}.jar'
+    dest: /opt/mantl/zookeeper/lib/zookeeper-{{.Version}}.jar
+    template: false
+  - src: '{{.BuildRoot}}/lib/'
+    dest: /opt/mantl/zookeeper/lib
+    template: false
+  - src: '{{.BuildRoot}}/bin/'
+    dest: /opt/mantl/zookeeper/bin
+    template: false
+  - src: '{{.BuildRoot}}/conf'
+    dest: /etc/zookeeper
+    config: true
+  - src: '{{.SpecRoot}}/zookeeper_check.sh'
+    dest: /usr/bin/zookeeper_check.sh
+    template: false
+  - src: '{{.SpecRoot}}/zookeeper_digest.sh'
+    dest: /usr/bin/zookeeper_digest.sh
+    template: false
+  - src: '{{.SpecRoot}}/zookeeper-wait-for-listen.sh'
+    dest: /usr/bin/zookeeper-wait-for-listen.sh
+    template: false
+  - src: '{{.SpecRoot}}/zookeeper.service'
+    dest: /usr/lib/systemd/system/zookeeper.service
+
+
+scripts:
+  build: |
+    tar -xzvf zookeeper-{{.Version}}.tar.gz --strip=1
+    # remove windows' scripts
+    rm -f bin/*.cmd
+
+  after-install: |
+    getent passwd zookeeper >/dev/null || useradd --system -d /var/lib/zookeeper/version-2 zookeeper 
+    mkdir -p /var/lib/zookeeper/version-2
+    chown root:root /var/lib/zookeeper
+    chown zookeeper:zookeeper -R /var/lib/zookeeper/version-2
+    test -e /var/lib/zookeeper/myid && chown root:root /var/lib/zookeeper/myid || :
+    test -e /var/lib/zookeeper/myid && chown 0644 /var/lib/zookeeper/myid || :
+    systemctl daemon-reload
+    systemctl enable zookeeper
+
+  after-upgrade: |
+    chown root:root /var/lib/zookeeper
+    chown zookeeper:zookeeper -R /var/lib/zookeeper/version-2
+    test -e /var/lib/zookeeper/myid && chown root:root /var/lib/zookeeper/myid || :
+    test -e /var/lib/zookeeper/myid && chown 0644 /var/lib/zookeeper/myid || :
+    systemctl daemon-reload
+    systemctl try-restart zookeeper
+  
+extra-args: |
+  --rpm-os linux

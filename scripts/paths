@@ -30,6 +30,7 @@
 |mantl-storage-setup| packages/mantl-storage-setup/
 |smlr| packages/smlr/
 |traefik| packages/traefik/
+|zookeeper| packages/zookeeper/
 |zookeepercli| packages/zookeepercli/
 |vault| vault/vault/
 |vault-mantl| vault/vault-mantl/
