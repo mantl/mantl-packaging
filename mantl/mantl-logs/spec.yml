@@ -1,0 +1,12 @@
+---
+name: mantl-logs
+version: 0.0.1
+license: ASL 2.0
+iteration: 1
+vendor: Asteris
+url: https://github.com/asteris-llc/mantl-packaging
+description: Log bundler utility for mantl
+type: rpm
+
+depends:
+  - consul-cli
