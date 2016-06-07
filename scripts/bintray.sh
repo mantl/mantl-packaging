@@ -1,7 +1,12 @@
-#/bin/bash
+#!/bin/bash
+# This script has to be executed from the root mantl-packaging directory.
 set -e
 
 OUTPUT=${1:-out}
+
+if [ -f ./.bintray ]; then
+    source .bintray
+fi
 
 if curl -s -I "https://api.bintray.com/repos/$BINTRAY_PROJECT" | grep -q 404; then
     echo "package repository not found, creating repository"
