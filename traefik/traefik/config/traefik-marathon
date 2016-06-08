@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+import argparse
+import os
+import subprocess
+import sys
+from textwrap import dedent
+
+def parse_args(args=None):
+    parser = argparse.ArgumentParser(
+        __file__,
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument('--endpoint', default='http://127.0.0.1:8080', help='marathon address')
+    parser.add_argument('--interface', default='eth0', help='interface to get IP from')
+    parser.add_argument('--domain', default='marathon.localhost', help='domain to address apps by')
+    parser.add_argument('--disable', action='store_true', help='disable marathon backend')
+
+    watch = parser.add_mutually_exclusive_group(required=False)
+    watch.add_argument('--watch', dest='watch', action='store_true', help='watch for changes')
+    watch.add_argument('--no-watch', dest='watch', action='store_false')
+    parser.set_defaults(watch=True)
+
+    return parser.parse_args(args)
+
+
+def get_template(endpoint, interface, watch, domain):
+    return dedent("""
+    [marathon]
+    endpoint = "{endpoint}"
+    networkInterface = "{interface}"
+    watch = {watch}
+    domain = "{domain}"
+    """.format(
+        endpoint=endpoint,
+        interface=interface,
+        watch="true" if watch else "false",
+        domain=domain,
+    ))
+
+
+def main(args=None):
+    args = parse_args()
+
+    fname = '/etc/traefik/configs/marathon.toml'
+
+    if args.disable:
+        os.unlink(fname)
+    else:
+        with open(fname, 'w') as f:
+            f.write(get_template(
+                args.endpoint,
+                args.interface,
+                args.watch,
+                args.domain,
+            ))
+
+    return subprocess.call('traefik-regen')
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv))

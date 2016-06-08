@@ -1,0 +1,2 @@
+traefik	ALL=(ALL)	NOPASSWD:	/usr/bin/systemctl restart traefik.service
+

@@ -1,0 +1,10 @@
+{{range ls "config/traefik"}}{{.Key}} = {{.Value}}
+{{end}}
+
+[web]
+{{range ls "config/traefik/web"}}{{.Key}} = {{.Value}}
+{{end}}
+
+[marathon]
+{{range ls "config/traefik/marathon"}}{{.Key}} = {{.Value}}
+{{end}}
