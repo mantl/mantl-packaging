@@ -30,8 +30,6 @@ targets:
     template: yes
   - src: "{{empty}}"
     dest: /etc/traefik
-  - src: "{{empty}}"
-    dest: /etc/traefik/configs
 
   # consul template - these can't be placed in their actual directory, otherwise
   # yum will throw a "Transaction check error"
@@ -52,10 +50,6 @@ targets:
     dest: /var/log/traefik
   - src: "{{empty}}"
     dest: /var/log/traefik/archive
-
-  # config generation scripts
-  - src: "{{.SpecRoot}}/config/"
-    dest: /usr/bin/
 
 scripts:
   before-install: |
