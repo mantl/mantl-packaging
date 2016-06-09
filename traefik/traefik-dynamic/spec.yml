@@ -31,8 +31,7 @@ targets:
   - src: "{{empty}}"
     dest: /etc/traefik
 
-  # consul template - these can't be placed in their actual directory, otherwise
-  # yum will throw a "Transaction check error"
+  # consul template 
   - src: "{{.SpecRoot}}/traefik-consul-template.hcl"
     dest: /etc/consul-template/config.d/traefik.hcl
   - src: "{{.SpecRoot}}/traefik.toml.tmpl"
