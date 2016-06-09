@@ -7,9 +7,9 @@ Wants=network-online.target
 [Service]
 User={{.Name}}
 Group={{.Name}}
-ExecStartPre=/bin/touch /var/log/{{.Name}}/access.log
-ExecStartPre=/bin/touch /var/log/{{.Name}}/traefik.log
-ExecStart=/usr/bin/{{.Name}} -c /etc/{{.Name}}/{{.Name}}.toml
+ExecStartPre=-/bin/touch /var/log/traefik/access.log
+ExecStartPre=-/bin/touch /var/log/traefik/traefik.log
+ExecStart=/usr/bin/traefik -c /etc/traefik/traefik.toml
 ExecReload=/bin/kill -HUP $MAINPID
 KillSignal=SIGINT
 LimitNOFILE=65536

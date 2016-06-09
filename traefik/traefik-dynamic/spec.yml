@@ -17,54 +17,50 @@ dependencies:
   - consul-template >= 0.10.0
 
 resources:
-  - url: '{{.URL}}/releases/download/v{{.Version}}-{{.Iteration}}/traefik_linux-amd64'
+  - url: "{{.URL}}/releases/download/v{{.Version}}-{{.Iteration}}/traefik_linux-amd64"
     hash-type: sha256
     hash: d3862ad9e46f3fe18a04882c71c09c748781829d8542d9c9e6954b8de167e14b
 
 targets:
   # base
-  - src: '{{.BuildRoot}}/traefik_linux-amd64'
+  - src: "{{.BuildRoot}}/traefik_linux-amd64"
     dest: /usr/bin/traefik
-  - src: '{{.SpecRoot}}{{.Name}}.service'
-    dest: /etc/systemd/system/{{.Name}}.service
+  - src: "{{.SpecRoot}}/{{.Name}}.service"
+    dest: /etc/systemd/system/
     template: yes
-  - src: '{{empty}}'
+  - src: "{{empty}}"
     dest: /etc/traefik
-  - src: '{{empty}}'
+  - src: "{{empty}}"
     dest: /etc/traefik/configs
 
-  # consul template
-  - src: '{{.SpecRoot}}/traefik-consul-template.hcl'
+  # consul template - these can't be placed in their actual directory, otherwise
+  # yum will throw a "Transaction check error"
+  - src: "{{.SpecRoot}}/traefik-consul-template.hcl"
     dest: /etc/consul-template/config.d/traefik.hcl
-  - src: '{{.SpecRoot}}/traefik.toml.tmpl'
+  - src: "{{.SpecRoot}}/traefik.toml.tmpl"
     dest: /etc/consul-template/templates/traefik.toml.tmpl
-  - src: '{{.SpecRoot}}/consul-template-traefik'
+  # allow consul template to restart traefik on config changes. 
+  - src: "{{.SpecRoot}}/traefik-sudo-rules"
     dest: /etc/sudoers.d/
 
-  # consul service
-  - src: '{{.SpecRoot}}/traefik-consul-service.json'
-    dest: /etc/consul/traefik.json
-
   # logging
-  - src: '{{.SpecRoot}}/logrotate/traefik'
-    dest: /etc/logrotate.d/traefik
-  - src: '{{.SpecRoot}}/logrotate/traefik-access'
-    dest: /etc/logrotate.d/traefik-access
+  - src: "{{.SpecRoot}}/logrotate/traefik"
+    dest: /etc/logrotate.d/
+  - src: "{{.SpecRoot}}/logrotate/traefik-access"
+    dest: /etc/logrotate.d/
   - src: "{{empty}}"
     dest: /var/log/traefik
   - src: "{{empty}}"
     dest: /var/log/traefik/archive
 
   # config generation scripts
-  - src: '{{.SpecRoot}}/config/'
+  - src: "{{.SpecRoot}}/config/"
     dest: /usr/bin/
-  - src: '{{.SpecRoot}}/traefik-restart'
-    dest: /etc/sudoers.d/
 
 scripts:
   before-install: |
-    # set up traefik user and group
-    getent group traefik > /dev/null || groupadd -r {{.Name}}
+    # set up traefik-dynamic user and group
+    getent group traefik > /dev/null || groupadd -r traefik
     getent passwd traefik > /dev/null || \
         useradd -r \
                 -g traefik \
@@ -79,7 +75,7 @@ scripts:
 
     setcap 'cap_net_bind_service=+ep' /usr/bin/traefik
 
-    # set up first-time configuration
+    # set up firsttime configuration
     sudo -u consul consul-template -config /etc/consul-template/config.d/traefik.hcl -once
     systemctl restart consul-template.service
 
@@ -108,11 +104,14 @@ scripts:
     systemctl daemon-reload
     systemctl restart consul-template.service
 
-# TODO: what does this do? Should we add consul-template?
 extra-args: |
+  --conflicts traefik
   --rpm-os linux
   --rpm-auto-add-directories
   --rpm-auto-add-exclude-directories /etc/systemd
   --rpm-auto-add-exclude-directories /etc/systemd/system
   --rpm-auto-add-exclude-directories /etc/sudoers.d
   --rpm-auto-add-exclude-directories /etc/logrotate.d
+  --rpm-auto-add-exclude-directories /etc/consul-template
+  --rpm-auto-add-exclude-directories /etc/consul-template/config.d
+  --rpm-auto-add-exclude-directories /etc/consul-template/templates
