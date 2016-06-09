@@ -76,7 +76,7 @@ scripts:
     setcap 'cap_net_bind_service=+ep' /usr/bin/traefik
 
     # set up firsttime configuration
-    sudo -u consul consul-template -config /etc/consul-template/config.d/traefik.hcl -once
+    sudo consul-template -config /etc/consul-template/config.d/traefik.hcl -once
     systemctl restart consul-template.service
 
     # enable and start service
@@ -84,8 +84,8 @@ scripts:
     systemctl start {{.Name}}.service
 
     # start listeners
-    sudo -u traefik traefik-global --port=80 --grace-time-out=10
-    sudo -u traefik traefik-web --address=:8080
+    sudo traefik-global --port=80 --grace-time-out=10
+    sudo traefik-web --address=:8080
 
   after-upgrade: |
     chown -R traefik:traefik /var/log/traefik
