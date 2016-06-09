@@ -53,7 +53,7 @@ targets:
 
 scripts:
   before-install: |
-    # set up traefik-dynamic user and group
+    # set up traefik user and group
     getent group traefik > /dev/null || groupadd -r traefik
     getent passwd traefik > /dev/null || \
         useradd -r \
@@ -69,17 +69,13 @@ scripts:
 
     setcap 'cap_net_bind_service=+ep' /usr/bin/traefik
 
-    # set up firsttime configuration
+    # set up initial configuration
     sudo consul-template -config /etc/consul-template/config.d/traefik.hcl -once
     systemctl restart consul-template.service
 
     # enable and start service
     systemctl enable /etc/systemd/system/{{.Name}}.service 2>/dev/null
     systemctl start {{.Name}}.service
-
-    # start listeners
-    sudo traefik-global --port=80 --grace-time-out=10
-    sudo traefik-web --address=:8080
 
   after-upgrade: |
     chown -R traefik:traefik /var/log/traefik
