@@ -20,6 +20,17 @@ TRAVIS_COMMIT = os.environ['TRAVIS_COMMIT']
 TRAVIS_BRANCH = os.environ['TRAVIS_BRANCH']
 
 
+def find_parent(branch):
+    parent = branch
+    branch_re = re.compile("\\[%s.+\\]" % branch)
+    for line in check_output(["git", "show-branch"]):
+        if line.startswith("*"):
+            match = branch_re.search(line)
+            if match:
+                parent = match.group(1)
+    print "Parent for '%s' is '%s'" % (branch, parent)
+    return parent
+
 def build(names, stream_for=None):
     print 'Building %s' % ', '.join(names)
     args = ['hammer', 'build', '--output=/tmp/out']
@@ -40,7 +51,7 @@ def main(args):
         except CalledProcessError:
             # Branch rebased, "old" hash is previous head of same branch
             print "Branch rebased, %s hash is previous head of same branch (%s)" % (old, TRAVIS_BRANCH)
-            ancestor = check_output(['git', 'merge-base', TRAVIS_BRANCH, new]).strip()
+            ancestor = check_output(['git', 'merge-base', find_parent(TRAVIS_BRANCH), new]).strip()
             print "Common ancestor for merge: %s, check against it" % (ancestor)
             commit_range = "%s..%s" % (ancestor, new)
         else:

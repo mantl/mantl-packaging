@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 set -e
 
-if [[ $PACKAGE == "distributive" ]] && ! which godep; then
-  go get -v github.com/tools/godep
-  go build -o tools/bin/godep github.com/tools/godep
+echo "Go platform version is: $(go version)"
+
+if [[ $PACKAGE == "distributive" ]] && ! which glide; then
+  go get -v github.com/Masterminds/glide
+  go build -o tools/bin/glide github.com/Masterminds/glide
 fi
 
 mkdir -p tools/bin || true
