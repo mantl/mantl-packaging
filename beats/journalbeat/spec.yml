@@ -1,0 +1,39 @@
+---
+name: journalbeat
+version: 0.1.0
+iteration: 1
+license: ASL 2.0
+description:  >
+  Journalbeat is a log shipper from systemd/journald to Logstash/Elasticsearch
+url: https://github.com/mheese/journalbeat
+vendor: mheese
+type: rpm
+
+requires:
+  - systemd-devel
+
+resources:
+  - url: https://raw.githubusercontent.com/travis-ci/gimme/25d0c5945c26d0d2a98375e76df97702afd5a123/gimme
+    hash-type: sha256
+    hash: ada93dbb0e02616ef35f346a1f5641087cc5700c5c90d3bf7be8c0d67e1f61a0
+
+targets:
+  - src: '{{.BuildRoot}}/{{.Name}}'
+    dest: '/usr/bin/{{.Name}}'
+  - src: '{{.BuildRoot}}/src/github.com/{{.Vendor}}/{{.Name}}/etc/{{.Name}}.yml'
+    dest: '/etc/{{.Name}}.yml'
+
+scripts:
+  build: |
+    # Get golang
+    export GOPATH='{{.BuildRoot}}'
+
+    # Get source code and compile
+    # If HOME is not set to "", the user's custom git config might be used.
+    HOME= go get -u 'github.com/{{.Vendor}}/{{.Name}}'
+    go build -o '{{.BuildRoot}}/{{.Name}}' 'github.com/{{.Vendor}}/{{.Name}}'
+
+extra-args: |
+  --rpm-os linux
+  --rpm-dist centos
+  --rpm-auto-add-directories
