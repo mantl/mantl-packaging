@@ -8,6 +8,7 @@ addons:
     packages:
       # hammer
       - rpm
+      - golang-go-systemd-dev
 
 cache:
   apt: true
