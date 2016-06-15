@@ -68,3 +68,4 @@ mkdir -p usr/local/lib
 # ensure symlinks are relative so they work as expected in the final env
 ( cd usr/local/lib && cp -s ../../lib/lib*so . )
 
+

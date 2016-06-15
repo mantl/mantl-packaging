@@ -5,14 +5,20 @@ sudo: false
 
 addons:
   apt:
+    sources:
+      - ubuntu-toolchain-r-test
     packages:
       # hammer
       - rpm
+      - g++-4.8
 
 cache:
   apt: true
   directories:
     - tools
+
+before_install:
+  - export CXX="g++-4.8" CC="gcc-4.8"
 
 install:
   - source scripts/travis-cache.sh
@@ -29,3 +35,4 @@ deploy:
   script: /bin/bash scripts/bintray.sh /tmp/out
   on:
     branch: master
+
