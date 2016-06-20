@@ -1,3 +1,5 @@
+|filebeat| beats/filebeat
+|journalbeat| beats/journalbeat
 |calico| calico/calico/
 |consul| consul/consul/
 |consul-cli| consul/consul-cli/
@@ -35,4 +37,3 @@
 |zookeepercli| packages/zookeepercli/
 |vault| vault/vault/
 |vault-mantl| vault/vault-mantl/
- 

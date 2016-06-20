@@ -1,0 +1,32 @@
+---
+name: filebeat
+version: 1.2.3
+iteration: 1
+license: ASL 2.0
+description: >
+  Lightweight shippers for Elasticsearch & Logstash
+url: https://github.com/elastic/beats
+vendor: elastic
+type: rpm
+
+resources:
+  - url: https://download.elastic.co/beats/{{.Name}}/{{.Name}}-{{.Version}}-x86_64.tar.gz
+    hash-type: sha1
+    hash: 3fde7f5f5ea837140965a193bbb387c131c16d9c
+
+targets:
+  - src: '{{.BuildRoot}}/{{.Name}}-{{.Version}}-x86_64/{{.Name}}'
+    dest: '/usr/bin/{{.Name}}'
+  - src: '{{.BuildRoot}}/{{.Name}}-{{.Version}}-x86_64/{{.Name}}.template.json'
+    dest: '/etc/{{.Name}}/{{.Name}}.template.json'
+  - src: '{{.BuildRoot}}/{{.Name}}-{{.Version}}-x86_64/{{.Name}}.yml'
+    dest: '/etc/{{.Name}}/{{.Name}}.yml'
+
+scripts:
+  build: |
+    tar -xvf {{.Name}}-{{.Version}}-x86_64.tar.gz
+
+extra-args: |
+  --rpm-os linux
+  --rpm-dist centos
+  --rpm-auto-add-directories
