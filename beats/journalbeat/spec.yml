@@ -10,28 +10,28 @@ vendor: mheese
 type: rpm
 
 requires:
-  - systemd-devel
+  - systemd
 
 resources:
-  - url: https://raw.githubusercontent.com/travis-ci/gimme/25d0c5945c26d0d2a98375e76df97702afd5a123/gimme
+  # Binary
+  - url: 'https://github.com/asteris-llc/{{.Name}}/releases/download/{{.Version}}/{{.Name}}.tar.gz'
     hash-type: sha256
-    hash: ada93dbb0e02616ef35f346a1f5641087cc5700c5c90d3bf7be8c0d67e1f61a0
+    hash: 1d76f18775d4d9778de9a64f09b193f293250bfc3ac552e21413546c8d3b665d
+
+  # Config file
+  - url: 'https://raw.githubusercontent.com/mheese/{{.Name}}/4298fcfa66d6f56c864452360c963ee6cf5109f5/etc/{{.Name}}.yml'
+    hash-type: sha256
+    hash: 35cd1d3caa65b0570da28e1622eb4c00b65c17a386664ad02c766061156885b0
 
 targets:
   - src: '{{.BuildRoot}}/{{.Name}}'
     dest: '/usr/bin/{{.Name}}'
-  - src: '{{.BuildRoot}}/src/github.com/{{.Vendor}}/{{.Name}}/etc/{{.Name}}.yml'
+  - src: '{{.BuildRoot}}/{{.Name}}.yml'
     dest: '/etc/{{.Name}}.yml'
 
 scripts:
   build: |
-    # Get golang
-    export GOPATH='{{.BuildRoot}}'
-
-    # Get source code and compile
-    # If HOME is not set to "", the user's custom git config might be used.
-    HOME= go get -u 'github.com/{{.Vendor}}/{{.Name}}'
-    go build -o '{{.BuildRoot}}/{{.Name}}' 'github.com/{{.Vendor}}/{{.Name}}'
+    tar -xvf {{.Name}}.tar.gz
 
 extra-args: |
   --rpm-os linux
