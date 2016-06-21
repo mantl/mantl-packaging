@@ -1,0 +1,80 @@
+---
+name: consul-k8s
+version: 0.6.4
+license: MPLv2.0
+iteration: 3
+vendor: Hashicorp
+url: https://consul.io
+architecture: x86_64
+description: Consul is a tool for service discovery and configuration. This version includes Kubernetes support.
+type: rpm
+
+depends:
+  - systemd
+  - bash
+
+resources:
+  - url: https://dl.bintray.com/gonzalo-mustwin/must-win-consul/linux_amd64.zip
+    hash-type: sha256
+    hash: 11afa011f3d3462154f3ac8861ddac1d06003dd28d7886a63d842d28bb1f2936
+
+targets:
+  - src: "{{.BuildRoot}}/consul"
+    dest: /usr/bin/
+
+  # data storage
+  - src: "{{empty}}"
+    dest: /var/lib/consul/
+
+  # service
+  - src: "{{.SpecRoot}}/consul.service"
+    dest: /etc/systemd/system/consul.service
+    template: true
+  - src: "{{.SpecRoot}}/consul.sysconfig"
+    dest: /etc/sysconfig/consul
+    config: true
+
+  # configuration
+  - src: "{{.SpecRoot}}/consul.json"
+    dest: /etc/consul/
+    config: true
+  - src: "{{empty}}"
+    dest: /etc/consul/ssl
+    config: true
+
+scripts:
+  build: |
+    unzip linux_amd64.zip
+
+  before-install: |
+    getent group consul > /dev/null || groupadd -r consul
+    getent passwd consul > /dev/null || \
+        useradd -r \
+                -g consul \
+                -d /var/lib/consul \
+                -s /bin/bash \
+                -c "consul.io user" \
+                consul
+
+  after-install: |
+    chown -R consul:consul /var/lib/consul
+    chown -R consul:consul /etc/consul
+
+  before-remove: |
+    systemctl disable consul.service
+
+  before-upgrade: |
+    usermod -s /bin/bash consul
+
+  after-upgrade: |
+    chown consul:consul /var/lib/consul
+    chown consul:consul /etc/consul
+
+    systemctl daemon-reload
+
+extra-args: |
+  --rpm-os linux
+  --rpm-dist centos
+  --rpm-auto-add-directories
+  --rpm-auto-add-exclude-directories /etc/systemd
+  --rpm-auto-add-exclude-directories /etc/systemd/system

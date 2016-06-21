@@ -1,0 +1,21 @@
+[Unit]
+Description={{.Description}}
+Documentation={{.URL}}
+After=network-online.target
+Wants=network-online.target
+After=rsyslog.service
+Wants=rsyslog.service
+
+[Service]
+User=consul
+Group=consul
+EnvironmentFile=/etc/sysconfig/consul
+ExecStart=/usr/bin/consul agent -config-dir=${CONFIG_DIR} -data-dir=${DATA_DIR} $EXTRA_OPTS
+ExecReload=-/bin/kill -HUP $MAINPID
+KillSignal=SIGINT
+LimitNOFILE=65536
+Restart=on-success
+IgnoreSIGPIPE=yes
+
+[Install]
+WantedBy=multi-user.target
