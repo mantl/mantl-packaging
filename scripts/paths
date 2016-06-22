@@ -2,6 +2,7 @@
 |journalbeat| beats/journalbeat
 |calico| calico/calico/
 |consul| consul/consul/
+|consul-k8s| consul/consul-k8s/
 |consul-cli| consul/consul-cli/
 |consul-template| consul/consul-template/
 |consul-ui| consul/consul-ui/
