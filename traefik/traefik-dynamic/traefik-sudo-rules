@@ -1,0 +1,7 @@
+# Allow traefik user to restart and reload traefik service
+traefik	        ALL=(ALL)	    NOPASSWD: /usr/bin/systemctl restart {{.Name}}.service
+traefik	        ALL=(ALL)	    NOPASSWD: /usr/bin/systemctl reload {{.Name}}.service
+
+# Allow consul-template to restart and reload traefik service
+consul	        ALL=(ALL)	    NOPASSWD:	/usr/bin/systemctl restart {{.Name}}.service
+consul	        ALL=(ALL)	    NOPASSWD:	/usr/bin/systemctl reload {{.Name}}.service

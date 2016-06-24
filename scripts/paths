@@ -34,7 +34,8 @@
 |generate-certificate| packages/generate-certificate/
 |mantl-storage-setup| packages/mantl-storage-setup/
 |smlr| packages/smlr/
-|traefik| packages/traefik/
+|traefik| traefik/traefik
+|traefik-dynamic| traefik/traefik-dynamic
 |zookeepercli| packages/zookeepercli/
 |vault| vault/vault/
 |vault-mantl| vault/vault-mantl/

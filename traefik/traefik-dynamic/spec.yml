@@ -1,0 +1,106 @@
+---
+name: traefik-dynamic
+version: 1.0.0
+iteration: rc1
+license: MIT
+epoch: 414
+vendor: Emile Vauge
+architecture: x86_64
+type: rpm
+url: https://github.com/containous/traefik
+description: Træfɪk reverse proxy, dynamically configured with consul template.
+
+dependencies:
+  - libcap
+  - python
+  - sudo
+  - consul-template >= 0.10.0
+
+resources:
+  - url: "{{.URL}}/releases/download/v{{.Version}}-{{.Iteration}}/traefik_linux-amd64"
+    hash-type: sha256
+    hash: d3862ad9e46f3fe18a04882c71c09c748781829d8542d9c9e6954b8de167e14b
+
+targets:
+  # base
+  - src: "{{.BuildRoot}}/traefik_linux-amd64"
+    dest: /usr/bin/traefik
+  - src: "{{.SpecRoot}}/{{.Name}}.service"
+    dest: /etc/systemd/system/
+    template: yes
+  - src: "{{empty}}"
+    dest: /etc/traefik
+
+  # consul template 
+  - src: "{{.SpecRoot}}/traefik-consul-template.hcl"
+    dest: /etc/consul-template/config.d/traefik.hcl
+  - src: "{{.SpecRoot}}/traefik.toml.tmpl"
+    dest: /etc/consul-template/templates/traefik.toml.tmpl
+  # allow consul template to restart traefik on config changes. 
+  - src: "{{.SpecRoot}}/traefik-sudo-rules"
+    dest: /etc/sudoers.d/
+
+  # logging
+  - src: "{{.SpecRoot}}/logrotate/traefik"
+    dest: /etc/logrotate.d/
+  - src: "{{.SpecRoot}}/logrotate/traefik-access"
+    dest: /etc/logrotate.d/
+  - src: "{{empty}}"
+    dest: /var/log/traefik
+  - src: "{{empty}}"
+    dest: /var/log/traefik/archive
+
+scripts:
+  before-install: |
+    # set up traefik user and group
+    getent group traefik > /dev/null || groupadd -r traefik
+    getent passwd traefik > /dev/null || \
+        useradd -r \
+                -g traefik \
+                -d /etc/traefik \
+                -s /sbin/nologin \
+                -c "traefik user" \
+                traefik
+
+  after-install: |
+    chown -R traefik:traefik /etc/traefik
+    chown -R traefik:traefik /var/log/traefik
+
+    setcap 'cap_net_bind_service=+ep' /usr/bin/traefik
+
+    # set up initial configuration
+    sudo consul-template -config /etc/consul-template/config.d/traefik.hcl -once
+    systemctl restart consul-template.service
+
+    # enable and start service
+    systemctl enable /etc/systemd/system/{{.Name}}.service 2>/dev/null
+    systemctl start {{.Name}}.service
+
+  after-upgrade: |
+    chown -R traefik:traefik /var/log/traefik
+
+    setcap 'cap_net_bind_service=+ep' /usr/bin/traefik
+
+    systemctl daemon-reload
+    systemctl restart consul-template.service
+    systemctl restart {{.Name}}.service
+
+  before-remove: |
+    systemctl stop {{.Name}}.service
+    systemctl disable {{.Name}}.service 2>/dev/null
+
+  after-remove: |
+    systemctl daemon-reload
+    systemctl restart consul-template.service
+
+extra-args: |
+  --conflicts traefik
+  --rpm-os linux
+  --rpm-auto-add-directories
+  --rpm-auto-add-exclude-directories /etc/systemd
+  --rpm-auto-add-exclude-directories /etc/systemd/system
+  --rpm-auto-add-exclude-directories /etc/sudoers.d
+  --rpm-auto-add-exclude-directories /etc/logrotate.d
+  --rpm-auto-add-exclude-directories /etc/consul-template
+  --rpm-auto-add-exclude-directories /etc/consul-template/config.d
+  --rpm-auto-add-exclude-directories /etc/consul-template/templates
