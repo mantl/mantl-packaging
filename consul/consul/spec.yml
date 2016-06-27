@@ -2,7 +2,7 @@
 name: consul
 version: 0.6.4
 license: MPLv2.0
-iteration: 3
+iteration: 4
 vendor: Hashicorp
 url: https://consul.io
 architecture: x86_64
@@ -14,9 +14,9 @@ depends:
   - bash
 
 resources:
-  - url: https://releases.hashicorp.com/consul/{{.Version}}/consul_{{.Version}}_linux_amd64.zip
+  - url: https://dl.bintray.com/gonzalo-mustwin/must-win-consul/linux_amd64.zip
     hash-type: sha256
-    hash: abdf0e1856292468e2c9971420d73b805e93888e006c76324ae39416edcf0627
+    hash: 31e5cd18fef8d87839774b0070eead2ead4be3b5ae2460b54254b9c73166725a
 
 targets:
   - src: "{{.BuildRoot}}/consul"
@@ -44,7 +44,7 @@ targets:
 
 scripts:
   build: |
-    unzip consul_{{.Version}}_linux_amd64.zip
+    unzip linux_amd64.zip
 
   before-install: |
     getent group consul > /dev/null || groupadd -r consul
