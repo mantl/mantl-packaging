@@ -1,0 +1,35 @@
+---
+name: easy-rsa
+version: 3.0.1
+license: ASL 2.0
+iteration: 1
+vendor: OpenVPN
+architecture: noarch
+type: rpm
+
+depends:
+  - openssl
+
+resources:
+  - url: https://github.com/{{.Vendor}}/{{.Name}}/releases/download/{{.Version}}/EasyRSA-{{.Version}}.tgz
+    hash-type: sha256
+    hash: dbdaf5b9444b99e0c5221fd4bcf15384c62380c1b63cea23d42239414d7b2d4e
+
+targets:
+  - src: '{{.BuildRoot}}/EasyRSA-{{.Version}}/easyrsa'
+    dest: /usr/share/easyrsa/
+  - src: '{{.BuildRoot}}/EasyRSA-{{.Version}}/openssl-1.0.cnf'
+    dest: /usr/share/easyrsa/
+    config: true
+  - src: '{{.BuildRoot}}/EasyRSA-{{.Version}}/vars.example'
+    dest: /usr/share/easyrsa/
+    config: true
+  - src: '{{.BuildRoot}}/EasyRSA-{{.Version}}/x509-types'
+    dest: /usr/share/easyrsa/
+
+scripts:
+  build: |
+    tar --extract --verbose --file EasyRSA-{{.Version}}.tgz
+
+  after-install: |
+    chmod +x /usr/share/easy-rsa
