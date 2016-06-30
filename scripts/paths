@@ -38,3 +38,4 @@
 |zookeepercli| packages/zookeepercli/
 |vault| vault/vault/
 |vault-mantl| vault/vault-mantl/
+|vaultfs| vault/vaultfs/

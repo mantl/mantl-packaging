@@ -15,13 +15,13 @@ depends:
 
 targets:
   - src: "{{.SpecRoot}}/vault-unseal.sh"
-    dest: /usr/local/bin
+    dest: /usr/local/bin/vault-unseal.sh
   - src: "{{.SpecRoot}}/vault-bootstrap.sh"
-    dest: /usr/local/bin
+    dest: /usr/local/bin/vault-bootstrap.sh
   - src: "{{.SpecRoot}}/vault-health-check.sh"
-    dest: /usr/local/bin
+    dest: /usr/local/bin/vault-health-check.sh
   - src: "{{.SpecRoot}}/vault-register-with-consul.sh"
-    dest: /usr/local/bin
+    dest: /usr/local/bin/vault-register-with-consul.sh
 
 extra-args: |
   --rpm-os linux
