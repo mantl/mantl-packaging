@@ -1,0 +1,16 @@
+[Unit]
+Description=VaultFS mounts arbitrary Vault prefixes in a FUSE filesystem
+After=vault.service
+Requires=vault.service
+
+[Service]
+Restart=on-failure
+RestartSec=20
+TimeoutStartSec=2
+
+EnvironmentFile=/etc/sysconfig/vaultfs
+ExecStart=-/bin/bash -c "[ -f /usr/local/bin/vaultfs-bootstrap.sh ] && /usr/local/bin/vaultfs-bootstrap.sh"
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target

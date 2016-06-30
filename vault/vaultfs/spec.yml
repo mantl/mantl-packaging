@@ -1,0 +1,39 @@
+---
+name: vaultfs
+version: 1.0.0
+license: MPLv2.0
+iteration: 1
+vendor: Asteris-llc
+url: https://github.com/asteris-llc/vaultfs
+architecture: x86_64
+description: VaultFS mounts arbitrary Vault prefixes in a FUSE filesystem
+type: rpm
+
+
+resources:
+  - url: https://github.com/asteris-llc/vaultfs/releases/download/{{.Version}}/vaultfs-{{.Version}}-linux-amd64.tar.gz
+    hash-type: md5
+    hash: 93343393698af5537053a4bd53ff3f58
+
+targets:
+  - src: "{{.BuildRoot}}/vaultfs"
+    dest: /usr/local/bin/
+  - src: "{{.SpecRoot}}/vaultfs-bootstrap.sh"
+    dest: /usr/local/bin
+  - src: "{{.SpecRoot}}/vaultfs.sysconfig"
+    dest: /etc/sysconfig/vaultfs
+    config: true
+  - src: "{{.SpecRoot}}/vaultfs.service"
+    dest: /etc/systemd/system/vaultfs.service
+    template: true
+
+scripts:
+  build: |
+    tar -xzf vaultfs-{{.Version}}-linux-amd64.tar.gz
+    cp vaultfs-{{.Version}}-linux-amd64/vaultfs vaultfs
+
+  before-remove: |
+    systemctl disable vaultfs.service
+
+extra-args: |
+  --rpm-os linux

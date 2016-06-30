@@ -26,6 +26,7 @@ for building generic Mantl utilities.
 		- [Vault Packages](#vault-packages)
 			- [vault](#vault)
 			- [vault-mantl](#vault-mantl)
+			- [vault-packages](#vaultfs)
 		- [Mantl Packages](#mantl-packages)
 			- [mantl-dns](#mantl-dns)
 		- [Calico packages](#calico-packages)
@@ -214,6 +215,13 @@ Packages mantl.io specific scripts for Vault.
 | `vault-health-check.sh`         | Consul health check script for Vault      |
 | `vault-register-with-consul.sh` | Register the Vault service with Consul    |
 | `vault-unseal.sh`               | Read tokens from Consul and unlock Vault  |
+
+#### vaultfs
+
+[*spec*](vault/vault-mantl/spec.yml)
+
+Packages vaultfs with systemd. Check `/etc/sysconfig/vault` for
+configuration.
 
 ### Mantl Packages
 
