@@ -23,8 +23,6 @@ targets:
   - src: "{{.SpecRoot}}/vaultfs-docker.service"
     dest: /etc/systemd/system/vaultfs-docker.service
     template: true
-  - src: "{{.SpecRoot}}/vaultfs-bootstrap.sh"
-    dest: /usr/local/bin/vaultfs-bootstrap.sh
   - src: "{{.SpecRoot}}/vaultfs.sysconfig"
     dest: /etc/sysconfig/vaultfs
     config: true
