@@ -2,6 +2,7 @@
 
 # Variables
 #
+ca_cert="$(pwd)/cacert.pem"
 cert_country="US"
 cert_state="New York"
 cert_locality="Anytown"
@@ -13,15 +14,16 @@ cert_dns=
 destination=
 prefix=
 
-OPTS=`getopt -n generate_certificate -l country:,state:,locality:,organization:,unit:,email:,location:,ip:,dns:,destination:,prefix: -- $0 "$@"`
+OPTS=$(getopt -n generate_certificate -l cacert:,country:,state:,locality:,organization:,unit:,email:,location:,ip:,dns:,destination:,prefix: -- $0 "$@")
 if [ $? -ne 0 ]; then
-	echo "Error"
+	echo "Error parsing options"
 	exit 1
 fi
 eval set -- "${OPTS}"
 
 while :; do
 	case "$1" in
+	--cacert)  ca_cert="$2"; shift 2;;
 	--country)	cert_country="$2"; shift 2;;
 	--state)	cert_state="$2"; shift 2;;
 	--locality)	cert_locality="$2"; shift 2;;
@@ -89,14 +91,14 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
-openssl ca -create_serial -extensions usr_cert -notext -md sha256 -in ${csrfile} -out ${certfile} -config openssl-req.cnf -batch
+openssl ca -cert "${ca_cert}" -create_serial -extensions usr_cert -notext -md sha256 -in ${csrfile} -out ${certfile} -config openssl-req.cnf -batch
 if [ $? -ne 0 ]; then
 	echo "Error generating cert"
 	exit 1
 fi
 chmod 0666 ${certfile}
 
-openssl verify -CAfile ./cacert.pem ${certfile}
+openssl verify -CAfile "${ca_cert}" "${certfile}"
 if [ $? -ne 0 ]; then
 	echo "Error signing certificate"
 	exit 1
