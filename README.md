@@ -45,6 +45,9 @@ for building generic Mantl utilities.
 			- [marathon-dynamic](#marathon-dynamic)
 		- [Mantl-Cadvisor Packages](#mantl-cadvisor-packages)
 			- [mantl-cadvisor](#mantl-cadvisor)
+        - [Beats](#beats)
+			- [filebeat](#filebeat)
+			- [journalbeat](#journalbeat)
 	- [Building](#building)
 
 <!-- markdown-toc end -->
@@ -373,6 +376,19 @@ Available configuration:
 
 cAdvisor customized for Mantl clusters
 
+### Beats
+
+#### filebeat
+
+[*spec*](beats/filebeat/spec.yml)
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/filebeat/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/filebeat/_latestVersion)
+
+#### journalbeat
+
+[*spec*](beats/journalbeat/spec.yml)
+
+[ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/journalbeat/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/journalbeat/_latestVersion)
 
 ## Building
 
