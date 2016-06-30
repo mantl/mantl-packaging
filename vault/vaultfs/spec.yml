@@ -1,6 +1,7 @@
 ---
 name: vaultfs
 version: 1.0.0
+<<<<<<< HEAD
 license: MPLv2.0
 iteration: 1
 vendor: Asteris-llc
@@ -37,3 +38,45 @@ scripts:
 
 extra-args: |
   --rpm-os linux
+=======
+license: ASL 2.0
+iteration: 1
+vendor: Asteris
+url: https://github.com/asteris-llc/vaultfs
+architecture: x86_64
+description: Vault filesystem (and Docker volume plugin)
+type: rpm
+
+depends:
+  - systemd
+
+resources:
+  - url: https://github.com/asteris-llc/vaultfs/releases/download/{{.Version}}/vaultfs-{{.Version}}-linux-amd64.tar.gz
+    hash-type: sha256
+    hash: 4c7d8bc9702cfa2b315235343043ec2df18e42814cf7d8f38aa69b0a945c9bcf
+
+targets:
+  - src: "{{.BuildRoot}}/vaultfs-{{.Version}}-linux-amd64/vaultfs"
+    dest: /usr/bin/
+  - src: "{{.SpecRoot}}/vaultfs-docker.service"
+    dest: /usr/lib/systemd/system/vaultfs-docker.service
+    template: true
+  - src: "{{.SpecRoot}}/vaultfs-docker.sysconfig"
+    dest: /etc/sysconfig/vaultfs-docker
+    config: true
+  - src: "{{empty}}"
+    dest: /var/lib/vaultfs-docker
+
+scripts:
+  build: |
+    tar -xzvf vaultfs-{{.Version}}-linux-amd64.tar.gz
+
+  after-install: |
+    systemctl daemon-reload
+
+extra-args: |
+  --rpm-os linux
+  --rpm-auto-add-directories
+  --rpm-auto-add-exclude-directories /etc/systemd
+  --rpm-auto-add-exclude-directories /etc/systemd/system
+>>>>>>> a43bdae5714af09e7cc486b3317a721462a89b4d
