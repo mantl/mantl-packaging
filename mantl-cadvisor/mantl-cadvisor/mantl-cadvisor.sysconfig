@@ -1,5 +1,5 @@
 CADVISOR_IMAGE=shippedrepos-docker-mantl-enterprise.bintray.io/mantl-cadvisor
-CADVISOR_IMAGE_VERSION=0.23.1.5
+CADVISOR_IMAGE_VERSION=0.23.1.7
 HOUSEKEEPING_INTERVAL=30s
 KAFKA_BROKER_LIST=localhost:9092
 KAFKA_TOPIC=metrics

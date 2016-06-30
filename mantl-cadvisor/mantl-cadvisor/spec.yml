@@ -1,7 +1,7 @@
 name: mantl-cadvisor
 version: 0.23.1
 license: APL 2.0
-iteration: 7
+iteration: 8
 vendor: Google
 url: https://github.com/google/cadvisor
 architecture: x86_64
@@ -17,10 +17,11 @@ targets:
     config: true
 
 scripts:
-  after-upgrade:
+  after-upgrade: |
     systemctl daemon-reload
     systemctl restart mantl-cadvisor.service
   after-install: |
+    echo "WARNING: Obsolete package - final version."
     systemctl daemon-reload
     systemctl enable mantl-cadvisor.service 2>/dev/null
     systemctl start mantl-cadvisor.service
