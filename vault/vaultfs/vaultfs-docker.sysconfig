@@ -1,3 +1,0 @@
-VAULT_ADDRESS=https://localhost:8200
-VAULT_TOKEN=
-VAULT_MOUNTPOINT=/var/lib/vaultfs-docker

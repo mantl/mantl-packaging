@@ -1,7 +1,12 @@
+|filebeat| beats/filebeat
+|journalbeat| beats/journalbeat
+|calico| calico/calico/
 |consul| consul/consul/
+|consul-k8s| consul/consul-k8s/
 |consul-cli| consul/consul-cli/
 |consul-template| consul/consul-template/
 |consul-ui| consul/consul-ui/
+|distributive| distributive/distributive/
 |distributive-calico| distributive/distributive-calico/
 |distributive-chronos| distributive/distributive-chronos/
 |distributive-collectd| distributive/distributive-collectd/

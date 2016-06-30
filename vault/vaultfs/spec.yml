@@ -1,44 +1,6 @@
 ---
 name: vaultfs
 version: 1.0.0
-<<<<<<< HEAD
-license: MPLv2.0
-iteration: 1
-vendor: Asteris-llc
-url: https://github.com/asteris-llc/vaultfs
-architecture: x86_64
-description: VaultFS mounts arbitrary Vault prefixes in a FUSE filesystem
-type: rpm
-
-
-resources:
-  - url: https://github.com/asteris-llc/vaultfs/releases/download/{{.Version}}/vaultfs-{{.Version}}-linux-amd64.tar.gz
-    hash-type: md5
-    hash: 93343393698af5537053a4bd53ff3f58
-
-targets:
-  - src: "{{.BuildRoot}}/vaultfs"
-    dest: /usr/local/bin/
-  - src: "{{.SpecRoot}}/vaultfs-bootstrap.sh"
-    dest: /usr/local/bin
-  - src: "{{.SpecRoot}}/vaultfs.sysconfig"
-    dest: /etc/sysconfig/vaultfs
-    config: true
-  - src: "{{.SpecRoot}}/vaultfs.service"
-    dest: /etc/systemd/system/vaultfs.service
-    template: true
-
-scripts:
-  build: |
-    tar -xzf vaultfs-{{.Version}}-linux-amd64.tar.gz
-    cp vaultfs-{{.Version}}-linux-amd64/vaultfs vaultfs
-
-  before-remove: |
-    systemctl disable vaultfs.service
-
-extra-args: |
-  --rpm-os linux
-=======
 license: ASL 2.0
 iteration: 1
 vendor: Asteris
@@ -56,27 +18,38 @@ resources:
     hash: 4c7d8bc9702cfa2b315235343043ec2df18e42814cf7d8f38aa69b0a945c9bcf
 
 targets:
-  - src: "{{.BuildRoot}}/vaultfs-{{.Version}}-linux-amd64/vaultfs"
-    dest: /usr/bin/
+  - src: "{{.BuildRoot}}/vaultfs"
+    dest: /usr/bin/vaultfs
   - src: "{{.SpecRoot}}/vaultfs-docker.service"
-    dest: /usr/lib/systemd/system/vaultfs-docker.service
+    dest: /etc/systemd/system/vaultfs-docker.service
     template: true
-  - src: "{{.SpecRoot}}/vaultfs-docker.sysconfig"
-    dest: /etc/sysconfig/vaultfs-docker
+  - src: "{{.SpecRoot}}/vaultfs-bootstrap.sh"
+    dest: /usr/local/bin/vaultfs-bootstrap.sh
+  - src: "{{.SpecRoot}}/vaultfs.sysconfig"
+    dest: /etc/sysconfig/vaultfs
     config: true
+  - src: "{{.SpecRoot}}/vaultfs.service"
+    dest: /etc/systemd/system/vaultfs.service
+    template: true
   - src: "{{empty}}"
     dest: /var/lib/vaultfs-docker
+  - src: "{{empty}}"
+    dest: /var/lib/vaultfs
 
 scripts:
   build: |
     tar -xzvf vaultfs-{{.Version}}-linux-amd64.tar.gz
+    cp vaultfs-{{.Version}}-linux-amd64/vaultfs vaultfs
 
   after-install: |
     systemctl daemon-reload
+
+  before-remove: |
+    systemctl disable vaultfs.service
+    systemctl disable vaultfs-docker.service
 
 extra-args: |
   --rpm-os linux
   --rpm-auto-add-directories
   --rpm-auto-add-exclude-directories /etc/systemd
   --rpm-auto-add-exclude-directories /etc/systemd/system
->>>>>>> a43bdae5714af09e7cc486b3317a721462a89b4d

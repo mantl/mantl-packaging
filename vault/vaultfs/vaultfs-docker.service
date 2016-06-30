@@ -1,7 +1,7 @@
 [Unit]
 Description=Docker volume plugin for vaultfs
 Documentation={{.URL}}
-After=network-online.target
+After=network-online.target docker.service vault.service vaultfs.service
 Wants=network-online.target
 
 [Service]

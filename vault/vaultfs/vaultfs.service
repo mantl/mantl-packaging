@@ -1,6 +1,7 @@
 [Unit]
 Description=VaultFS mounts arbitrary Vault prefixes in a FUSE filesystem
-After=vault.service
+Documentation={{.URL}}
+After=network-online.target docker.service vault.service
 Requires=vault.service
 
 [Service]
@@ -9,7 +10,7 @@ RestartSec=20
 TimeoutStartSec=2
 
 EnvironmentFile=/etc/sysconfig/vaultfs
-ExecStart=-/bin/bash -c "[ -f /usr/local/bin/vaultfs-bootstrap.sh ] && /usr/local/bin/vaultfs-bootstrap.sh"
+ExecStart=/usr/bin/vaultfs mount --address=${VAULT_ADDRESS} --token=${VAULT_TOKEN} ${VAULT_MOUNTPOINT}
 KillSignal=SIGINT
 
 [Install]
