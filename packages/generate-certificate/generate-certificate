@@ -91,7 +91,7 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
-openssl ca -cert "${ca_cert}" -extensions usr_cert -notext -md sha256 -in "${csrfile}" -out "${certfile}" -config openssl-req.cnf -batch
+openssl ca -cert "${ca_cert}" -create_serial -extensions usr_cert -notext -md sha256 -in ${csrfile} -out ${certfile} -config openssl-req.cnf -batch
 if [ $? -ne 0 ]; then
 	echo "Error generating cert"
 	exit 1

@@ -1,26 +1,27 @@
 ---
 name: distributive
-version: 0.2.5
+version: 0.3.0
 iteration: 1
 license: ASL 2.0
-description: Distributive is a tool for running distributed health checks in
-  datacenters.
+description: >
+  Distributive is a tool for running distributed health checks in datacenters.
 url: https://github.com/CiscoCloud/distributive
 vendor: CiscoCloud
 type: rpm
+
+resources:
+  - url: https://github.com/CiscoCloud/distributive/releases/download/v{{.Version}}/{{.Name}}.tar.gz
+    hash-type: sha256
+    hash: 360ae9523f94375523939c789802d1b017d7ec518c7a81e3e1d4458efe223938
 
 targets:
   - src: "{{empty}}"
     dest: /etc/distributive.d/
   - src: "{{empty}}"
     dest: /usr/share/distributive/
-  - src: "{{.BuildRoot}}/{{.Name}}"
+  - src: "{{.BuildRoot}}/bin/{{.Name}}"
     dest: /usr/bin/distributive
 
 scripts:
   build: |
-    mkdir -p '{{.BuildRoot}}/src/github.com/{{.Vendor}}'
-    git clone '{{.URL}}' '{{.BuildRoot}}/src/github.com/{{.Vendor}}/{{.Name}}'
-    cd '{{.BuildRoot}}/src/github.com/{{.Vendor}}/{{.Name}}'
-    git checkout 'v{{.Version}}'
-    GOPATH=$GOPATH:{{.BuildRoot}} godep go build -o '{{.BuildRoot}}/{{.Name}}' .
+    tar -xvf {{.Name}}.tar.gz
