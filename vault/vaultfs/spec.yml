@@ -20,9 +20,6 @@ resources:
 targets:
   - src: "{{.BuildRoot}}/vaultfs"
     dest: /usr/bin/vaultfs
-  - src: "{{.SpecRoot}}/vaultfs-docker.service"
-    dest: /etc/systemd/system/vaultfs-docker.service
-    template: true
   - src: "{{.SpecRoot}}/vaultfs.sysconfig"
     dest: /etc/sysconfig/vaultfs
     config: true
@@ -44,7 +41,10 @@ scripts:
 
   before-remove: |
     systemctl disable vaultfs.service
-    systemctl disable vaultfs-docker.service
+
+  after-upgrade: |
+    systemctl reload-daemon
+    systemctl restart vault.service
 
 extra-args: |
   --rpm-os linux

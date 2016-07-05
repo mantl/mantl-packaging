@@ -26,7 +26,7 @@ for building generic Mantl utilities.
 		- [Vault Packages](#vault-packages)
 			- [vault](#vault)
 			- [vault-mantl](#vault-mantl)
-			- [vault-packages](#vaultfs)
+			- [vaultfs](#vaultfs)
 		- [Mantl Packages](#mantl-packages)
 			- [mantl-dns](#mantl-dns)
 		- [Calico packages](#calico-packages)

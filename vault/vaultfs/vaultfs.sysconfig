@@ -1,3 +1,5 @@
+SECURE_TOKEN_PATH="/etc/default/consul_secure.env"
 VAULT_ADDRESS=https://localhost:8200
 VAULT_TOKEN=
-VAULT_MOUNTPOINT=/var/vaultfs
+VAULTFS_MOUNTPOINT=/vagrant/vaultfs
+VAULTFS_DOCKER_MOUNTPOINT=/vagrant/vaultfs-docker
