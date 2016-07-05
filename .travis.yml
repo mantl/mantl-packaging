@@ -28,4 +28,6 @@ deploy:
   provider: script
   script: /bin/bash scripts/bintray.sh /tmp/out
   on:
-    branch: master
+    branch:
+      - master
+      - release/*
