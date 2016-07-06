@@ -1,6 +1,6 @@
 ---
 name: consul-cli
-version: 0.2.0
+version: 0.3.1
 license: APL 2.0
 iteration: 1
 vendor: Cisco
@@ -12,7 +12,7 @@ type: rpm
 resources:
   - url: https://github.com/CiscoCloud/consul-cli/releases/download/v{{.Version}}/consul-cli_{{.Version}}_linux_amd64.tar.gz
     hash-type: sha256
-    hash: 0282b3a76c642cb7b541c53254d0d847aba083b7ae586e1fbfba5c83370715e2
+    hash: 3be10c499bd837c5cff77467096ebc062190ead74697bfa16eec075d23621e0d
 
 targets:
   - src: '{{.BuildRoot}}/consul-cli_{{.Version}}_linux_amd64/consul-cli'
