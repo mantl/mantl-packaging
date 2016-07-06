@@ -1,7 +1,7 @@
 ---
 name: traefik
 version: 1.0.0
-iteration: rc3
+iteration: 1
 epoch: 1
 license: MIT
 vendor: Emile Vauge
@@ -21,9 +21,9 @@ dependencies:
   - sudo
 
 resources:
-  - url: https://github.com/containous/traefik/releases/download/v1.0.0-rc3/traefik_linux-amd64
+  - url: https://github.com/containous/traefik/releases/download/v1.0.0/traefik_linux-amd64
     hash-type: sha1
-    hash: 60b65a62bbd9460a91cedb9bbbb59acaed3c0e75
+    hash: fdba2e3f2ec435b30f3bcd963460b659883edb28
 
 targets:
   # base
