@@ -1,7 +1,7 @@
 ---
 name: traefik-config-scripts
 version: 1.0.0
-iteration: 1
+iteration: 2
 epoch: 1
 license: MIT
 vendor: Asteris LLC
@@ -15,7 +15,7 @@ dependencies:
 
 # Actually it map to "replaces" in fpm/rpm, and need because we move some stuff from old `traefik`
 obsoletes:
-  - traefik
+  - traefik < 1.0.0-1
 
 targets:
   # base
