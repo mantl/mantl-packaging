@@ -1,7 +1,7 @@
 ---
 name: traefik
 version: 1.0.0
-iteration: 2
+iteration: 3
 epoch: 1
 license: MIT
 vendor: Emile Vauge
@@ -17,7 +17,7 @@ epoch: 413
 
 dependencies:
   - libcap
-  - python
+  - traefik-config-scripts
 
 resources:
   - url: https://github.com/containous/traefik/releases/download/v1.0.0/traefik_linux-amd64
@@ -31,38 +31,10 @@ targets:
   - src: '{{.SpecRoot}}/{{.Name}}.service'
     dest: /etc/systemd/system/{{.Name}}.service
     template: yes
-  - src: '{{empty}}'
-    dest: /etc/traefik
-  - src: '{{empty}}'
-    dest: /etc/traefik/configs
-
-  # logging
-  - src: '{{.SpecRoot}}/logrotate/traefik'
-    dest: /etc/logrotate.d/traefik
-  - src: '{{.SpecRoot}}/logrotate/traefik-access'
-    dest: /etc/logrotate.d/traefik-access
-  - src: "{{empty}}"
-    dest: /var/log/{{.Name}}
-  - src: "{{empty}}"
-    dest: /var/log/{{.Name}}/archive
-
-  # config generation scripts
-  - src: '{{.SpecRoot}}/config/'
-    dest: /usr/bin/
 
 scripts:
-  before-install: |
-    getent group {{.Name}} > /dev/null || groupadd -r {{.Name}}
-    getent passwd {{.Name}} > /dev/null || \
-        useradd -r \
-                -g {{.Name}} \
-                -d /etc/{{.Name}} \
-                -s /sbin/nologin \
-                -c "{{.Name}} user" \
-                {{.Name}}
-
   after-install: |
-    chown -R {{.Name}}:{{.Name}} /etc/{{.Name}}
+    chown -R root:root /etc/{{.Name}}
     chown -R {{.Name}}:{{.Name}} /var/log/{{.Name}}
 
     setcap 'cap_net_bind_service=+ep' /usr/bin/{{.Name}}
@@ -94,4 +66,3 @@ extra-args: |
   --rpm-auto-add-directories
   --rpm-auto-add-exclude-directories /etc/systemd
   --rpm-auto-add-exclude-directories /etc/systemd/system
-  --rpm-auto-add-exclude-directories /etc/logrotate.d
