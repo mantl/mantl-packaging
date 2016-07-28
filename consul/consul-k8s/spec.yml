@@ -20,7 +20,7 @@ resources:
   - url: https://dl.bintray.com/gonzalo-mustwin/must-win-consul/linux_amd64.zip
     hash-type: sha256
     hash: 31e5cd18fef8d87839774b0070eead2ead4be3b5ae2460b54254b9c73166725a
-
+ 
 targets:
   - src: "{{.BuildRoot}}/consul"
     dest: /usr/bin/
