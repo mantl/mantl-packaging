@@ -1,0 +1,51 @@
+---
+name: traefik-config-scripts
+version: 1.0.0
+iteration: 2
+epoch: 1
+license: MIT
+vendor: Asteris LLC
+architecture: x86_64
+type: rpm
+url: https://github.com/asteris-llc/mantl-packaging
+description: Træfɪk config scripts
+
+dependencies:
+  - python
+
+# Actually it map to "replaces" in fpm/rpm, and need because we move some stuff from old `traefik`
+obsoletes:
+  - traefik < 1.0.0-1
+
+targets:
+  # base
+  - src: '{{empty}}'
+    dest: /etc/traefik
+  - src: '{{empty}}'
+    dest: /etc/traefik/configs
+
+  # logging
+  - src: '{{.SpecRoot}}/logrotate/traefik'
+    dest: /etc/logrotate.d/traefik
+  - src: '{{.SpecRoot}}/logrotate/traefik-access'
+    dest: /etc/logrotate.d/traefik-access
+  - src: "{{empty}}"
+    dest: /var/log/{{.Name}}
+  - src: "{{empty}}"
+    dest: /var/log/{{.Name}}/archive
+
+  # config generation scripts
+  - src: '{{.SpecRoot}}/config/'
+    dest: /usr/bin/
+
+scripts:
+  after-upgrade: |
+    # Fix old non-strict permissions
+    chown -R root:root /etc/traefik
+
+extra-args: |
+  --rpm-os linux
+  --rpm-auto-add-directories
+  --rpm-auto-add-exclude-directories /etc/systemd
+  --rpm-auto-add-exclude-directories /etc/systemd/system
+  --rpm-auto-add-exclude-directories /etc/logrotate.d

@@ -1,7 +1,7 @@
 ---
 name: traefik
 version: 1.0.0
-iteration: 1
+iteration: 3
 epoch: 1
 license: MIT
 vendor: Emile Vauge
@@ -17,8 +17,7 @@ epoch: 413
 
 dependencies:
   - libcap
-  - python
-  - sudo
+  - traefik-config-scripts
 
 resources:
   - url: https://github.com/containous/traefik/releases/download/v1.0.0/traefik_linux-amd64
@@ -32,26 +31,6 @@ targets:
   - src: '{{.SpecRoot}}/{{.Name}}.service'
     dest: /etc/systemd/system/{{.Name}}.service
     template: yes
-  - src: '{{empty}}'
-    dest: /etc/traefik
-  - src: '{{empty}}'
-    dest: /etc/traefik/configs
-
-  # logging
-  - src: '{{.SpecRoot}}/logrotate/traefik'
-    dest: /etc/logrotate.d/traefik
-  - src: '{{.SpecRoot}}/logrotate/traefik-access'
-    dest: /etc/logrotate.d/traefik-access
-  - src: "{{empty}}"
-    dest: /var/log/{{.Name}}
-  - src: "{{empty}}"
-    dest: /var/log/{{.Name}}/archive
-
-  # config generation scripts
-  - src: '{{.SpecRoot}}/config/'
-    dest: /usr/bin/
-  - src: '{{.SpecRoot}}/traefik-restart'
-    dest: /etc/sudoers.d/
 
 scripts:
   before-install: |
@@ -65,7 +44,7 @@ scripts:
                 {{.Name}}
 
   after-install: |
-    chown -R {{.Name}}:{{.Name}} /etc/{{.Name}}
+    chown -R root:root /etc/{{.Name}}
     chown -R {{.Name}}:{{.Name}} /var/log/{{.Name}}
 
     setcap 'cap_net_bind_service=+ep' /usr/bin/{{.Name}}
@@ -73,14 +52,15 @@ scripts:
     systemctl enable /etc/systemd/system/{{.Name}}.service 2>/dev/null
     systemctl start {{.Name}}.service
 
-    sudo -u {{.Name}} traefik-global --port=80 --grace-time-out=10
-    sudo -u {{.Name}} traefik-web --address=:8080
+    traefik-global --port=80 --grace-time-out=10
+    traefik-web --address=:8080
 
   after-upgrade: |
     chown -R {{.Name}}:{{.Name}} /var/log/{{.Name}}
 
     setcap 'cap_net_bind_service=+ep' /usr/bin/{{.Name}}
 
+    chown -R root:root /etc/traefik
     systemctl daemon-reload
     systemctl restart {{.Name}}.service
 
@@ -96,5 +76,3 @@ extra-args: |
   --rpm-auto-add-directories
   --rpm-auto-add-exclude-directories /etc/systemd
   --rpm-auto-add-exclude-directories /etc/systemd/system
-  --rpm-auto-add-exclude-directories /etc/sudoers.d
-  --rpm-auto-add-exclude-directories /etc/logrotate.d
