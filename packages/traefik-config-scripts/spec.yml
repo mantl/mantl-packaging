@@ -39,16 +39,6 @@ targets:
     dest: /usr/bin/
 
 scripts:
-  before-install: |
-    getent group traefik > /dev/null || groupadd -r traefik
-    getent passwd traefik > /dev/null || \
-        useradd -r \
-                -g traefik \
-                -d /etc/traefik \
-                -s /sbin/nologin \
-                -c "Traefik user" \
-                traefik
-
   after-upgrade: |
     # Fix old non-strict permissions
     chown -R root:root /etc/traefik

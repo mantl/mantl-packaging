@@ -33,6 +33,16 @@ targets:
     template: yes
 
 scripts:
+  before-install: |
+    getent group {{.Name}} > /dev/null || groupadd -r {{.Name}}
+    getent passwd {{.Name}} > /dev/null || \
+        useradd -r \
+                -g {{.Name}} \
+                -d /etc/{{.Name}} \
+                -s /sbin/nologin \
+                -c "{{.Name}} user" \
+                {{.Name}}
+
   after-install: |
     chown -R root:root /etc/{{.Name}}
     chown -R {{.Name}}:{{.Name}} /var/log/{{.Name}}
