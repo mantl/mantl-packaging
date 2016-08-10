@@ -1,7 +1,7 @@
 ---
 name: traefik-config-scripts
 version: 1.0.0
-iteration: 2
+iteration: 3
 epoch: 1
 license: MIT
 vendor: Asteris LLC
@@ -29,10 +29,6 @@ targets:
     dest: /etc/logrotate.d/traefik
   - src: '{{.SpecRoot}}/logrotate/traefik-access'
     dest: /etc/logrotate.d/traefik-access
-  - src: "{{empty}}"
-    dest: /var/log/{{.Name}}
-  - src: "{{empty}}"
-    dest: /var/log/{{.Name}}/archive
 
   # config generation scripts
   - src: '{{.SpecRoot}}/config/'

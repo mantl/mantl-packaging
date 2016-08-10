@@ -1,7 +1,7 @@
 ---
 name: traefik
 version: 1.0.0
-iteration: 3
+iteration: 4
 epoch: 1
 license: MIT
 vendor: Emile Vauge
@@ -17,7 +17,7 @@ epoch: 413
 
 dependencies:
   - libcap
-  - traefik-config-scripts
+  - traefik-config-scripts >= 1.0.0-3
 
 resources:
   - url: https://github.com/containous/traefik/releases/download/v1.0.0/traefik_linux-amd64
@@ -31,6 +31,10 @@ targets:
   - src: '{{.SpecRoot}}/{{.Name}}.service'
     dest: /etc/systemd/system/{{.Name}}.service
     template: yes
+  - src: "{{empty}}"
+    dest: /var/log/{{.Name}}
+  - src: "{{empty}}"
+    dest: /var/log/{{.Name}}/archive
 
 scripts:
   before-install: |
