@@ -1,0 +1,14 @@
+
+name: distributive-cadvisor
+version: 0.1
+iteration: 1
+license: ASL 2.0
+description: >
+  distributive-cadvisor is a distributive checklist that checks the health of
+  CAdvisor as it runs on Mantl.
+url: https://github.com/asteris-llc/mantl-packaging
+type: rpm
+
+targets:
+  - src: "{{.SpecRoot}}/distributive-cadvisor.yml"
+    dest: /etc/distributive.d/distributive-cadvisor.json

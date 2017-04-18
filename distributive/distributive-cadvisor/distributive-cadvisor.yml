@@ -1,0 +1,6 @@
+---
+name: CAdvisor health check
+checklist:
+  - name: mantl-cadvisor docker container running
+    id: dockerRunningRegexp
+    parameters: ['mantl-cadvisor']
