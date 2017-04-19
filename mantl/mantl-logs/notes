@@ -1,0 +1,22 @@
+The idea here is that we provide a utility for users/customers to upload bundles of logs for tech support.
+./mantl-logs --upload --customer-id --name
+interact with consul-cli
+
+
+What it needs to do...
+	gather log files/directories into an archive
+		default paths are in a file that can be edited by user
+	add a bug report, with comments from user
+	send it someplace
+	take config options for where to send it
+	take config for user metadata
+	extensions
+		take config for what to bundle
+		different archive formats
+		post to GH/gist/etc.
+
+TODOS:
+	explore what ansible logs look like, see about including them in an upload.
+	talk to mgmt about what customer support looks like
+		propose that we have a support.json file that gets downloaded to their mantl install
+			that file will configure how uploads occur
