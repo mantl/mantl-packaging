@@ -3,45 +3,47 @@
 # Constants
 #
 LOCK_PATH="locks/vault/bootstrap"
-SECURE_TOKEN_PATH="/etc/default/consul_secure.env"
 VAULT_URL="https://localhost:8200"
 
-# Variables
-#
-token="$1"
+consulConfigPath=${1:-/etc/consul/acl.json}
 
 function do_exit {
 	rval=$1
 
-	consul-cli kv-unlock --session=${sessionid} ${LOCK_PATH}
+	consul-cli kv unlock --session=${sessionid} ${LOCK_PATH}
 
 	exit ${rval}
 }
-
-if [ -z "${token}" -a -f ${SECURE_TOKEN_PATH} ]; then
-	source ${SECURE_TOKEN_PATH}
-	token=${SECURE_TOKEN}
-fi
-
+# Extract the master token from $consulConfigPath
+token=$(jq -r .acl_master_token ${consulConfigPath})
 if [ -n "${token}" ]; then
 	consul_token="--token=${token}"
 fi
 
-sessionid=$(consul-cli kv-lock --lock-delay=5s ${LOCK_PATH})
+# Wait for vault to become available
+max_wait=60
+while :; do
+	curl -s ${VAULT_URL}/v1/sys/health >/dev/null 2>&1
+	if [ $? -eq 0 ]; then
+		break
+	fi
+
+	if [ $SECONDS -gt $max_wait ]; then
+		echo "Timeout waiting for vault to start"
+		exit 1
+	fi
+
+	sleep 5 
+done
+
+sessionid=$(consul-cli kv lock --lock-delay=5s ${LOCK_PATH})
+
+output=$(curl -s ${VAULT_URL}/v1/sys/health)
 
 # Initialize vault iff it's not already initialized.
-is_init=$(curl -s -1 $VAULT_URL/v1/sys/init | jq .initialized)
+is_init=$(echo $output | jq -r .initialized)
 if [ "${is_init}" == "true" ]; then
-	do_exit 0
-fi
-
-# Check the vault of ${LOCK_PATH}. If it is "init_done" then
-# the initialization of vault is complete and the process needs
-# to be restarted
-#
-is_init=$(consul-cli kv-read ${LOCK_PATH})
-if [ "${is_init}" == "init_done" ]; then
-	systemctl restart vault
+	echo "Vault already initialized"
 	do_exit 0
 fi
 
@@ -51,7 +53,12 @@ output=$(curl -X PUT -s -1 $VAULT_URL/v1/sys/init \
 keys=$(echo ${output} | jq -r .keys[])
 root_token=$(echo ${output} | jq -r .root_token)
 
-consul-cli kv-write ${consul_token} secure/vault/keys ${keys}
+if [ -z "${keys}" -o -z "${root_token}" ]; then
+	echo "No unseal keys or root_token"
+	do_exit 1
+fi
+
+consul-cli kv write ${consul_token} secure/vault/keys ${keys}
 if [ $? -ne 0 ]; then
 	echo "Error initializing vault!"
 	echo "Keys written to:       /etc/vault/keys"
@@ -62,7 +69,7 @@ if [ $? -ne 0 ]; then
 	do_exit 1
 fi
 
-consul-cli kv-write ${consul_token} secure/vault/root_token ${root_token}
+consul-cli kv write ${consul_token} secure/vault/root_token ${root_token}
 if [ $? -ne 0 ]; then
 	echo "Error initializing vault!"
 	echo "Keys written to:       /etc/vault/keys"
@@ -72,8 +79,5 @@ if [ $? -ne 0 ]; then
 	echo ${root_token} > /etc/vault/root_token
 	do_exit 1
 fi
-
-# Write "init_done" to LOCK_PATH so future runs don't try to re-init
-consul-cli kv-write ${LOCK_PATH} init_done
 
 do_exit 0

@@ -10,7 +10,6 @@ TimeoutStartSec=2
 
 EnvironmentFile=/etc/sysconfig/vault
 ExecStart=/usr/bin/vault server -config=${CONFIG_DIR} ${EXTRA_OPTS}
-ExecStartPost=-/bin/bash -c "[ -f /usr/local/bin/vault-unseal.sh ] && /usr/local/bin/vault-unseal.sh"
 KillSignal=SIGINT
 
 [Install]

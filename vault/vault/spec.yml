@@ -28,6 +28,10 @@ targets:
     config: true
   - src: "{{empty}}"
     dest: /etc/vault/ssl
+  - src: "{{empty}}"
+    dest: /etc/vault/policies
+  - src: "{{empty}}"
+    dest: /etc/systemd/system/vault.service.d
 
 scripts:
   build: |
