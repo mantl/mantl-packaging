@@ -1,7 +1,6 @@
 #!/bin/bash
 # This script has to be executed from the root mantl-packaging directory.
 set -e
-set -x
 
 OUTPUT=${1:-out}
 
