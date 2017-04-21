@@ -1,3 +1,0 @@
-CONFIG_DIR=/etc/consul
-DATA_DIR=/var/lib/consul
-EXTRA_OPTS=
