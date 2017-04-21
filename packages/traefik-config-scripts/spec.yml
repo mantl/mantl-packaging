@@ -4,7 +4,7 @@ version: 1.0.0
 iteration: 3
 epoch: 1
 license: MIT
-vendor: Mantl LLC
+vendor: Mantl
 architecture: x86_64
 type: rpm
 url: https://github.com/mantl/mantl-packaging

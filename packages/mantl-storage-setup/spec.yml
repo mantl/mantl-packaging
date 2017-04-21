@@ -3,8 +3,8 @@ name: mantl-storage-setup
 version: 0.2.1
 epoch: 1
 iteration: 1
-license: APL 2.0 
-vendor: Mantl, LLC
+license: APL 2.0
+vendor: Mantl
 architecture: noarch
 type: rpm
 description: Set up LVM for mantl clsuters
@@ -36,4 +36,3 @@ scripts:
 
   after-remove: |
     systemctl daemon-reload
-
