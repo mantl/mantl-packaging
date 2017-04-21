@@ -3,8 +3,8 @@ name: mesos-master-dynamic
 version: 0.25.0
 license: ASL 2.0
 iteration: 2
-vendor: Asteris
-url: http://github.com/asteris-llc/mantl-packaging
+vendor: Mantl
+url: http://github.com/mantl/mantl-packaging
 architecture: noarch
 description: dynamic reconfiguration of mesos-master with Consul
 type: rpm

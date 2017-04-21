@@ -3,7 +3,7 @@ name: smlr
 version: 0.0.1
 license: APL 2.0
 iteration: 2
-vendor: Asteris
+vendor: Astris
 url: https://github.com/asteris-llc/smlr
 architecture: x86_64
 description: smlr waits for service dependencies

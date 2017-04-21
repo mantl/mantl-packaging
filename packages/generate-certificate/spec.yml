@@ -3,7 +3,7 @@ name: generate-certificate
 version: 0.1.1
 license: ASL 2.0
 iteration: 1
-vendor: Asteris
+vendor: Mantl
 architecture: noarch
 description: >
   A script to generate certificates with a number of sensible defaults set.

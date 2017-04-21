@@ -3,8 +3,8 @@ name: marathon-dynamic
 version: 0.15.3
 license: ASL 2.0
 iteration: 1
-vendor: Asteris
-url: http://github.com/asteris-llc/mantl-packaging
+vendor: Mantl
+url: http://github.com/mantl/mantl-packaging
 architecture: noarch
 description: dynamic reconfiguration of marathon with Consul
 type: rpm

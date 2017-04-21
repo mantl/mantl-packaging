@@ -1,18 +1,18 @@
 ---
 name: mantl-dns
-version: 1.1.0
+version: 1.2.0
 license: ASL 2.0
-iteration: 5
-vendor: Asteris
-url: https://github.com/asteris-llc/mantl-packaging
+iteration: 0
+vendor: Mantl
+url: https://github.com/mantl/mantl-packaging
 description: DNS integration with Consul
 type: rpm
 
 depends:
   - consul
-  - dnsmasq = 2.66
-  - bind-utils = 32:9.9.4
-  - NetworkManager = 1:1.0.6
+  - dnsmasq
+  - bind-utils
+  - NetworkManager
 
 targets:
   - src: "{{.SpecRoot}}/10-consul"
