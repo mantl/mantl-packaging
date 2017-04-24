@@ -2,7 +2,7 @@
 name: vault
 version: 0.7.0
 license: MPLv2.0
-iteration: 0
+iteration: 1
 vendor: Hashicorp
 url: https://vaultproject.io
 architecture: x86_64
