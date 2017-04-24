@@ -1,6 +1,6 @@
 ---
-name: calico 
-version: 0.19.0
+name: calico
+version: 1.1.1
 license: ASL 2.0
 iteration: 1
 vendor: Metaswitch
@@ -12,16 +12,16 @@ type: rpm
 resources:
   - url: https://github.com/projectcalico/calico-containers/releases/download/v{{.Version}}/calicoctl
     hash-type: sha1
-    hash: aebc53f93e6486ac167f796a49aac7e92f30911f 
-  - url: https://github.com/projectcalico/calico-mesos/releases/download/v0.1.6/calico_mesos
+    hash: 86de340c49a39f1eb55b6d9553b6d78279623196
+  - url: https://github.com/projectcalico/netmodules-plugin/releases/download/v0.1.6/calico_mesos
     hash-type: sha1
     hash: 1deceacfba252985b558f197e62a56dc0e1e1bb2
-  - url: https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico
+  - url: https://github.com/projectcalico/cni-plugin/releases/download/v1.6.2/calico
     hash-type: sha1
-    hash: 321c5c23e02b43a483a055ebd89fd5966d188839
-  - url: https://github.com/projectcalico/calico-cni/releases/download/v1.3.1/calico-ipam
+    hash: 99809673095fe038cbd9a6cd0ea2f2f45dad6183
+  - url: https://github.com/projectcalico/cni-plugin/releases/download/v1.6.2/calico-ipam
     hash-type: sha1
-    hash: 35366ee46438a3c02bb18afb739c2d166eb898c0
+    hash: d9f7a4b7328b81044a8d0736296838b86879519d
 
 targets:
   - src: '{{.BuildRoot}}/calicoctl'
@@ -39,9 +39,9 @@ scripts:
     echo "xt_set" > /etc/modules-load.d/calico-modules.conf
     sysctl -w net.ipv4.ip_forward=1
   after-install: |
-    chmod +x /opt/cni/bin/calico-ipam 
-    chmod +x /opt/cni/bin/calico 
-    chmod +x /usr/local/bin/calico_mesos 
+    chmod +x /opt/cni/bin/calico-ipam
+    chmod +x /opt/cni/bin/calico
+    chmod +x /usr/local/bin/calico_mesos
 
 extra-args: |
   --rpm-os linux
