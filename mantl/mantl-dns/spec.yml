@@ -2,7 +2,7 @@
 name: mantl-dns
 version: 1.2.0
 license: ASL 2.0
-iteration: 0
+iteration: 1
 vendor: Mantl
 url: https://github.com/mantl/mantl-packaging
 description: DNS integration with Consul
