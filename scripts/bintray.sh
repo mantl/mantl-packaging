@@ -17,7 +17,7 @@ for PKG in $(ls $OUTPUT); do
     if curl -s -I "https://api.bintray.com/packages/$BINTRAY_PROJECT/$PKG" | grep -q 404; then
         echo "package $PKG not found, creating package "
         PKG_NAME=$(echo $PKG | sed -E "s|^(([a-zA-Z\-]+)-([0-9\.\-]+)\..*)$|\2|")
-        PKG_VCS_URL=https://github.com/asteris-llc/mantl-packaging/tree/master/$(grep "$PKG_NAME" scripts/paths | awk '{print $2}')
+        PKG_VCS_URL=https://github.com/mantl/mantl-packaging/tree/master/$(grep "$PKG_NAME" scripts/paths | awk '{print $2}')
         PKG_METADATA='{"name": "'$PKG_NAME'", "licenses": ["Apache-2.0"], "vcs_url": "'$PKG_VCS_URL'"}'
         echo $PKG_METADATA | curl  -u$BINTRAY_USER:$BINTRAY_API_KEY -d @- https://api.bintray.com/packages/$BINTRAY_PROJECT --header "Content-Type:application/json"
     fi

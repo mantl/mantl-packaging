@@ -3,7 +3,7 @@ name: docker-gc
 version: 0.1.1
 license: ASL 2.0
 iteration: 1
-vendor: Asteris
+vendor: Mantl
 architecture: noarch
 type: rpm
 description: Cleans up docker containers, images, and volumes

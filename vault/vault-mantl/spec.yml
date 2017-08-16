@@ -3,7 +3,7 @@ name: vault-mantl
 version: 0.1.0
 license: Apache-2.0
 iteration: 1
-vendor: Asteris, LLC.
+vendor: Mantl
 architecture: x86_64
 description: Mantl Vault
 type: rpm

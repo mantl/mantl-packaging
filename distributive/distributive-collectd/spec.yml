@@ -3,7 +3,7 @@ version: 0.2.4
 iteration: 1
 license: ASL 2.0
 description: distributive-collectd is a configuration for distributed health checks.
-url: https://github.com/CiscoCloud/distributive
+url: https://github.com/mantl/distributive
 type: rpm
 
 targets:

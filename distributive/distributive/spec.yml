@@ -5,12 +5,12 @@ iteration: 1
 license: ASL 2.0
 description: >
   Distributive is a tool for running distributed health checks in datacenters.
-url: https://github.com/CiscoCloud/distributive
-vendor: CiscoCloud
+url: https://github.com/mantl/distributive
+vendor: mantl
 type: rpm
 
 resources:
-  - url: https://github.com/CiscoCloud/distributive/releases/download/v{{.Version}}/{{.Name}}.tar.gz
+  - url: https://github.com/mantl/distributive/releases/download/v{{.Version}}/{{.Name}}.tar.gz
     hash-type: sha256
     hash: 360ae9523f94375523939c789802d1b017d7ec518c7a81e3e1d4458efe223938
 

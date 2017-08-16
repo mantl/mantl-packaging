@@ -1,10 +1,12 @@
 ---
 name: generate-certificate
-version: 0.0.1
+version: 0.1.1
 license: ASL 2.0
 iteration: 1
-vendor: Asteris
+vendor: Mantl
 architecture: noarch
+description: >
+  A script to generate certificates with a number of sensible defaults set.
 type: rpm
 
 depends:
@@ -19,14 +21,21 @@ targets:
     config: true
   - src: '{{.SpecRoot}}/index.txt'
     dest: /etc/pki/CA/
-  - src: '{{.SpecRoot}}/serial'
-    dest: /etc/pki/CA/
+
+#attrs:
+#  - file: /usr/bin/generate-certificate
+#    mode: 755
+#  - file: /etc/pki/CA/openssl-req.cnf
+#    mode: 600
+#    user: root
+#  - file: /etc/pki/CA/index.txt
+#    mode: 600
+#    user: root
 
 scripts:
   after-install: |
     chmod +x /usr/bin/generate-certificate
-
-    for F in openssl-req.cnf index.txt serial; do
+    for F in openssl-req.cnf index.txt; do
       chmod 600 /etc/pki/CA/$F
       chown root /etc/pki/CA/$F
     done

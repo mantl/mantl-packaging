@@ -185,7 +185,7 @@ systemd. Check `/etc/sysconfig/consul-template` for configuration.
 
 [ ![Download](https://api.bintray.com/packages/asteris/mantl-rpm/consul-cli/images/download.svg) ](https://bintray.com/asteris/mantl-rpm/consul-cli/_latestVersion)
 
-Packages [consul-cli](https://github.com/CiscoCloud/consul-cli) with the
+Packages [consul-cli](https://github.com/mantl/consul-cli) with the
 currently released version.
 
 > A Distributed, Highly Available, Datacenter-Aware Scheduler
@@ -271,7 +271,7 @@ via environment variables in `/etc/sysconfig/mesos-master`.
 
 Makes [mesos-master](#mesos-master) dynamic by populating it with
 [consul-template](https://github.com/hashicorp/consul-template)
-([spec](https://github.com/asteris-llc/consul-packaging/blob/master/packaging/consul-template/spec.yml)).
+([spec](https://github.com/mantl/consul-packaging/blob/master/packaging/consul-template/spec.yml)).
 
 Available configuration:
 
@@ -311,7 +311,7 @@ depending on `mesos`. `mesos-agent` is configured via environment variables in
 
 Makes [mesos-agent](#mesos-agent) dynamic by populating it with
 [consul-template](https://github.com/hashicorp/consul-template)
-([spec](https://github.com/asteris-llc/consul-packaging/blob/master/packaging/consul-template/spec.yml)).
+([spec](https://github.com/mantl/consul-packaging/blob/master/packaging/consul-template/spec.yml)).
 
 Available configuration:
 
@@ -349,7 +349,7 @@ available options are documented in the
 
 Makes [marathon](#marathon) dynamic by populating it with
 [consul-template](https://github.com/hashicorp/consul-template)
-([spec](https://github.com/asteris-llc/consul-packaging/blob/master/packaging/consul-template/spec.yml)).
+([spec](https://github.com/mantl/consul-packaging/blob/master/packaging/consul-template/spec.yml)).
 
 Available configuration:
 
